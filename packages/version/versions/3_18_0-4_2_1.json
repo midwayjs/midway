@@ -3,80 +3,251 @@
   "@midwayjs/fc-starter": "4.2.1",
   "@midwayjs/serverless-http-parser": "4.0.2",
   "@midwayjs/api-bridge": "4.0.3",
-  "@midwayjs/apollo": "4.2.1",
-  "@midwayjs/axios": "4.2.1",
+  "@midwayjs/apollo": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/axios": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/bootstrap": "4.2.1",
   "@midwayjs/bull": "4.2.1",
-  "@midwayjs/bull-board": "4.2.1",
+  "@midwayjs/bull-board": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/bullmq": "4.2.1",
-  "@midwayjs/busboy": "4.2.1",
-  "@midwayjs/cache-manager": "4.2.1",
-  "@midwayjs/captcha": "4.2.1",
-  "@midwayjs/casbin": "4.2.1",
-  "@midwayjs/casbin-redis-adapter": "4.2.1",
-  "@midwayjs/casbin-typeorm-adapter": "4.2.1",
-  "@midwayjs/code-dye": "4.2.1",
-  "@midwayjs/commander": "4.2.1",
-  "@midwayjs/consul": "4.2.1",
+  "@midwayjs/busboy": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/cache-manager": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/captcha": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/casbin": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/casbin-redis-adapter": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/casbin-typeorm-adapter": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/code-dye": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/commander": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/consul": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/core": "4.2.1",
-  "@midwayjs/cos": "4.2.1",
+  "@midwayjs/cos": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/cron": "4.2.1",
-  "@midwayjs/cross-domain": "4.2.1",
-  "@midwayjs/crud": "4.2.1",
-  "@midwayjs/etcd": "4.2.1",
+  "@midwayjs/cross-domain": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/crud": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/etcd": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/event-emitter": "4.2.1",
   "@midwayjs/express-session": "4.2.1",
   "@midwayjs/faas": "4.2.1",
   "@midwayjs/graphql": "4.2.1",
-  "@midwayjs/grpc": "4.2.1",
-  "@midwayjs/http-proxy": "4.2.1",
-  "@midwayjs/i18n": "4.2.1",
-  "@midwayjs/info": "4.2.1",
-  "@midwayjs/jwt": "4.2.1",
-  "@midwayjs/kafka": "4.2.1",
-  "@midwayjs/leoric": "4.2.1",
-  "@midwayjs/mcp": "4.2.1",
-  "@midwayjs/mikro": "4.2.1",
-  "@midwayjs/mikro7": "4.2.1",
+  "@midwayjs/grpc": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/http-proxy": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/i18n": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/info": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/jwt": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/kafka": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/leoric": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/mcp": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/mikro": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/mikro7": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/mock": "4.2.1",
-  "@midwayjs/mongoose": "4.2.1",
-  "@midwayjs/mqtt": "4.2.1",
+  "@midwayjs/mongoose": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/mqtt": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/one-shot": "4.2.1",
-  "@midwayjs/oss": "4.2.1",
-  "@midwayjs/passport": "4.2.1",
+  "@midwayjs/oss": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/passport": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/piscina": "4.2.1",
-  "@midwayjs/prometheus": "4.2.1",
-  "@midwayjs/prometheus-socket-io": "4.2.1",
-  "@midwayjs/rabbitmq": "4.2.1",
+  "@midwayjs/prometheus": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/prometheus-socket-io": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/rabbitmq": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/react": "4.2.1",
   "@midwayjs/redis": "4.2.1",
-  "@midwayjs/security": "4.2.1",
-  "@midwayjs/sequelize": "4.2.1",
-  "@midwayjs/session": "4.2.1",
-  "@midwayjs/skill-midway": "4.2.1",
-  "@midwayjs/socketio": "4.2.1",
-  "@midwayjs/static-file": "4.2.1",
-  "@midwayjs/swagger": "4.2.1",
-  "@midwayjs/tablestore": "4.2.1",
+  "@midwayjs/security": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/sequelize": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/session": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/skill-midway": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/socketio": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/static-file": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/swagger": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/tablestore": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/tenant": "4.2.1",
-  "@midwayjs/typegoose": "4.2.1",
-  "@midwayjs/typeorm": "4.2.1",
-  "@midwayjs/upload": "4.2.1",
-  "@midwayjs/validate": "4.2.1",
-  "@midwayjs/validation": "4.2.1",
-  "@midwayjs/validation-class-validator": "4.2.1",
-  "@midwayjs/validation-joi": "4.2.1",
-  "@midwayjs/validation-zod": "4.2.1",
-  "@midwayjs/validation-zod4": "4.2.1",
-  "@midwayjs/version": "4.2.1",
-  "@midwayjs/view": "4.2.1",
-  "@midwayjs/view-ejs": "4.2.1",
-  "@midwayjs/view-nunjucks": "4.2.1",
+  "@midwayjs/typegoose": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/typeorm": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/upload": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/validate": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/validation": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/validation-class-validator": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/validation-joi": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/validation-zod": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/validation-zod4": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/version": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/view": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/view-ejs": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/view-nunjucks": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/vue": "4.0.3",
-  "@midwayjs/web": "4.2.1",
+  "@midwayjs/web": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/web-bridge": "4.0.3",
   "@midwayjs/express": "4.2.1",
-  "@midwayjs/koa": "4.2.1",
-  "@midwayjs/ws": "4.2.1",
+  "@midwayjs/koa": [
+    "4.2.1",
+    "4.2.2"
+  ],
+  "@midwayjs/ws": [
+    "4.2.1",
+    "4.2.2"
+  ],
   "@midwayjs/decorator": "3.18.0"
 }

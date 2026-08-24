@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/process-agent",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "private": true,
   "description": "Midway Component for Process Agent",
   "main": "dist/index.js",

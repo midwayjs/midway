@@ -1,6 +1,41 @@
 # Change Log
 
 
+## v4.2.2 (2026-08-24)
+
+#### :bug: Bug Fix
+* `axios`, `bull-board`, `busboy`, `cache-manager`, `commander`, `consul`, `cos`, `etcd`, `grpc`, `i18n`, `kafka`, `mcp`, `mikro`, `mikro7`, `mongoose`, `mqtt`, `oss`, `rabbitmq`, `sequelize`, `session`, `socketio`, `tablestore`, `tags`, `typeorm`, `web-koa`, `web`
+  * [#4616](https://github.com/midwayjs/midway/pull/4616) fix: add missing root declaration type imports ([@czy88840616](https://github.com/czy88840616))
+
+#### :memo: Documentation
+* [#4599](https://github.com/midwayjs/midway/pull/4599) docs: typo in controller and quick guide ([@Nokic233](https://github.com/Nokic233))
+* [#4594](https://github.com/midwayjs/midway/pull/4594) docs: Document Apollo GraphQL defaults and usage ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* Other
+  * [#4613](https://github.com/midwayjs/midway/pull/4613) chore(deps): update redis docker tag to v7.4.11 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4614](https://github.com/midwayjs/midway/pull/4614) chore(deps): update dependency axios to v1.19.0 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4602](https://github.com/midwayjs/midway/pull/4602) chore(deps): update redis docker tag to v7.4.10 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4591](https://github.com/midwayjs/midway/pull/4591) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.7.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `captcha`, `security`
+  * [#4607](https://github.com/midwayjs/midway/pull/4607) fix(deps): update dependency nanoid to v3.3.18 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mqtt`
+  * [#4605](https://github.com/midwayjs/midway/pull/4605) fix(deps): update dependency mqtt to v5.15.2 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `apollo`
+  * [#4604](https://github.com/midwayjs/midway/pull/4604) fix(deps): update dependency graphql to v16.14.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4596](https://github.com/midwayjs/midway/pull/4596) fix(deps): update dependency @graphql-tools/schema to v10.0.38 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validation-zod4`
+  * [#4597](https://github.com/midwayjs/midway/pull/4597) fix(deps): update dependency @semihbou/zod-i18n-map to v0.0.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4592](https://github.com/midwayjs/midway/pull/4592) fix(deps): update dependency @grpc/grpc-js to v1.14.4 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- NoKic233 ([@Nokic233](https://github.com/Nokic233))
+- Tushar Pagar ([@tushardev-365](https://github.com/tushardev-365))
+
+
+
 ## v4.2.1 (2026-06-14)
 
 #### :nail_care: Polish
