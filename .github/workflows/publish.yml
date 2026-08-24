@@ -13,6 +13,15 @@ on:
           - next
           - beta
           - canary
+      version_bump:
+        description: Version bump
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: write
@@ -71,15 +80,15 @@ jobs:
         run: |
           case "${{ inputs.release_type }}" in
             beta)
-              bash scripts/publish.sh beta
+              bash scripts/publish.sh beta "${{ inputs.version_bump }}"
               ;;
             next)
-              bash scripts/publish.sh next
+              bash scripts/publish.sh next "${{ inputs.version_bump }}"
               ;;
             canary)
-              bash scripts/publish.sh canary
+              bash scripts/publish.sh canary "${{ inputs.version_bump }}"
               ;;
             release)
-              bash scripts/publish.sh
+              bash scripts/publish.sh release "${{ inputs.version_bump }}"
               ;;
           esac
