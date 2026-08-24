@@ -23,22 +23,30 @@ version_if_needed() {
   fi
 }
 
+publish_packages() {
+  if [ "$VERSION_BUMP" = "existing" ]; then
+    lerna publish from-package --yes "$@"
+  else
+    lerna publish from-git --yes "$@"
+  fi
+}
+
 case "$RELEASE_TYPE" in
   "beta")
     SKIP_VERSION_SCRIPTS=true version_if_needed --force-publish=*
-    lerna publish from-git --yes --dist-tag beta
+    publish_packages --dist-tag beta
     ;;
   "next")
     SKIP_VERSION_SCRIPTS=true version_if_needed
-    lerna publish from-git --yes --dist-tag next
+    publish_packages --dist-tag next
     ;;
   "canary")
     SKIP_VERSION_SCRIPTS=true lerna version major --yes
-    lerna publish from-git --yes --canary --preid alpha --dist-tag alpha
+    publish_packages --canary --preid alpha --dist-tag alpha
     ;;
   *)
     # release (default) - 只有这个会执行完整的 version 脚本
     version_if_needed
-    lerna publish from-git --yes
+    publish_packages
     ;;
 esac
