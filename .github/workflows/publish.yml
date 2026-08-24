@@ -76,6 +76,7 @@ jobs:
 
       - name: Publish packages
         env:
+          GITHUB_AUTH: ${{ github.token }}
           NPM_CONFIG_PROVENANCE: true
         run: |
           case "${{ inputs.release_type }}" in
