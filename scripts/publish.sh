@@ -48,5 +48,6 @@ case "$RELEASE_TYPE" in
     # release (default) - 只有这个会执行完整的 version 脚本
     version_if_needed
     publish_packages
+    node scripts/create_github_release.js
     ;;
 esac
