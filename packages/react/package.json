@@ -25,6 +25,10 @@
   ],
   "author": "Midway Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
   "scripts": {
     "build": "tsup",
     "test": "node -r ts-node/register ../../node_modules/jest/bin/jest.js --runInBand",

@@ -34,6 +34,10 @@
     "index.d.ts"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
   "dependencies": {
     "@midwayjs/i18n": "workspace:^",
     "@midwayjs/validation": "workspace:^",

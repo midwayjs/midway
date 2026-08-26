@@ -22,6 +22,10 @@
     "node": ">=20"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
   "dependencies": {
     "@midwayjs/i18n": "workspace:^",
     "joi": "17.13.3"
