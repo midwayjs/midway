@@ -21,6 +21,10 @@
   ],
   "author": "Nawbc",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/express": "workspace:^",

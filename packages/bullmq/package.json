@@ -23,6 +23,10 @@
     "index.d.ts"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^"
@@ -33,5 +37,8 @@
   "engines": {
     "node": ">=20"
   },
-  "repository": "https://github.com/midwayjs/midway.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  }
 }
