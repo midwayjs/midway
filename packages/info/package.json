@@ -10,7 +10,7 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "picomatch": "2.3.2"
+    "picomatch": "4.0.4"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
