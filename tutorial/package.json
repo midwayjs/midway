@@ -30,7 +30,7 @@
     "@tutorialkit/types": "1.6.0",
     "@types/node": "^20.14.6",
     "@types/react": "^18.3.3",
-    "astro": "^4.16.19",
+    "astro": "^7.0.0",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.4.5"
   }
