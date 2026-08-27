@@ -1851,8 +1851,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       '@types/qs':
-        specifier: 6.15.0
-        version: 6.15.0
+        specifier: 6.15.1
+        version: 6.15.1
       koa:
         specifier: 3.1.2
         version: 3.1.2
@@ -4890,11 +4890,8 @@ packages:
   '@types/prop-types@15.7.15':
     resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
 
-  '@types/qs@6.15.0':
-    resolution: {integrity: sha512-JawvT8iBVWpzTrz3EGw9BTQFg3BQNmwERdKE22vlTxawwtbyUSlMppvZYKLZzB5zgACXdXxbD3m1bXaMqP/9ow==}
-
-  '@types/qs@6.9.18':
-    resolution: {integrity: sha512-kK7dgTYDyGqS+e2Q4aK9X3D7q234CIZ1Bv0q/7Z5IwRDoADNU81xXJK/YVyLbLTZCoIwUoDoffFeF+p/eIklAA==}
+  '@types/qs@6.15.1':
+    resolution: {integrity: sha512-GZHUBZR9hckSUhrxmp1nG6NwdpM9fCunJwyThLW1X3AyHgd9IlHb6VANpQQqDr2o/qQp6McZ3y/IA2rVzKzSbw==}
 
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
@@ -15841,14 +15838,14 @@ snapshots:
   '@types/express-serve-static-core@4.19.7':
     dependencies:
       '@types/node': 20.19.39
-      '@types/qs': 6.15.0
+      '@types/qs': 6.15.1
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
 
   '@types/express-serve-static-core@4.19.8':
     dependencies:
       '@types/node': 22.12.0
-      '@types/qs': 6.15.0
+      '@types/qs': 6.15.1
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
 
@@ -15860,7 +15857,7 @@ snapshots:
     dependencies:
       '@types/body-parser': 1.19.6
       '@types/express-serve-static-core': 4.19.7
-      '@types/qs': 6.9.18
+      '@types/qs': 6.15.1
       '@types/serve-static': 1.15.10
 
   '@types/glob@7.2.0':
@@ -16006,9 +16003,7 @@ snapshots:
 
   '@types/prop-types@15.7.15': {}
 
-  '@types/qs@6.15.0': {}
-
-  '@types/qs@6.9.18': {}
+  '@types/qs@6.15.1': {}
 
   '@types/range-parser@1.2.7': {}
 
