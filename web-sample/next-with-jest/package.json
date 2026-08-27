@@ -9,7 +9,7 @@
     "dev:server": "MIDWAY_SERVER_ENV=local mwtsc --project tsconfig.midway.json --watch --run @midwayjs/mock/app.js"
   },
   "dependencies": {
-    "next": "~15.5.0",
+    "next": "~16.2.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@midwayjs/nextjs": "file:../../../packages/nextjs",
