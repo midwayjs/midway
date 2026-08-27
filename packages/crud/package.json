@@ -58,7 +58,7 @@
     "@midwayjs/mongoose": "workspace:^",
     "@midwayjs/sequelize": "workspace:^",
     "@midwayjs/typeorm": "workspace:^",
-    "mongoose": "8.9.5",
+    "mongoose": "8.24.1",
     "sequelize": "6.37.8",
     "sequelize-typescript": "2.1.6",
     "sqlite3": "5.1.7",
