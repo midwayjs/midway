@@ -891,14 +891,14 @@ importers:
         specifier: workspace:^
         version: link:../mock
       '@mikro-orm/core':
-        specifier: 6.4.5
-        version: 6.4.5
+        specifier: 6.6.10
+        version: 6.6.10
       '@mikro-orm/entity-generator':
         specifier: 6.4.5
-        version: 6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)
+        version: 6.4.5(@mikro-orm/core@6.6.10)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.5
-        version: 6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(mysql2@3.16.0)(supports-color@8.1.1)
+        version: 6.4.5(@mikro-orm/core@6.6.10)(better-sqlite3@12.9.0)(mysql2@3.16.0)(supports-color@8.1.1)
 
   packages/mikro7:
     devDependencies:
@@ -3654,8 +3654,8 @@ packages:
     resolution: {integrity: sha512-0VwK++J76FlvRUj0zfpD1vjV/PTJf8hnZ/OVsMwEUJWVSm2L4bEbcHa+ERKLiprK9tk+fIrDgeX3JB9K8iuGfw==}
     engines: {node: '>= 10'}
 
-  '@mikro-orm/core@6.4.5':
-    resolution: {integrity: sha512-9/CZ5oSbf4P1oBZA2HHKzuxh5yYKDNUZZq/RvJmzMdJDgV8fpTt26po/7J6UytABqZp9yXj1jXc+Kqv73vGGOA==}
+  '@mikro-orm/core@6.6.10':
+    resolution: {integrity: sha512-XdnipWmZ0BG+lzMBv6TykSKGLgBtNwqdJqh4Er+n1kTP0IZmXCtgluzHB66sNXkcYHomuIn2olIVbcVb0m/jDw==}
     engines: {node: '>= 18.12.0'}
 
   '@mikro-orm/core@7.0.13':
@@ -6913,6 +6913,10 @@ packages:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
+  dotenv@17.3.1:
+    resolution: {integrity: sha512-IO8C/dzEb6O3F9/twg6ZLXz164a2fhTnEWb95H23Dm4OuN+92NmEAlTrupP9VW6Jm3sO26tQlqyvyi4CsnY9GA==}
+    engines: {node: '>=12'}
+
   dottie@2.0.6:
     resolution: {integrity: sha512-iGCHkfUc5kFekGiqhe8B/mdaurD+lakO9txNnTvKtA6PISrw86LgqHvRzWYPyoE2Ph5aMIrCw9/uko6XHTKCwA==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
@@ -7749,6 +7753,10 @@ packages:
 
   fs-extra@11.3.0:
     resolution: {integrity: sha512-Z4XaCL6dUDHfP/jT25jJKMmtxvuwbkrD1vNSMFlo9lNLY2c5FHYSQgHPRZUjAB26TpDEoW9HCOgplrdbaPV/ew==}
+    engines: {node: '>=14.14'}
+
+  fs-extra@11.3.3:
+    resolution: {integrity: sha512-VWSRii4t0AFm6ixFFmLLx1t7wS1gh+ckoa84aOeapGum0h+EZd1EhEumSB+ZdDLnEPuucsVB9oB7cxJHap6Afg==}
     engines: {node: '>=14.14'}
 
   fs-extra@11.3.4:
@@ -9646,8 +9654,8 @@ packages:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
     engines: {node: '>=8.6'}
 
-  mikro-orm@6.4.5:
-    resolution: {integrity: sha512-CFQf87MG4c1N3J/3ELtmwFKXHBzp62o/da7dt43V9cGXygBs65KSk3EBCAdyd5VYNtu/09mt/rztanQSWNWzog==}
+  mikro-orm@6.6.10:
+    resolution: {integrity: sha512-9z+F31IYQx4sDOO+2gtTS9JUz8SxoSrMQte0p300RIzWj+KByBYkpPZLhAToyIkuUCXHf2sGah8HSpExToCm6Q==}
     engines: {node: '>= 18.12.0'}
 
   mime-db@1.52.0:
@@ -14769,14 +14777,14 @@ snapshots:
 
   '@midwayjs/simple-lock@1.2.2': {}
 
-  '@mikro-orm/core@6.4.5':
+  '@mikro-orm/core@6.6.10':
     dependencies:
       dataloader: 2.2.3
-      dotenv: 16.4.7
+      dotenv: 17.3.1
       esprima: 4.0.1
-      fs-extra: 11.3.0
+      fs-extra: 11.3.3
       globby: 11.1.0
-      mikro-orm: 6.4.5
+      mikro-orm: 6.6.10
       reflect-metadata: 0.2.2
 
   '@mikro-orm/core@7.0.13(dataloader@2.2.3)':
@@ -14789,10 +14797,10 @@ snapshots:
     optionalDependencies:
       reflect-metadata: 0.2.2
 
-  '@mikro-orm/entity-generator@6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)':
+  '@mikro-orm/entity-generator@6.4.5(@mikro-orm/core@6.6.10)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      '@mikro-orm/core': 6.4.5
-      '@mikro-orm/knex': 6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)
+      '@mikro-orm/core': 6.6.10
+      '@mikro-orm/knex': 6.4.5(@mikro-orm/core@6.6.10)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)
       fs-extra: 11.3.0
     transitivePeerDependencies:
       - better-sqlite3
@@ -14811,9 +14819,9 @@ snapshots:
       '@mikro-orm/core': 7.0.13(dataloader@2.2.3)
       '@mikro-orm/sql': 7.0.13(@mikro-orm/core@7.0.13(dataloader@2.2.3))
 
-  '@mikro-orm/knex@6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)':
+  '@mikro-orm/knex@6.4.5(@mikro-orm/core@6.6.10)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
-      '@mikro-orm/core': 6.4.5
+      '@mikro-orm/core': 6.6.10
       fs-extra: 11.3.0
       knex: 3.1.0(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)
       sqlstring: 2.3.3
@@ -14833,10 +14841,10 @@ snapshots:
       '@mikro-orm/core': 7.0.13(dataloader@2.2.3)
       kysely: 0.28.16
 
-  '@mikro-orm/sqlite@6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(mysql2@3.16.0)(supports-color@8.1.1)':
+  '@mikro-orm/sqlite@6.4.5(@mikro-orm/core@6.6.10)(better-sqlite3@12.9.0)(mysql2@3.16.0)(supports-color@8.1.1)':
     dependencies:
-      '@mikro-orm/core': 6.4.5
-      '@mikro-orm/knex': 6.4.5(@mikro-orm/core@6.4.5)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)
+      '@mikro-orm/core': 6.6.10
+      '@mikro-orm/knex': 6.4.5(@mikro-orm/core@6.6.10)(better-sqlite3@12.9.0)(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@8.1.1)
       fs-extra: 11.3.0
       sqlite3: 5.1.7(supports-color@8.1.1)
       sqlstring-sqlite: 0.1.1
@@ -18360,6 +18368,8 @@ snapshots:
 
   dotenv@16.4.7: {}
 
+  dotenv@17.3.1: {}
+
   dottie@2.0.6: {}
 
   dunder-proto@1.0.1:
@@ -19776,6 +19786,12 @@ snapshots:
   fs-constants@1.0.0: {}
 
   fs-extra@11.3.0:
+    dependencies:
+      graceful-fs: 4.2.11
+      jsonfile: 6.2.0
+      universalify: 2.0.1
+
+  fs-extra@11.3.3:
     dependencies:
       graceful-fs: 4.2.11
       jsonfile: 6.2.0
@@ -22179,7 +22195,7 @@ snapshots:
       braces: 3.0.3
       picomatch: 2.3.2
 
-  mikro-orm@6.4.5: {}
+  mikro-orm@6.6.10: {}
 
   mime-db@1.52.0: {}
 
