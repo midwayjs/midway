@@ -29,7 +29,7 @@
     "@midwayjs/graphql": "workspace:^",
     "graphql": "16.14.2",
     "graphql-ws": "6.0.8",
-    "ws": "8.20.0"
+    "ws": "8.21.0"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",

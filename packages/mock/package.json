@@ -57,7 +57,7 @@
     "kafkajs": "2.2.4",
     "socket.io": "4.8.1",
     "socket.io-client": "4.8.1",
-    "ws": "8.18.0"
+    "ws": "8.21.0"
   },
   "dependencies": {
     "@types/superagent": "4.1.14",
