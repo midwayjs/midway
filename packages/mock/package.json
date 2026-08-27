@@ -62,7 +62,7 @@
   "dependencies": {
     "@types/superagent": "4.1.14",
     "@types/supertest": "2.0.16",
-    "js-yaml": "4.1.1",
+    "js-yaml": "4.3.1",
     "raw-body": "2.5.2",
     "supertest": "6.3.4"
   },
