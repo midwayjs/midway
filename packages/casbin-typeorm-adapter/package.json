@@ -14,7 +14,7 @@
     "@midwayjs/mock": "workspace:^",
     "better-sqlite3": "12.9.0",
     "casbin": "5.38.0",
-    "typeorm": "1.0.0"
+    "typeorm": "1.1.0"
   },
   "dependencies": {
     "@midwayjs/casbin": "workspace:^",
