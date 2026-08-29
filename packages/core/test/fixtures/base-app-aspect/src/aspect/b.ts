@@ -1,6 +1,6 @@
 import { Aspect, IMethodAspect, JoinPoint, Provide } from '../../../../../src';
 import { Home } from '../home';
-import * as assert from 'assert';
+import assert from 'assert';
 
 @Provide()
 @Aspect([Home], '*2', 1)

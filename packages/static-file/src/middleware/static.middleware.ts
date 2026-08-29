@@ -9,9 +9,9 @@ import {
   MidwayEnvironmentService,
 } from '@midwayjs/core';
 import * as assert from 'assert';
-import * as staticCache from 'koa-static-cache';
-import * as LRU from 'ylru';
-import * as range from 'koa-range';
+import staticCache from 'koa-static-cache';
+import LRU from 'ylru';
+import range from 'koa-range';
 import { DirectoryNotFoundError } from '../error';
 import * as fs from 'fs';
 

@@ -158,7 +158,7 @@ export const parseFromReadableStream = (
           fileInfo.fieldName = head['content-disposition'].name;
           fileInfo.mimeType = head['content-type'];
           isTransformFileData = true;
-          lastChunk = data;
+          lastChunk = data as typeof lastChunk;
           allChuns = emptyBuf;
           this.pause();
           resolve({ fileInfo, fields });

@@ -28,7 +28,7 @@ import {
 } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
-import * as assert from 'assert';
+import assert from 'assert';
 import { ComponentConfigurationLoader } from '../../src/context/componentLoader';
 import { defineConfiguration } from '../../src/functional';
 

@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import assert from 'assert';
 import { join } from 'path';
 import {
   safeRequire,
@@ -14,7 +14,7 @@ import {
   sleep,
 } from '../../src/util';
 import { PathFileUtils } from '../../src';
-import * as EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import { fork } from 'child_process';
 
 describe('/test/util/util.test.ts', () => {

@@ -5,7 +5,6 @@
     "rootDir": "src",
     "outDir": "dist",
     "esModuleInterop": true,
-    "baseUrl": ".",
     "paths": {
       "@midwayjs/web-bridge": [
         "../web-bridge/dist/index.d.ts"

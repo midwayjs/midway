@@ -1,7 +1,7 @@
 import { fork } from 'child_process';
 import { join } from 'path';
 import { sleep } from '@midwayjs/core';
-import * as request from 'request';
+import request from 'request';
 import { io as socketClient } from 'socket.io-client';
 
 describe('/test/bootstrap.test.ts', () => {

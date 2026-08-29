@@ -1,7 +1,7 @@
 import { is as typeis } from 'type-is';
-import * as accepts from 'accepts';
+import accepts from 'accepts';
 import * as qs from 'querystring';
-import * as only from 'only';
+import only from 'only';
 import { isPlainObject } from './util';
 
 const BODY = Symbol.for('ctx#body');

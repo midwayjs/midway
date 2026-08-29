@@ -1,5 +1,5 @@
 import { join } from 'path';
-import * as request from 'request';
+import request from 'request';
 import { sleep } from '../../src/util';
 import { ThreadManager } from '../../src/manager/thread';
 const cluster = require('cluster');

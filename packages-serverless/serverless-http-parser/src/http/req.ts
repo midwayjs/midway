@@ -1,6 +1,6 @@
 import { is as typeis } from 'type-is';
 import * as qs from 'querystring';
-import * as parseurl from 'parseurl';
+import parseurl from 'parseurl';
 import { isPlainObject } from '../util';
 
 const EVENT = Symbol.for('ctx#event');

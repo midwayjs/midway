@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import * as mm from 'mm';
+import mm from 'mm';
 import { createNewStarter, closeApp } from './utils';
 import { createLegacyFunctionApp, createHttpRequest } from '@midwayjs/mock';
 import { Framework } from '../src';

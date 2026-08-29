@@ -48,7 +48,7 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
     return this.fetchInstancesByKeys(keys);
   }
 
-  onData(setData) {
+  async onData(setData) {
     // 订阅当前 serviceName 的变更消息
     const channel = `service:change:${this.serviceName}`;
     const handler = async (channelName, message) => {
@@ -66,7 +66,7 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
         this.logger.error('[midway:redis] Error on service change:', err);
       }
     };
-    this.pubsub.subscribe(channel);
+    await this.pubsub.subscribe(channel);
     this.pubsub.on('message', handler);
 
     // 提供取消订阅方法

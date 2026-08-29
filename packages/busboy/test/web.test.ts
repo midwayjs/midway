@@ -1,6 +1,6 @@
 import { createHttpRequest, close, createLegacyApp } from '@midwayjs/mock';
 import { join } from 'path';
-import * as assert from 'assert';
+import assert from 'assert';
 import { statSync } from 'fs';
 
 describe.skip('test/web.test.ts', function () {

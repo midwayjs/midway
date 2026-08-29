@@ -1,7 +1,7 @@
 import { createLegacyApp, createHttpRequest, close } from '@midwayjs/mock';
 import { join } from 'path';
-import * as assert from 'assert';
-import * as nock from 'nock';
+import assert from 'assert';
+import nock from 'nock';
 
 describe('test/express.test.ts', function () {
   let app;

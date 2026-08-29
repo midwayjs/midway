@@ -2,7 +2,7 @@ import { IMidwayKoaConfigurationOptions, Framework, IMidwayKoaApplication } from
 import * as koaModule from '../src';
 import { join } from 'path';
 import { createLegacyApp, close } from '@midwayjs/mock';
-import * as axios from 'axios';
+import axios from 'axios';
 
 export async function creatApp(name: string, options: IMidwayKoaConfigurationOptions = {}): Promise<IMidwayKoaApplication> {
   return createLegacyApp<Framework>(join(__dirname, 'fixtures', name), {

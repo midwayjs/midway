@@ -1,4 +1,4 @@
-import * as koaBodyParser from 'koa-bodyparser';
+import koaBodyParser from 'koa-bodyparser';
 import { Config, Middleware } from '@midwayjs/core';
 
 @Middleware()

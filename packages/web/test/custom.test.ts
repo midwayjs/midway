@@ -1,4 +1,4 @@
-import * as mm from 'mm';
+import mm from 'mm';
 import { join } from 'path';
 mm(process.env, 'MIDWAY_PROJECT_APPDIR', join(__dirname, './fixtures/feature/base-app-use-custom-egg'));
 import { closeApp, creatApp, createHttpRequest } from './utils';

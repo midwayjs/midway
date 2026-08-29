@@ -463,7 +463,7 @@ export class MidwayWSFramework extends BaseFramework<
       (this.configurationOptions as any)?.tracing?.enable !== false;
     const traceInjector = (this.configurationOptions as any)?.tracing?.injector;
     const sendWithTrace = async (
-      currentSocket: IMidwayWSContext | WebSocket,
+      currentSocket: { send: (data: any) => unknown },
       payload: any,
       eventName: string
     ) => {

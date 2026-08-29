@@ -1,5 +1,5 @@
 import { IMidwayApplication } from '@midwayjs/core';
-import * as request from 'supertest';
+import request from 'supertest';
 
 export function createHttpRequest<T extends IMidwayApplication<any>>(
   app: T

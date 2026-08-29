@@ -1,6 +1,6 @@
 import { TAG_ERROR, MATCH_TYPE, TagServiceFactory } from '../src';
 import { createLightApp, close } from '@midwayjs/mock';
-import * as assert from 'assert';
+import assert from 'assert';
 import { join } from 'path';
 describe('memory.test.ts', () => {
   let tagManager;

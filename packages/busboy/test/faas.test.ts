@@ -1,6 +1,6 @@
 import { createHttpRequest, close, createLegacyFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
-import * as assert from 'assert';
+import assert from 'assert';
 import { existsSync, statSync } from 'fs';
 import { Framework } from '@midwayjs/faas';
 

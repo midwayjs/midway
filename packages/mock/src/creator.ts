@@ -39,7 +39,7 @@ import { existsSync, readFileSync } from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as yaml from 'js-yaml';
-import * as getRawBody from 'raw-body';
+import getRawBody from 'raw-body';
 import { defineConfiguration } from '@midwayjs/core/functional';
 import { createSourceModuleLoader } from './sourceLoader';
 

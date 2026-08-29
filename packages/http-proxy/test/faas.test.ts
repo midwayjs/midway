@@ -1,6 +1,6 @@
 import { createHttpRequest, close, createLegacyFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
-import * as nock from 'nock';
+import nock from 'nock';
 
 describe('test/faas.test.ts', function () {
   let app;

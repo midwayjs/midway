@@ -1,11 +1,11 @@
-import * as getType from 'cache-content-type';
+import getType from 'cache-content-type';
 import * as assert from 'assert';
 import * as statuses from 'statuses';
 import { is as typeis } from 'type-is';
-import * as encodeUrl from 'encodeurl';
-import * as escape from 'escape-html';
-import * as only from 'only';
-import * as vary from 'vary';
+import encodeUrl from 'encodeurl';
+import escape from 'escape-html';
+import only from 'only';
+import vary from 'vary';
 
 export const response = {
   _explicitStatus: false,

@@ -11,7 +11,7 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/core';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

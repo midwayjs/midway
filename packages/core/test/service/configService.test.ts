@@ -1,7 +1,7 @@
 import assert = require('assert');
 import { resolve, join } from 'path';
 import { MidwayContainer, MidwayConfigService, MidwayInformationService, MidwayEnvironmentService, MidwayInvalidConfigError } from '../../src';
-import * as mm from 'mm';
+import mm from 'mm';
 
 async function createConfigService(): Promise<MidwayConfigService> {
   const container = new MidwayContainer();

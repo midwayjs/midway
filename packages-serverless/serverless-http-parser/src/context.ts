@@ -1,5 +1,5 @@
 import * as util from 'util';
-import * as createError from 'http-errors';
+import createError from 'http-errors';
 import { Cookies } from '@midwayjs/cookies';
 
 const COOKIES = Symbol('context#cookies');

@@ -1,6 +1,6 @@
-import * as assert from 'assert';
+import assert from 'assert';
 import { Application, HTTPRequest, HTTPResponse } from '../src';
-import * as mm from 'mm';
+import mm from 'mm';
 import { createReadStream, createWriteStream, readFileSync } from 'fs';
 import { join } from 'path';
 

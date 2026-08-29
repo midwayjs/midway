@@ -24,7 +24,7 @@ import {
   totalmem,
 } from 'os';
 import { join } from 'path';
-import * as pm from 'picomatch';
+import pm from 'picomatch';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

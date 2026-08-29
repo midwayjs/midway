@@ -1,5 +1,5 @@
 import { pathMatching as match } from '../../src/';
-import * as assert from 'assert';
+import assert from 'assert';
 
 describe('/test/util/path-matching.test.ts', () => {
   it('options.match and options.ignore both present should throw', () => {

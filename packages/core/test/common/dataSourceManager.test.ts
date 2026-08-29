@@ -1,6 +1,6 @@
 import { DataSourceManager, sleep } from '../../src';
 import { join } from 'path';
-import * as assert from 'assert';
+import assert from 'assert';
 
 describe('test/common/dataSourceManager.test.ts', () => {
 

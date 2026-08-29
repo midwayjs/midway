@@ -1,5 +1,5 @@
 import { getCurrentDateString } from '../src/utils';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 describe('test/utils.test.ts', function () {
 
