@@ -29,7 +29,6 @@ import {
   UploadMode,
 } from './interface';
 import { parseMultipart } from './parse';
-import { fromBuffer } from 'file-type';
 import { formatExt, streamToAsyncIterator } from './utils';
 import * as busboy from 'busboy';
 import { BusboyConfig } from 'busboy';
@@ -548,7 +547,12 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     if (!mime.length) {
       return { passed: true };
     }
-    const typeInfo = await fromBuffer(data);
+    // file-type v21 exposes a synchronous CommonJS bridge for supported Node versions.
+    const nodeRequire = process
+      .getBuiltinModule('module')
+      .createRequire(__filename);
+    const { fileTypeFromBuffer } = nodeRequire('file-type');
+    const typeInfo = await fileTypeFromBuffer(data);
     if (!typeInfo) {
       return { passed: false, mime: mime.join('、') };
     }

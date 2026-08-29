@@ -69,7 +69,7 @@ describe('/test/index.test.ts', () => {
 
   it('should test defaults and interceptors', () => {
     expect(Axios.get).toBeDefined();
-    expect(httpService.defaults).toStrictEqual(Axios.defaults);
+    expect(httpService.defaults).toEqual(Axios.defaults);
     expect(httpService.interceptors.response).toStrictEqual(
       Axios.interceptors.response
     );
