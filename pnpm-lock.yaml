@@ -621,8 +621,8 @@ importers:
         specifier: workspace:^
         version: link:../typeorm
       mongoose:
-        specifier: 8.9.5
-        version: 8.9.5(socks@2.8.7)(supports-color@7.2.0)
+        specifier: 8.24.1
+        version: 8.24.1(socks@2.8.7)(supports-color@8.1.1)
       sequelize:
         specifier: 6.37.8
         version: 6.37.8(mysql2@3.16.0)(sqlite3@5.1.7(supports-color@8.1.1))(supports-color@7.2.0)
@@ -976,8 +976,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       mongoose:
-        specifier: 8.9.5
-        version: 8.9.5(socks@2.8.7)(supports-color@8.1.1)
+        specifier: 8.24.1
+        version: 8.24.1(socks@2.8.7)(supports-color@8.1.1)
 
   packages/mqtt:
     dependencies:
@@ -1447,10 +1447,10 @@ importers:
         version: link:../mock
       '@typegoose/typegoose':
         specifier: 12.10.1
-        version: 12.10.1(mongoose@8.9.5(socks@2.8.7)(supports-color@8.1.1))
+        version: 12.10.1(mongoose@8.24.1(socks@2.8.7)(supports-color@8.1.1))
       mongoose:
-        specifier: 8.9.5
-        version: 8.9.5(socks@2.8.7)(supports-color@8.1.1)
+        specifier: 8.24.1
+        version: 8.24.1(socks@2.8.7)(supports-color@8.1.1)
 
   packages/typeorm:
     devDependencies:
@@ -9882,8 +9882,8 @@ packages:
   mongodb-connection-string-url@3.0.2:
     resolution: {integrity: sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==}
 
-  mongodb@6.12.0:
-    resolution: {integrity: sha512-RM7AHlvYfS7jv7+BXund/kR64DryVI+cHbVAy9P61fnb1RcWZqOW1/Wj2YhqMCx+MuYhqTRGv7AwHBzmsCKBfA==}
+  mongodb@6.20.0:
+    resolution: {integrity: sha512-Tl6MEIU3K4Rq3TSHd+sZQqRBoGlFsOgNrH5ltAcFBV62Re3Fd+FcaVf8uSEQFOJ51SDowDVttBTONMfoYWrWlQ==}
     engines: {node: '>=16.20.1'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.188.0
@@ -9891,7 +9891,7 @@ packages:
       gcp-metadata: ^5.2.0
       kerberos: ^2.0.1
       mongodb-client-encryption: '>=6.0.0 <7'
-      snappy: ^7.2.2
+      snappy: ^7.3.2
       socks: ^2.7.1
     peerDependenciesMeta:
       '@aws-sdk/credential-providers':
@@ -9909,8 +9909,8 @@ packages:
       socks:
         optional: true
 
-  mongoose@8.9.5:
-    resolution: {integrity: sha512-SPhOrgBm0nKV3b+IIHGqpUTOmgVL5Z3OO9AwkFEmvOZznXTvplbomstCnPOGAyungtRXE5pJTgKpKcZTdjeESg==}
+  mongoose@8.24.1:
+    resolution: {integrity: sha512-UpHBA0l5kHyKJQFjmBaFYQFo5sgz1DK0TRqDkOyBLYbqiIbKKhIvBpHWBXqeo0rgW4kGI1UhhAw+kTQZoj1BdA==}
     engines: {node: '>=16.20.1'}
 
   mpath@0.9.0:
@@ -15737,11 +15737,11 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@typegoose/typegoose@12.10.1(mongoose@8.9.5(socks@2.8.7)(supports-color@8.1.1))':
+  '@typegoose/typegoose@12.10.1(mongoose@8.24.1(socks@2.8.7)(supports-color@8.1.1))':
     dependencies:
       lodash: 4.17.21
       loglevel: 1.9.2
-      mongoose: 8.9.5(socks@2.8.7)(supports-color@8.1.1)
+      mongoose: 8.24.1(socks@2.8.7)(supports-color@8.1.1)
       reflect-metadata: 0.2.2
       semver: 7.7.3
       tslib: 2.8.1
@@ -22426,7 +22426,7 @@ snapshots:
       '@types/whatwg-url': 11.0.5
       whatwg-url: 14.2.0
 
-  mongodb@6.12.0(socks@2.8.7):
+  mongodb@6.20.0(socks@2.8.7):
     dependencies:
       '@mongodb-js/saslprep': 1.4.4
       bson: 6.10.4
@@ -22434,30 +22434,11 @@ snapshots:
     optionalDependencies:
       socks: 2.8.7
 
-  mongoose@8.9.5(socks@2.8.7)(supports-color@7.2.0):
+  mongoose@8.24.1(socks@2.8.7)(supports-color@8.1.1):
     dependencies:
       bson: 6.10.4
       kareem: 2.6.3
-      mongodb: 6.12.0(socks@2.8.7)
-      mpath: 0.9.0
-      mquery: 5.0.0(supports-color@7.2.0)
-      ms: 2.1.3
-      sift: 17.1.3
-    transitivePeerDependencies:
-      - '@aws-sdk/credential-providers'
-      - '@mongodb-js/zstd'
-      - gcp-metadata
-      - kerberos
-      - mongodb-client-encryption
-      - snappy
-      - socks
-      - supports-color
-
-  mongoose@8.9.5(socks@2.8.7)(supports-color@8.1.1):
-    dependencies:
-      bson: 6.10.4
-      kareem: 2.6.3
-      mongodb: 6.12.0(socks@2.8.7)
+      mongodb: 6.20.0(socks@2.8.7)
       mpath: 0.9.0
       mquery: 5.0.0(supports-color@8.1.1)
       ms: 2.1.3
@@ -22504,12 +22485,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  mquery@5.0.0(supports-color@7.2.0):
-    dependencies:
-      debug: 4.4.3(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - supports-color
 
   mquery@5.0.0(supports-color@8.1.1):
     dependencies:
