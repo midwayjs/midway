@@ -19,7 +19,6 @@ import {
 } from '.';
 import { parseFromReadableStream, parseMultipart } from './parse';
 import * as getRawBody from 'raw-body';
-import { fromBuffer } from 'file-type';
 import { formatExt } from './utils';
 
 const { unlink, writeFile } = promises;
@@ -297,7 +296,12 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     if (!mime.length) {
       return { passed: true };
     }
-    const typeInfo = await fromBuffer(data);
+    // file-type v21 exposes a synchronous CommonJS bridge for supported Node versions.
+    const nodeRequire = process
+      .getBuiltinModule('module')
+      .createRequire(__filename);
+    const { fileTypeFromBuffer } = nodeRequire('file-type');
+    const typeInfo = await fileTypeFromBuffer(data);
     if (!typeInfo) {
       return { passed: false, mime: mime.join('、') };
     }
