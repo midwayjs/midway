@@ -34,7 +34,7 @@
   "dependencies": {
     "@midwayjs/glob": "^1.0.2",
     "@opentelemetry/api": "1.9.1",
-    "picomatch": "2.3.2",
+    "picomatch": "4.0.4",
     "reflect-metadata": "0.2.2"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
