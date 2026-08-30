@@ -34,6 +34,14 @@ const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
 let projectIdx = 1;
+
+/**
+ * Normalize an explicitly configured Bootstrap import into a module list.
+ */
+function normalizeBootstrapImports(imports: any | any[]): any[] {
+  return Array.isArray(imports) ? imports : [imports];
+}
+
 function printStepDebugInfo(stepInfo: string) {
   debug(`\n\nProject ${projectIdx} - Step ${stepIdx++}: ${stepInfo}\n`);
 }
@@ -230,16 +238,19 @@ export async function prepareGlobalApplicationContextAsync(
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // set entry file
-  globalOptions.imports = [
-    ...(globalOptions.imports ?? []),
-    await findProjectEntryFile(
-      appDir,
-      baseDir,
-      globalOptions.moduleLoadType,
-      globalOptions.moduleLoader
-    ),
-  ];
+  // Explicit imports replace the conventional project entry.
+  if (globalOptions.imports === undefined) {
+    globalOptions.imports = [
+      await findProjectEntryFile(
+        appDir,
+        baseDir,
+        globalOptions.moduleLoadType,
+        globalOptions.moduleLoader
+      ),
+    ];
+  } else {
+    globalOptions.imports = normalizeBootstrapImports(globalOptions.imports);
+  }
 
   MidwayInitializerPerformanceManager.markEnd(
     MidwayInitializerPerformanceManager.MEASURE_KEYS.DETECTOR_PREPARE
@@ -403,11 +414,12 @@ export function prepareGlobalApplicationContext(
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // set entry file
-  globalOptions.imports = [
-    ...(globalOptions.imports ?? []),
-    findProjectEntryFileSync(appDir, baseDir),
-  ];
+  // Explicit imports replace the conventional project entry.
+  if (globalOptions.imports === undefined) {
+    globalOptions.imports = [findProjectEntryFileSync(appDir, baseDir)];
+  } else {
+    globalOptions.imports = normalizeBootstrapImports(globalOptions.imports);
+  }
 
   printStepDebugInfo('Binding built-in service');
 

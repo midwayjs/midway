@@ -320,11 +320,27 @@ Bootstrap
 | -------------- |--------------------------------------------------------------------------------------| ------------------------------------------------------------ |
 | appDir         | string                                                                               | 可选，项目根目录，默认为 `process.cwd()`                     |
 | baseDir        | string                                                                               | 可选，项目代码目录，研发时为 `src`，部署时为 `dist`          |
-| imports        | Component[]                                                                          | 可选，显式的组件引用                                         |
+| imports        | Component \| Component[]                                                            | 可选，显式的启动入口或组件引用                               |
 | moduleDetector | 'file' \| IFileDetector \| false                                                     | 可选，使用的模块加载方式，默认为 `file` ，使用依赖注入本地文件扫描方式，可以显式指定一个扫描器，也可以关闭扫描 |
 | logger         | Boolean \| ILogger                                                                   | 可选，bootstrap 中使用的 logger，默认为 consoleLogger        |
 | ignore         | string[]                                                                             | 可选，依赖注入容器扫描忽略的路径，moduleDetector 为 false 时无效 |
 | globalConfig   | Array\<\{ [environmentName: string]: Record\<string, any> }> \| Record\<string, any> | 可选，全局传入的配置，如果传入对象，则直接以对象形式合并到当前的配置中，如果希望传入不同环境的配置，那么，以数组形式传入，结构和 `importConfigs` 一致。 |
+
+从 Midway 5.x 开始，`imports` 是否传入会决定项目入口的加载方式：
+
+- 不传 `imports` 时，Bootstrap 会从 `baseDir` 自动查找 `configuration` 或 `index` 入口。
+- 显式传入 `imports` 时，只加载指定的模块，不再自动追加默认项目入口。
+- `imports: []` 表示不加载任何项目入口。
+
+因此，可以为不同启动场景直接指定不同的 Configuration：
+
+```javascript
+const { Bootstrap } = require('@midwayjs/bootstrap');
+
+Bootstrap.configure({
+  imports: require('./dist/configuration.worker'),
+}).run();
+```
 
 
 
