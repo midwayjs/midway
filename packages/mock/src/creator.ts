@@ -18,6 +18,7 @@ import {
   isTypeScriptEnvironment,
   DecoratorManager,
   DynamicMidwayContainer,
+  resolveBootstrapImports,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
@@ -57,6 +58,26 @@ function formatPath(baseDir, p) {
 
 function getFileNameWithSuffix(fileName: string) {
   return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
+}
+
+async function resolveMockBootstrapImports(
+  options: MockBootstrapOptions,
+  appDir: string,
+  internalImports: any[] = []
+): Promise<any[]> {
+  const additionalImports =
+    options.imports === undefined
+      ? []
+      : Array.isArray(options.imports)
+        ? options.imports
+        : [options.imports];
+  const projectImports = await resolveBootstrapImports({
+    ...options,
+    appDir,
+    imports: undefined,
+  });
+
+  return [...additionalImports, ...internalImports, ...projectImports];
 }
 
 function createMockWrapApplicationContext() {
@@ -253,8 +274,9 @@ export async function create<
 
     const container = createMockWrapApplicationContext();
     options.applicationContext = container;
-    options.imports = options.imports || [];
-    options.imports.push(anonymousConfiguration);
+    options.imports = await resolveMockBootstrapImports(options, appDir, [
+      anonymousConfiguration,
+    ]);
 
     await initializeGlobalApplicationContext({
       loggerFactory: loggers,
@@ -434,6 +456,11 @@ export async function createFunctionApp<
         }
       );
     }
+
+    options.imports = await resolveMockBootstrapImports(
+      options,
+      options.appDir
+    );
 
     // new mode
     const exports = options.starter.start(options);

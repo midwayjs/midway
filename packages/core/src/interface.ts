@@ -1123,6 +1123,11 @@ export interface IMidwayBootstrapOptions {
   appDir?: string;
   applicationContext?: IMidwayGlobalContainer;
   preloadModules?: any[];
+  /**
+   * Modules loaded as Bootstrap entries. When omitted, Midway resolves the
+   * conventional project entry from baseDir. An explicit value, including an
+   * empty array, replaces the conventional project entry.
+   */
   imports?: any | any[];
   moduleLoadType?: ModuleLoadType;
   logger?: boolean | ILogger;

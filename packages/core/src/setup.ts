@@ -34,6 +34,54 @@ const debug = util.debuglog('midway:debug');
 
 let stepIdx = 1;
 let projectIdx = 1;
+
+/**
+ * Normalize an explicitly configured Bootstrap import into a module list.
+ */
+function normalizeBootstrapImports(imports: any | any[]): any[] {
+  return Array.isArray(imports) ? imports : [imports];
+}
+
+/**
+ * Resolve Bootstrap imports for asynchronous application initialization.
+ * @param globalOptions Bootstrap options used to locate the project entry.
+ */
+export async function resolveBootstrapImports(
+  globalOptions: IMidwayBootstrapOptions
+): Promise<any[]> {
+  if (globalOptions.imports !== undefined) {
+    return normalizeBootstrapImports(globalOptions.imports);
+  }
+
+  return [
+    await findProjectEntryFile(
+      globalOptions.appDir ?? '',
+      globalOptions.baseDir ?? '',
+      globalOptions.moduleLoadType ?? 'commonjs',
+      globalOptions.moduleLoader
+    ),
+  ];
+}
+
+/**
+ * Resolve Bootstrap imports for synchronous application initialization.
+ * @param globalOptions Bootstrap options used to locate the project entry.
+ */
+export function resolveBootstrapImportsSync(
+  globalOptions: IMidwayBootstrapOptions
+): any[] {
+  if (globalOptions.imports !== undefined) {
+    return normalizeBootstrapImports(globalOptions.imports);
+  }
+
+  return [
+    findProjectEntryFileSync(
+      globalOptions.appDir ?? '',
+      globalOptions.baseDir ?? ''
+    ),
+  ];
+}
+
 function printStepDebugInfo(stepInfo: string) {
   debug(`\n\nProject ${projectIdx} - Step ${stepIdx++}: ${stepInfo}\n`);
 }
@@ -230,16 +278,7 @@ export async function prepareGlobalApplicationContextAsync(
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // set entry file
-  globalOptions.imports = [
-    ...(globalOptions.imports ?? []),
-    await findProjectEntryFile(
-      appDir,
-      baseDir,
-      globalOptions.moduleLoadType,
-      globalOptions.moduleLoader
-    ),
-  ];
+  globalOptions.imports = await resolveBootstrapImports(globalOptions);
 
   MidwayInitializerPerformanceManager.markEnd(
     MidwayInitializerPerformanceManager.MEASURE_KEYS.DETECTOR_PREPARE
@@ -403,11 +442,7 @@ export function prepareGlobalApplicationContext(
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // set entry file
-  globalOptions.imports = [
-    ...(globalOptions.imports ?? []),
-    findProjectEntryFileSync(appDir, baseDir),
-  ];
+  globalOptions.imports = resolveBootstrapImportsSync(globalOptions);
 
   printStepDebugInfo('Binding built-in service');
 
