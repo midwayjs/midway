@@ -42,6 +42,46 @@ function normalizeBootstrapImports(imports: any | any[]): any[] {
   return Array.isArray(imports) ? imports : [imports];
 }
 
+/**
+ * Resolve Bootstrap imports for asynchronous application initialization.
+ * @param globalOptions Bootstrap options used to locate the project entry.
+ */
+export async function resolveBootstrapImports(
+  globalOptions: IMidwayBootstrapOptions
+): Promise<any[]> {
+  if (globalOptions.imports !== undefined) {
+    return normalizeBootstrapImports(globalOptions.imports);
+  }
+
+  return [
+    await findProjectEntryFile(
+      globalOptions.appDir ?? '',
+      globalOptions.baseDir ?? '',
+      globalOptions.moduleLoadType ?? 'commonjs',
+      globalOptions.moduleLoader
+    ),
+  ];
+}
+
+/**
+ * Resolve Bootstrap imports for synchronous application initialization.
+ * @param globalOptions Bootstrap options used to locate the project entry.
+ */
+export function resolveBootstrapImportsSync(
+  globalOptions: IMidwayBootstrapOptions
+): any[] {
+  if (globalOptions.imports !== undefined) {
+    return normalizeBootstrapImports(globalOptions.imports);
+  }
+
+  return [
+    findProjectEntryFileSync(
+      globalOptions.appDir ?? '',
+      globalOptions.baseDir ?? ''
+    ),
+  ];
+}
+
 function printStepDebugInfo(stepInfo: string) {
   debug(`\n\nProject ${projectIdx} - Step ${stepIdx++}: ${stepInfo}\n`);
 }
@@ -238,19 +278,7 @@ export async function prepareGlobalApplicationContextAsync(
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // Explicit imports replace the conventional project entry.
-  if (globalOptions.imports === undefined) {
-    globalOptions.imports = [
-      await findProjectEntryFile(
-        appDir,
-        baseDir,
-        globalOptions.moduleLoadType,
-        globalOptions.moduleLoader
-      ),
-    ];
-  } else {
-    globalOptions.imports = normalizeBootstrapImports(globalOptions.imports);
-  }
+  globalOptions.imports = await resolveBootstrapImports(globalOptions);
 
   MidwayInitializerPerformanceManager.markEnd(
     MidwayInitializerPerformanceManager.MEASURE_KEYS.DETECTOR_PREPARE
@@ -414,12 +442,7 @@ export function prepareGlobalApplicationContext(
     globalOptions.moduleLoadType = 'commonjs';
   }
 
-  // Explicit imports replace the conventional project entry.
-  if (globalOptions.imports === undefined) {
-    globalOptions.imports = [findProjectEntryFileSync(appDir, baseDir)];
-  } else {
-    globalOptions.imports = normalizeBootstrapImports(globalOptions.imports);
-  }
+  globalOptions.imports = resolveBootstrapImportsSync(globalOptions);
 
   printStepDebugInfo('Binding built-in service');
 

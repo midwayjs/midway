@@ -11,6 +11,7 @@
 - 当 `imports` 被显式传入时，只加载传入的模块，不再追加项目默认入口。
 - 支持单个模块、模块数组和空数组；其中空数组明确表示不加载任何项目入口。
 - 保证同步和异步应用上下文初始化路径使用相同规则。
+- 迁移 `@midwayjs/mock` 的内部入口组合，使其按照既有契约把 `options.imports` 作为额外测试组件，并显式加入项目默认入口。
 - 补充 4.x 到 5.x 的迁移说明，提示依赖“显式 imports + 自动默认入口”行为的应用手动加入默认入口。
 
 ## Impact
@@ -19,4 +20,6 @@
   - `packages/core/src/setup.ts`
   - `packages/core/src/interface.ts`
   - `packages/core/test/setup.test.ts`
+  - `packages/mock/src/creator.ts`
+  - Functional API sample smoke tests
   - Bootstrap 相关用户文档和 5.x 迁移文档

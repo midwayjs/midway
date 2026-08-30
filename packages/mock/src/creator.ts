@@ -18,6 +18,7 @@ import {
   isTypeScriptEnvironment,
   DecoratorManager,
   DynamicMidwayContainer,
+  resolveBootstrapImports,
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { clearAllLoggers, loggers } from '@midwayjs/logger';
@@ -253,8 +254,22 @@ export async function create<
 
     const container = createMockWrapApplicationContext();
     options.applicationContext = container;
-    options.imports = options.imports || [];
-    options.imports.push(anonymousConfiguration);
+    const additionalImports =
+      options.imports === undefined
+        ? []
+        : Array.isArray(options.imports)
+          ? options.imports
+          : [options.imports];
+    const projectImports = await resolveBootstrapImports({
+      ...options,
+      appDir,
+      imports: undefined,
+    });
+    options.imports = [
+      ...additionalImports,
+      anonymousConfiguration,
+      ...projectImports,
+    ];
 
     await initializeGlobalApplicationContext({
       loggerFactory: loggers,
