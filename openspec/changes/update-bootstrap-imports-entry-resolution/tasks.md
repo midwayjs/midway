@@ -4,7 +4,7 @@
 - [x] 1.2 调整异步应用上下文准备流程，仅在 `imports` 未传时探测默认项目入口
 - [x] 1.3 调整同步应用上下文准备流程，使其与异步流程保持相同语义
 - [x] 1.4 为 `IMidwayBootstrapOptions.imports` 补充覆盖语义的接口注释
-- [x] 1.5 迁移 `@midwayjs/mock` 的入口组合，保留额外测试组件的 additive imports 契约
+- [x] 1.5 迁移 `@midwayjs/mock` 的应用与 FaaS 入口组合，保留额外测试组件的 additive imports 契约
 
 ## 2. Tests
 
@@ -13,6 +13,7 @@
 - [x] 2.3 验证 `imports: []` 不加载默认 Configuration
 - [x] 2.4 验证同步和异步初始化路径行为一致
 - [x] 2.5 验证 mock 驱动的 Functional API samples 在有无额外 imports 时均可加载默认 Configuration
+- [x] 2.6 验证 mock 驱动的 FaaS fixture 可同时加载额外组件与默认 Configuration
 
 ## 3. Documentation And Validation
 

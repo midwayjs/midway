@@ -60,6 +60,26 @@ function getFileNameWithSuffix(fileName: string) {
   return isTypeScriptEnvironment() ? `${fileName}.ts` : `${fileName}.js`;
 }
 
+async function resolveMockBootstrapImports(
+  options: MockBootstrapOptions,
+  appDir: string,
+  internalImports: any[] = []
+): Promise<any[]> {
+  const additionalImports =
+    options.imports === undefined
+      ? []
+      : Array.isArray(options.imports)
+        ? options.imports
+        : [options.imports];
+  const projectImports = await resolveBootstrapImports({
+    ...options,
+    appDir,
+    imports: undefined,
+  });
+
+  return [...additionalImports, ...internalImports, ...projectImports];
+}
+
 function createMockWrapApplicationContext() {
   const container = new DynamicMidwayContainer();
   debug(`[mock]: Create mock MidwayContainer, id=${container.id}.`);
@@ -254,22 +274,9 @@ export async function create<
 
     const container = createMockWrapApplicationContext();
     options.applicationContext = container;
-    const additionalImports =
-      options.imports === undefined
-        ? []
-        : Array.isArray(options.imports)
-          ? options.imports
-          : [options.imports];
-    const projectImports = await resolveBootstrapImports({
-      ...options,
-      appDir,
-      imports: undefined,
-    });
-    options.imports = [
-      ...additionalImports,
+    options.imports = await resolveMockBootstrapImports(options, appDir, [
       anonymousConfiguration,
-      ...projectImports,
-    ];
+    ]);
 
     await initializeGlobalApplicationContext({
       loggerFactory: loggers,
@@ -449,6 +456,11 @@ export async function createFunctionApp<
         }
       );
     }
+
+    options.imports = await resolveMockBootstrapImports(
+      options,
+      options.appDir
+    );
 
     // new mode
     const exports = options.starter.start(options);
