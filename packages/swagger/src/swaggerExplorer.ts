@@ -17,6 +17,7 @@ import {
   CUSTOM_PARAM_INJECT_KEY,
   CUSTOM_PROPERTY_INJECT_KEY,
   safeRequire,
+  Utils,
 } from '@midwayjs/core';
 import {
   MixDecoratorMetadata,
@@ -263,7 +264,7 @@ export class SwaggerExplorer {
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
         // 生成URL
-        let url = (prefix + webRouter.path).replace('//', '/');
+        let url = Utils.joinURLPath(prefix, webRouter.path);
         url = replaceUrl(url, parseParamsInPath(url));
 
         // 方法元数据
