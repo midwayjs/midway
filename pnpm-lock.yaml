@@ -1747,8 +1747,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       '@types/koa':
-        specifier: 2.15.0
-        version: 2.15.0
+        specifier: 2.15.2
+        version: 2.15.2
       dayjs:
         specifier: 1.11.20
         version: 1.11.20
@@ -4848,8 +4848,8 @@ packages:
   '@types/koa-router@7.4.9':
     resolution: {integrity: sha512-YibkqJrFWwwF55YtZo6dORpMj/1zfweHHIZA/qpA+2JPcVbBopAvLjejTcO1ojWAJfzf1tPC+CrPnLDuVRkUEA==}
 
-  '@types/koa@2.15.0':
-    resolution: {integrity: sha512-7QFsywoE5URbuVnG3loe03QXuGajrnotr3gQkXcEBShORai23MePfFYdhz90FEtBBpkyIYQbVD+evKtloCgX3g==}
+  '@types/koa@2.15.2':
+    resolution: {integrity: sha512-CB+iyjjh1uS5N6/CKwXvw0qA7USMS2WVc4Tjf660yCjhdvqzNr8gdFcIawB41zGGptOQ+d1fnpaQWIIUXYxR3w==}
 
   '@types/koa@3.0.0':
     resolution: {integrity: sha512-MOcVYdVYmkSutVHZZPh8j3+dAjLyR5Tl59CN0eKgpkE1h/LBSmPAsQQuWs+bKu7WtGNn+hKfJH9Gzml+PulmDg==}
@@ -15842,7 +15842,7 @@ snapshots:
       '@types/connect': 3.4.38
       '@types/express': 4.17.25
       '@types/keygrip': 1.0.6
-      '@types/node': 20.19.39
+      '@types/node': 22.12.0
 
   '@types/cors@2.8.19':
     dependencies:
@@ -15854,7 +15854,7 @@ snapshots:
 
   '@types/depd@1.1.37':
     dependencies:
-      '@types/node': 20.19.39
+      '@types/node': 22.12.0
 
   '@types/empower-core@1.2.4':
     dependencies:
@@ -15907,7 +15907,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 6.0.0
-      '@types/node': 20.19.39
+      '@types/node': 22.12.0
 
   '@types/graceful-fs@4.1.9':
     dependencies:
@@ -15965,7 +15965,7 @@ snapshots:
     dependencies:
       '@types/koa': 3.0.0
 
-  '@types/koa@2.15.0':
+  '@types/koa@2.15.2':
     dependencies:
       '@types/accepts': 1.3.7
       '@types/content-disposition': 0.5.9
@@ -15974,7 +15974,7 @@ snapshots:
       '@types/http-errors': 2.0.5
       '@types/keygrip': 1.0.6
       '@types/koa-compose': 3.2.9
-      '@types/node': 14.18.63
+      '@types/node': 22.12.0
 
   '@types/koa@3.0.0':
     dependencies:
@@ -16082,11 +16082,11 @@ snapshots:
   '@types/send@0.17.6':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.19.39
+      '@types/node': 22.12.0
 
   '@types/send@1.2.1':
     dependencies:
-      '@types/node': 20.19.39
+      '@types/node': 22.12.0
 
   '@types/serve-index@1.9.4':
     dependencies:
@@ -18483,7 +18483,7 @@ snapshots:
     dependencies:
       '@eggjs/router': 2.2.0
       '@types/depd': 1.1.37
-      '@types/koa': 2.15.0
+      '@types/koa': 2.15.2
       co: 4.6.0
       debug: 4.4.3(supports-color@7.2.0)
       depd: 2.0.0
@@ -18703,7 +18703,7 @@ snapshots:
   egg@2.37.0(supports-color@8.1.1):
     dependencies:
       '@types/accepts': 1.3.7
-      '@types/koa': 2.15.0
+      '@types/koa': 2.15.2
       '@types/koa-router': 7.4.9
       accepts: 1.3.8
       agentkeepalive: 4.6.0
