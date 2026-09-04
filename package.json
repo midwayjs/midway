@@ -12,7 +12,7 @@
     "execa": "9.6.1",
     "fs-extra": "11.3.4",
     "jest": "29.7.0",
-    "lerna": "9.0.7",
+    "lerna": "10.0.1",
     "lerna-changelog": "2.2.0",
     "madge": "6.1.0",
     "mwts": "2.0.4",
