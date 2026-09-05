@@ -4,7 +4,7 @@ Base view component for midway.
 
 ## Install
 
-@midwayjs/view don't have build-in view engine, So you should choose a template engine like ejs, and install `@midwayjs/view-ejs`.
+@midwayjs/view don't have built-in view engine, So you should choose a template engine like ejs, and install `@midwayjs/view-ejs`.
 View component will be auto install and enable by import `view-ejs`.
 
 ```bash
@@ -122,7 +122,7 @@ These methods receive three arguments, `renderString` will pass tpl as the first
 - locals: data used by template
 - viewOptions: the view options for each render, it can override the view default config in `config/config.default.js`. Plugin should implement it if it has config.
   When you implement view engine, you will receive this options from `render`, the options contain:
-  - root: it will resolve the name to full path, but seperating root and name in viewOptions.
+  - root: it will resolve the name to full path, but separating root and name in viewOptions.
   - name: the original name when call render
   - locals: the original locals when call render
 

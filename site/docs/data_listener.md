@@ -8,7 +8,7 @@ Midway 提供了 `DataListener` 的抽象，用于方便的创建这种模式的
 
 我们以一个简单的 **内存数据更新** 的需求为例。
 
-数据订阅在 midway 中也是一个普通的类，比如我们也可以把他放到 `src/listener/memory.listner.ts` 中。
+数据订阅在 midway 中也是一个普通的类，比如我们也可以把他放到 `src/listener/memory.listener.ts` 中。
 
 我们只需要继承内置的 `DataListener` 类，同时，一般数据订阅类为单例。
 
@@ -17,7 +17,7 @@ Midway 提供了 `DataListener` 的抽象，用于方便的创建这种模式的
 比如：
 
 ```typescript
-// src/listener/memory.listner.ts
+// src/listener/memory.listener.ts
 import { Provide, Scope, ScopeEnum } from '@midwayjs/core';
 import { DataListener } from '@midwayjs/core';
 
@@ -52,7 +52,7 @@ export class MemoryDataListener extends DataListener<string> {
 比如上面的示例代码，我们需要关闭定时器。
 
 ```typescript
-// src/listener/memory.listner.ts
+// src/listener/memory.listener.ts
 import { Provide, Scope, ScopeEnum, DataListener } from '@midwayjs/core';
 
 @Provide()
@@ -103,7 +103,7 @@ export class MemoryDataListener extends DataListener<string> {
 
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
-import { MemoryDataListener } from '../listener/memory.listner.ts';
+import { MemoryDataListener } from '../listener/memory.listener.ts';
 
 @Provide()
 export class UserService {

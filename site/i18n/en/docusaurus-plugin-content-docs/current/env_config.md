@@ -291,7 +291,7 @@ For example, the loading sequence for loading a configuration in the prod enviro
 ### Configure merge rules
 
 
-By default, the `**/config.defaut.ts` file and the `**/config.{environment}.ts` file will be loaded.
+By default, the `**/config.default.ts` file and the `**/config.{environment}.ts` file will be loaded.
 
 For example, the following code will search for `config.default.*` and `config.local.*` files in the `local` environment. If it is in other environments, it will only search for `config.default.*` and `config.{Current environment}.*`, if the file does not exist, it will not be loaded and no error will be reported.
 

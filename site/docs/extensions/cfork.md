@@ -34,7 +34,7 @@ cfork({
   })
   .on('disconnect', (worker) => {
     console.warn(
-      '[%s] [master:%s] wroker:%s disconnect, exitedAfterDisconnect: %s, state: %s.',
+      '[%s] [master:%s] worker:%s disconnect, exitedAfterDisconnect: %s, state: %s.',
       Date(),
       process.pid,
       worker.process.pid,
@@ -55,7 +55,7 @@ cfork({
       )
     );
     err.name = 'WorkerDiedError';
-    console.error('[%s] [master:%s] wroker exit: %s', Date(), process.pid, err.stack);
+    console.error('[%s] [master:%s] worker exit: %s', Date(), process.pid, err.stack);
   });
 ```
 

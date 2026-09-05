@@ -4,7 +4,7 @@
 
 ## 在 VSCode 中调试
 
-### 方法一：使用 JavaScript Debug Teminal
+### 方法一：使用 JavaScript Debug Terminal
 
 在 VSCode 的终端下拉出，隐藏着一个 `JavaScript Debug Terminal` ，点击它，创建出来的终端将自带调试能力。
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01HWzQEu1cQ6C7q9OYh_!!6000000003594-2-tps-1030-364.png)
@@ -69,7 +69,7 @@
 配置 npm 命令。
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01e4yJnU1QT3MOImlpR_!!6000000001976-2-tps-620-946.png)
 
-选择你的 `package.json` 后，下拉选择 `Scrips` ，其中是你 `package.json` 中配置好的 `scripts` 中的命令，选择你要的命令，比如 `dev` 或者 `test` 等即可 。
+选择你的 `package.json` 后，下拉选择 `Scripts` ，其中是你 `package.json` 中配置好的 `scripts` 中的命令，选择你要的命令，比如 `dev` 或者 `test` 等即可 。
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01DBqmwD1rtbwqpuQZe_!!6000000005689-2-tps-1500-1017.png)
 
 在代码上断点后执行调试即可。

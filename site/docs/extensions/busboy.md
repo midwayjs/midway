@@ -60,7 +60,7 @@ $ npm i @midwayjs/busboy@4 --save
 ## 启用组件
 
 ```typescript
-// src/configuratin.ts
+// src/configuration.ts
 
 import { Configuration } from '@midwayjs/core';
 import * as busboy from '@midwayjs/busboy';
@@ -105,7 +105,7 @@ export class HomeController {
 <TabItem value="koa" label="@midwayjs/koa">
 
 ```typescript
-// src/configuratin.ts
+// src/configuration.ts
 
 import { Configuration } from '@midwayjs/core';
 import * as busboy from '@midwayjs/busboy';
@@ -127,7 +127,7 @@ export class MainConfiguration {
 <TabItem value="egg" label="@midwayjs/web">
 
 ```typescript
-// src/configuratin.ts
+// src/configuration.ts
 
 import { Configuration } from '@midwayjs/core';
 import * as busboy from '@midwayjs/busboy';
@@ -149,7 +149,7 @@ export class MainConfiguration {
 <TabItem value="express" label="@midwayjs/express">
 
 ```typescript
-// src/configuratin.ts
+// src/configuration.ts
 
 import { Configuration } from '@midwayjs/core';
 import * as busboy from '@midwayjs/busboy';
@@ -171,7 +171,7 @@ export class MainConfiguration {
 <TabItem value="faas" label="@midwayjs/faas">
 
 ```typescript
-// src/configuratin.ts
+// src/configuration.ts
 
 import { Configuration } from '@midwayjs/core';
 import * as busboy from '@midwayjs/busboy';

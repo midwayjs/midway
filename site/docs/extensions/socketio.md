@@ -102,7 +102,7 @@ export class MainConfiguration {
 ## 目录结构
 
 
-下面是 Socket.io 项目的基础目录结构，和传统应用类似，我们创建了 `socket` 目录，用户存放 Soscket.io 业务的服务代码。
+下面是 Socket.io 项目的基础目录结构，和传统应用类似，我们创建了 `socket` 目录，用户存放 Socket.io 业务的服务代码。
 ```
 .
 ├── package.json
