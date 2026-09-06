@@ -1,8 +1,33 @@
-import { DataSourceManager, sleep } from '../../src';
+import {
+  DataSourceManager,
+  DataSourceManagerConfigOption,
+  sleep,
+} from '../../src';
 import { join } from 'path';
 import * as assert from 'assert';
 
 describe('test/common/dataSourceManager.test.ts', () => {
+
+  it('should accept named data source configuration', () => {
+    const config: DataSourceManagerConfigOption<{
+      uri: string;
+      options: Record<string, unknown>;
+    }> = {
+      dataSource: {
+        default: {
+          uri: 'mongodb://127.0.0.1:27017/default',
+          options: {},
+          entities: [],
+        },
+        secondary: {
+          uri: 'mongodb://127.0.0.1:27017/secondary',
+          options: {},
+        },
+      },
+    };
+
+    expect(Object.keys(config.dataSource)).toEqual(['default', 'secondary']);
+  });
 
   class CustomDataSourceFactory extends DataSourceManager<any> {
     getName() {
