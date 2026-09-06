@@ -2,6 +2,7 @@
   "name": "midway_project",
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
+  "packageManager": "pnpm@10.33.0",
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "7.25.9",
     "@nrwl/tao": "16.10.0",
