@@ -61,13 +61,13 @@ export interface CrudContext {
   [key: string]: any;
 }
 
-export interface CrudRouteOverride {
+export interface CrudRouteOverride extends Omit<CrudRouteDefinition, 'name'> {
   enabled?: boolean;
 }
 
 export interface CrudOptions {
   model: new (...args: any[]) => any;
-  service?: new (...args: any[]) => CrudServiceAdapter<any>;
+  service?: string | (new (...args: any[]) => CrudServiceAdapter<any>);
   id?: string;
   dto?: {
     create?: new (...args: any[]) => any;
@@ -76,10 +76,48 @@ export interface CrudOptions {
     query?: new (...args: any[]) => any;
   };
   routes?: {
+    /**
+     * API Route Mode (default: RESTful)
+     * - RESTful: Resource-based route. with HTTP methods defines the operation
+     *            (e.g., `POST /users`, `DELETE /users/:id`)
+     * - RPC:     Action-based route. with the URL defines the operation
+     *            (e.g., `POST /users/create`, `POST /users/delete/:id`)
+     * - CUSTOM:  Custom route. defined by `{ name, method, path }`
+     */
+    mode?: 'RESTful' | 'RPC' | 'CUSTOM';
+    /**
+     * Allowed routes. When set, `include` and `exclude` are ignored.
+     */
     only?: CrudRouteName[];
+    /**
+     * Defaults to [list, detail, create, update, delete].
+     * When specified, merged with the default set.
+     */
+    include?: CrudRouteName[];
+    /**
+     * Defaults to empty. Exclusions override inclusions.
+     */
     exclude?: CrudRouteName[];
-    overrides?: Partial<Record<CrudRouteName, CrudRouteOverride>>;
-  };
+    /**
+     * Route overrides.
+     * - When mode is RESTful/RPC: merges with (overrides) existing routes.
+     * - When mode is CUSTOM: fully replaces all routes.
+     * - The `enabled` flag takes precedence over `include` and `exclude`.
+     */
+    overrides?: {
+      [P in CrudRouteName]?: Partial<CrudRouteOverride>;
+    };
+  } & (
+    | {
+        mode?: 'RESTful' | 'RPC';
+      }
+    | {
+        mode: 'CUSTOM';
+        overrides: {
+          [P in CrudRouteName]?: CrudRouteOverride;
+        };
+      }
+  );
   query?: {
     maxLimit?: number;
     defaultLimit?: number;
@@ -153,4 +191,6 @@ export type FunctionalCrudRouteFactory<T = any> = (
   __entityType__?: T;
 };
 
-export type FunctionalCrudOptions = CrudOptions;
+export type FunctionalCrudOptions = Omit<CrudOptions, 'service'> & {
+  service: new (...args: any[]) => CrudServiceAdapter<any>;
+};

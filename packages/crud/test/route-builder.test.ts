@@ -5,7 +5,12 @@ import {
   CrudNotFoundError,
   getEnabledCrudRoutes,
 } from '../src';
-import { createCrudControllerMethod } from '../src/routeBuilder';
+import { CRUD_SERVICE_KEY } from '../src/constants';
+import {
+  createCrudControllerMethod,
+  getService,
+  defaultRoutes
+} from '../src/routeBuilder';
 
 class TestModel {}
 class TestService {}
@@ -17,7 +22,7 @@ const baseOptions = {
 };
 
 describe('route builder helpers', () => {
-  it('should respect routes.only and routes.exclude', () => {
+  it('should respect routes.only, routes.include and routes.exclude', () => {
     expect(
       getEnabledCrudRoutes({
         ...baseOptions,
@@ -26,6 +31,15 @@ describe('route builder helpers', () => {
         },
       })
     ).toEqual(['list', 'detail', 'replace']);
+
+    expect(
+      getEnabledCrudRoutes({
+        ...baseOptions,
+        routes: {
+          include: ['replace'],
+        },
+      })
+    ).toEqual([ ...defaultRoutes, 'replace']);
 
     expect(
       getEnabledCrudRoutes({
@@ -54,9 +68,108 @@ describe('route builder helpers', () => {
     ]);
   });
 
+  it('should merge pre-defined routes when use routes.overrides', () => {
+    const routes = buildCrudRoutes({
+      ...baseOptions,
+      routes: {
+        mode: 'RESTful',
+        overrides: {
+          list: {
+            path: '/list',
+            method: 'POST'
+          },
+          delete: {
+            enabled: false
+          }
+        }
+      },
+    });
+
+    expect(routes?.length).toBe(defaultRoutes.length - 1);
+
+    const route = routes?.find(m => m.name === 'list');
+    expect(route).toEqual({
+      name: 'list',
+      method: 'POST',
+      path: '/list',
+    });
+  });
+
+  it('should respect routes.mode and build routes', () => {
+    let routes = buildCrudRoutes({
+      ...baseOptions,
+      routes: {
+        mode: 'RPC'
+      },
+    });
+
+    expect(routes?.length).toBe(defaultRoutes.length);
+
+    const route = routes?.find(m => m.name === 'list');
+    expect(route).toEqual({
+      name: 'list',
+      method: 'GET',
+      path: '/list',
+    });
+
+    routes = buildCrudRoutes({
+      ...baseOptions,
+      routes: {
+        mode: 'CUSTOM',
+        overrides: {
+          create: {
+            path: '/create',
+            method: 'POST'
+          },
+          delete: {
+            path: '/delete/:id',
+            method: 'DELETE'
+          }
+        }
+      },
+    });
+
+    expect(routes).toEqual([
+      {
+        name: 'create',
+        method: 'POST',
+        path: '/create',
+      },
+      {
+        name: 'delete',
+        method: 'DELETE',
+        path: '/delete/:id',
+      }
+    ]);
+  });
+
   it('should reject missing crudService bindings', async () => {
     const handler = createCrudRouteHandler('list', {}, baseOptions);
     await expect(handler({ query: {} })).rejects.toThrow(CrudConfigError);
+  });
+
+  it('should retrieve the CRUD service instance by prop name or type', async () => {
+    const ctx = {
+      requestContext: {
+        getAsync: async (type) => {
+          if (type === TestService) return new TestService();
+          return null;
+        }
+      }
+    };
+    let controller: any = { testService: new TestService() };
+
+    let service = await getService(controller, ctx, { ...baseOptions, service: 'testService' });
+    expect(service).toBeTruthy();
+    expect(controller[CRUD_SERVICE_KEY]).not.toBeTruthy();
+
+    controller = { };
+    service = await getService(controller, ctx, { ...baseOptions, service: TestService as any });
+    expect(service).toBeTruthy();
+    expect(controller[CRUD_SERVICE_KEY]).toBeTruthy();
+
+    const res = getService({}, ctx, { ...baseOptions, service: 'testService' });
+    await expect(res).rejects.toThrow(CrudConfigError);
   });
 
   it('should route replace to replace() and fallback to update()', async () => {
