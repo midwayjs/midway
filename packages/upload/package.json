@@ -26,7 +26,7 @@
     "url": "https://github.com/midwayjs/midway.git"
   },
   "dependencies": {
-    "file-type": "21.3.2",
+    "file-type": "21.3.4",
     "raw-body": "2.5.2"
   },
   "devDependencies": {
