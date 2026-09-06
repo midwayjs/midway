@@ -27,7 +27,6 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
           run_install: false
 
       # ✅ 安装最新 docker compose v2.37.1
