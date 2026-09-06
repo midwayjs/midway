@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bullmq",
-  "version": "4.2.1",
+  "version": "4.2.3",
   "description": "midway component for BullMQ",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -36,9 +36,5 @@
   },
   "engines": {
     "node": ">=20"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/midwayjs/midway.git"
   }
 }

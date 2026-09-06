@@ -1,6 +1,52 @@
 # Change Log
 
 
+## v4.2.3 (2026-09-06)
+
+#### :bug: Bug Fix
+* `core`
+  * [#4650](https://github.com/midwayjs/midway/pull/4650) fix(core): correct named data source config type ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `mock`
+  * [#4648](https://github.com/midwayjs/midway/pull/4648) fix(deps): update dependency js-yaml to v4.3.2 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4632](https://github.com/midwayjs/midway/pull/4632) fix(deps): update dependency js-yaml to v4.3.1 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#4642](https://github.com/midwayjs/midway/pull/4642) chore(deps): update dependency @types/koa to v2.15.2 - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4644](https://github.com/midwayjs/midway/pull/4644) chore(deps): update dependency mysql2 to v3.23.1 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4635](https://github.com/midwayjs/midway/pull/4635) chore(deps): update dependency astro to v7 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4562](https://github.com/midwayjs/midway/pull/4562) chore(deps): update dependency @astrojs/check to ^0.9.0 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4636](https://github.com/midwayjs/midway/pull/4636) chore(deps): update dependency vite to v6 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#4645](https://github.com/midwayjs/midway/pull/4645) fix(deps): update dependency qs to v6.16.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4626](https://github.com/midwayjs/midway/pull/4626) fix(deps): update dependency qs to v6.15.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `i18n`, `info`, `security`
+  * [#4639](https://github.com/midwayjs/midway/pull/4639) fix(deps): update dependency picomatch to v4 [security] - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `busboy`, `upload`
+  * [#4637](https://github.com/midwayjs/midway/pull/4637) fix(deps): update dependency file-type to v21.3.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `axios`, `busboy`, `http-proxy`, `mikro`, `upload`, `validate`, `validation-joi`, `web-express`, `web-koa`
+  * [#4641](https://github.com/midwayjs/midway/pull/4641) fix(deps): make security upgrades compatible ([@czy88840616](https://github.com/czy88840616))
+* `crud`, `mongoose`, `typegoose`
+  * [#4628](https://github.com/midwayjs/midway/pull/4628) chore(deps): update dependency mongoose to v8.24.1 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `nextjs`
+  * [#4638](https://github.com/midwayjs/midway/pull/4638) fix(deps): update dependency next to v16.2.11 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `apollo`, `mock`, `ws`
+  * [#4634](https://github.com/midwayjs/midway/pull/4634) fix(deps): update dependency ws to v8.21.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `piscina`
+  * [#4633](https://github.com/midwayjs/midway/pull/4633) fix(deps): update dependency piscina to v5.2.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `crud`, `typeorm`
+  * [#4629](https://github.com/midwayjs/midway/pull/4629) chore(deps): update dependency typeorm to v1.1.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`
+  * [#4608](https://github.com/midwayjs/midway/pull/4608) fix(deps): update dependency @types/qs to v6.15.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4603](https://github.com/midwayjs/midway/pull/4603) fix(deps): update dependency express to v4.22.2 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.2.2 (2026-08-24)
 
 #### :bug: Bug Fix
