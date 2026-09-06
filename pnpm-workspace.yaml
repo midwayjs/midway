@@ -4,5 +4,6 @@ packages:
   - 'packages-resource/*'
   - 'samples/*'
 onlyBuiltDependencies: [
+  'better-sqlite3',
   'sqlite3'
 ]
