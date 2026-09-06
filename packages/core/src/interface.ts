@@ -532,7 +532,11 @@ export interface DataSourceManagerConfigOption<
 > extends CreateDataSourceInstanceOptions {
   default?: BaseDataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY>;
   defaultDataSourceName?: string;
-  dataSource?: BaseDataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY>;
+  /** Named data source configurations. */
+  dataSource?: Record<
+    string,
+    BaseDataSourceManagerConfigOption<OPTIONS, ENTITY_CONFIG_KEY>
+  >;
 }
 
 type ConfigType<T> = T extends (...args: any[]) => any
