@@ -4,7 +4,7 @@ Base view component for midway.
 
 ## Install
 
-@midwayjs/view don't have built-in view engine, So you should choose a template engine like ejs, and install `@midwayjs/view-ejs`.
+@midwayjs/view doesn't have a built-in view engine, so you should choose a template engine like ejs, and install `@midwayjs/view-ejs`.
 View component will be auto install and enable by import `view-ejs`.
 
 ```bash

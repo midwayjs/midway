@@ -33,24 +33,24 @@ cfork({
     console.warn('[%s] [worker:%d] new worker start', Date(), worker.process.pid);
   })
   .on('disconnect', (worker) => {
-    console.warn (
-      '[%s] [master:%s] worker:%s disconnect, exitedAfterDisconnect: %s, state: %s .',
-      Date()
-      process.pid
-      worker.process.pid
-      worker.exitedAfterDisconnect
+    console.warn(
+      '[%s] [master:%s] worker:%s disconnect, exitedAfterDisconnect: %s, state: %s.',
+      Date(),
+      process.pid,
+      worker.process.pid,
+      worker.exitedAfterDisconnect,
       worker.state
     );
   })
   .on('exit', (worker, code, signal) => {
     const exitCode = worker.process.exitCode;
-    const err = new Error (
-      util.format (
+    const err = new Error(
+      util.format(
         'worker %s died (code: %s, signal: %s, exitedAfterDisconnect: %s, state: %s)',
-        worker.process.pid
-        exitCode
-        signal
-        worker.exitedAfterDisconnect
+        worker.process.pid,
+        exitCode,
+        signal,
+        worker.exitedAfterDisconnect,
         worker.state
       )
     );
