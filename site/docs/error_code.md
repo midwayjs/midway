@@ -11,7 +11,7 @@
 | MIDWAY_10004 | MidwayFeatureNoLongerSupportedError   | 功能不再支持                 |
 | MIDWAY_10005 | MidwayFeatureNotImplementedError      | 功能未实现                   |
 | MIDWAY_10006 | MidwayConfigMissingError              | 配置项丢失                   |
-| MIDWAY_10007 | MidwayResolverMissingError            | 依赖注入属性 resovler 未找到 |
+| MIDWAY_10007 | MidwayResolverMissingError            | 依赖注入属性 resolver 未找到 |
 | MIDWAY_10008 | MidwayDuplicateRouteError             | 路由重复                     |
 | MIDWAY_10009 | MidwayUseWrongMethodError             | 使用了错误的方法             |
 | MIDWAY_10010 | MidwaySingletonInjectRequestError     | 作用域混乱                   |

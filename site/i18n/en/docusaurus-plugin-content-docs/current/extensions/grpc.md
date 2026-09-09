@@ -937,7 +937,7 @@ duplexCall.write({
 ```
 
 
-If you want to ensure the order of calls, we also provide a two-way flow call method that guarantees the order, but you need to define a fixed ID in the Proto to to ensure the order.
+If you want to ensure the order of calls, we also provide a two-way flow call method that guarantees the order, but you need to define a fixed ID in the Proto to ensure the order.
 
 
 For example, our Math.proto adds a fixed id to each entry and exit parameter, so the order can be fixed.

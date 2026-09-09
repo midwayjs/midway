@@ -8,7 +8,7 @@ Midway provides `DataListener` abstractions to easily create code for this patte
 
 Let's take a simple **memory data update** requirement as an example.
 
-Data subscription is also a common class in midway. For example, we can also put it in `src/listener/memory.listner.ts`.
+Data subscription is also a common class in midway. For example, we can also put it in `src/listener/memory.listener.ts`.
 
 We only need to inherit the built-in `DataListener` class, and at the same time, the general data subscription class is singleton.
 
@@ -17,7 +17,7 @@ We only need to inherit the built-in `DataListener` class, and at the same time,
 For example:
 
 ```typescript
-// src/listener/memory.listner.ts
+// src/listener/memory.listener.ts
 import { DataListener, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
@@ -51,7 +51,7 @@ In addition, most data subscriptions use timers or other external SDKs. We need 
 For example, in the above sample code, we need to turn off the timer.
 
 ```typescript
-// src/listener/memory.listner.ts
+// src/listener/memory.listener.ts
 import { DataListener, Provide, Scope, ScopeEnum } from '@midwayjs/core';
 
 @Provide()
@@ -102,7 +102,7 @@ For example:
 
 ```typescript
 import { Provide, Inject } from '@midwayjs/core';
-import { MemoryDataListener } from '../listener/memory.listner.ts';
+import { MemoryDataListener } from '../listener/memory.listener.ts';
 
 @Provide()
 export class UserService {

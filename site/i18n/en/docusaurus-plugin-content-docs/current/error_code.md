@@ -11,7 +11,7 @@ The following are the errors built into the framework, which will increase over 
 | MIDWAY_10004 | MidwayFeatureNoLongerSupportedError | Features are no longer supported |
 | MIDWAY_10005 | MidwayFeatureNotImplementedError | Function not implemented |
 | MIDWAY_10006 | MidwayConfigMissingError | Configuration item missing |
-| MIDWAY_10007 | MidwayResolverMissingError | Dependency injection attribute resovler not found |
+| MIDWAY_10007 | MidwayResolverMissingError | Dependency injection attribute resolver not found |
 | MIDWAY_10008 | MidwayDuplicateRouteError | Duplicate route |
 | MIDWAY_10009 | MidwayUseWrongMethodError | The wrong method was used |
 | MIDWAY_10010 | MidwaySingletonInjectRequestError | Scope confusion |

@@ -4,7 +4,7 @@ This section describes how to debug a Midway project in a common editor.
 
 ## Debugging in VSCode
 
-### Method 1: Use JavaScript Debug Teminal
+### Method 1: Use JavaScript Debug Terminal
 
 Pull out under the VSCode terminal and hide a `JavaScript Debug Terminal`. Click on it and the created terminal will have its own debugging capability.
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01HWzQEu1cQ6C7q9OYh_!!6000000003594-2-tps-1030-364.png)
@@ -69,7 +69,7 @@ Start configuring IDE.
 Configure the npm command.
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01e4yJnU1QT3MOImlpR_!!6000000001976-2-tps-620-946.png)
 
-After you select `package.json`, drop down and select `Scrips`, which is the command in the `scripts` configured in `package.json`. Select the command you want, such as `dev` or `test`.
+After you select `package.json`, drop down and select `Scripts`, which is the command in the `scripts` configured in `package.json`. Select the command you want, such as `dev` or `test`.
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01DBqmwD1rtbwqpuQZe_!!6000000005689-2-tps-1500-1017.png)
 
 Debugging can be performed after the code breakpoint.
