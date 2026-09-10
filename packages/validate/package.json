@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@midwayjs/i18n": "workspace:^",
-    "joi": "17.13.4"
+    "joi": "17.13.6"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
