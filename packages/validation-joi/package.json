@@ -45,7 +45,7 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "joi": "17.13.4",
+    "joi": "17.13.6",
     "tsup": "8.5.1"
   }
 }
