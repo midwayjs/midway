@@ -302,7 +302,7 @@ export default {
 
 [cache-manager](https://github.com/node-cache-manager/node-cache-manager) 支持将多个缓存 Store 聚合到一起，实现多级缓存。
 
-比如我可以创建一个多级缓存将多个缓存 Store 合并到一起。
+下面的示例将内存缓存和 Redis 缓存组合到一起，分别设置 60 秒和 600 秒的默认过期时间。
 
 ```typescript
 // src/config/config.default.ts
@@ -312,18 +312,18 @@ export default {
     clients: {
       memoryCaching: {
         store: 'memory',
+        options: {
+          ttl: 60_000, // 60 秒，单位为毫秒
+        },
       },
       redisCaching: {
         store: createRedisStore('default'),
         options: {
-          ttl: 10,
+          ttl: 600_000, // 600 秒，单位为毫秒
         },
       },
       multiCaching: {
         store: ['memoryCaching', 'redisCaching'],
-        options: {
-          ttl: 100,
-        },
       },
     },
   },
@@ -340,6 +340,8 @@ export default {
 ```
 
 这样 `multiCaching` 这个缓存实例就包含了两级缓存，缓存的优先级从上到下，在查找时，会先查找 `memoryCaching` ，如果内存缓存不存在 key，则继续查找 `redisCaching`。
+
+多级缓存自身的 `options.ttl` 不参与 `set`、`mset` 的写入，请在各个子缓存的 `options.ttl` 中配置默认过期时间。内置内存 Store 和 `createRedisStore` 使用的 TTL 单位都是毫秒。
 
 
 
@@ -395,6 +397,16 @@ export class UserService {
   }
 }
 
+```
+
+对于上面的内存和 Redis 缓存，调用 `set` 或 `mset` 时省略 TTL 参数，各层会使用自己的默认过期时间；显式传入 TTL 时，本次写入的所有缓存层都会使用该值。
+
+```typescript
+// 使用各层默认 TTL：内存 60 秒，Redis 600 秒
+await this.multiCache.set('key', 'value');
+
+// 覆盖各层默认 TTL：本次写入的两层缓存都使用 30 秒
+await this.multiCache.set('key', 'value', 30_000);
 ```
 
 ### 8、自动刷新
