@@ -89,7 +89,7 @@ export const loadModule = async (
       if (options.loadMode === 'commonjs') {
         try {
           return require(p);
-        } catch {
+        } catch (err) {
           for (const extraPath of [
             process.cwd(),
             ...(options.extraModuleRoot || []),
@@ -100,6 +100,8 @@ export const loadModule = async (
               // do nothing
             }
           }
+          // Preserve the original error for the safeLoad handling below.
+          throw err;
         }
       } else {
         // if json file, import need add options
