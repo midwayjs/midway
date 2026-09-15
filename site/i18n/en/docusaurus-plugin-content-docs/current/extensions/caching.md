@@ -298,7 +298,7 @@ export default {
 
 [cache-manager](https://github.com/node-cache-manager/node-cache-manager) supports aggregating multiple cache stores to achieve multi-level caching.
 
-For example, I can create a multi-level cache to merge multiple cache stores together.
+The following example combines memory and Redis caches with default expiration times of 60 seconds and 600 seconds, respectively.
 
 ```typescript
 // src/config/config.default.ts
@@ -308,18 +308,18 @@ export default {
     clients: {
       memoryCaching: {
         store: 'memory',
+        options: {
+          ttl: 60_000, // 60 seconds, expressed in milliseconds
+        },
       },
       redisCaching: {
         store: createRedisStore('default'),
         options: {
-          ttl: 10,
+          ttl: 600_000, // 600 seconds, expressed in milliseconds
         }
       },
       multiCaching: {
         store: ['memoryCaching', 'redisCaching'],
-        options: {
-          ttl: 100,
-        },
       },
     },
   },
@@ -335,6 +335,8 @@ export default {
 ```
 
 In this way, the cache instance `multiCaching` contains two levels of cache. The cache priority is from top to bottom. When searching, it will first search `memoryCaching`. If the key does not exist in the memory cache, it will continue to search `redisCaching`.
+
+The multi-level cache's own `options.ttl` is not used by `set` or `mset`. Configure the default expiration time in each child cache's `options.ttl` instead. Both the built-in memory store and `createRedisStore` use milliseconds for TTL values.
 
 
 
@@ -390,6 +392,16 @@ export class UserService {
    }
 }
 
+```
+
+For the memory and Redis caches above, omitting the TTL argument from `set` or `mset` uses each layer's default expiration time. Passing an explicit TTL applies that value to all layers for that write.
+
+```typescript
+// Use each layer's default TTL: 60 seconds in memory, 600 seconds in Redis
+await this.multiCache.set('key', 'value');
+
+// Override both defaults: use 30 seconds in both layers for this write
+await this.multiCache.set('key', 'value', 30_000);
 ```
 
 ### 8. Automatic refresh
