@@ -101,7 +101,7 @@ export class MainConfiguration {
 ## Directory structure
 
 
-The following is the basic directory structure of the Socket.io project. Similar to traditional applications, we have created a `socket` directory to store service codes for Soscket.io services.
+The following is the basic directory structure of the Socket.io project. Similar to traditional applications, we have created a `socket` directory to store service codes for Socket.io services.
 ```
 .
 ├── package.json

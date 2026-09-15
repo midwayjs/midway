@@ -19,7 +19,7 @@ The functions realized are:
 
 
 
-## Loger path and file
+## Logger path and file
 
 Midway creates some default files in the log root directory.
 
@@ -32,7 +32,7 @@ The **Log Path** and **Log Level** of local development and server deployment ar
 
 
 
-## Default loger object
+## Default logger object
 
 Midway provides three different logs in the framework by default, corresponding to three different behaviors.
 

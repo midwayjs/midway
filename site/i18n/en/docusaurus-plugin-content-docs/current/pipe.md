@@ -67,9 +67,9 @@ export class ValidatePipe implements PipeTransform<T, R> {
 }
 ```
 
-`PipeTransform<T, R>` is a generic interface that every pipeline must implement. The generic `T` indicates the type of the input `value`, and `R` indicates the return type of the `transfrom()` method.
+`PipeTransform<T, R>` is a generic interface that every pipeline must implement. The generic `T` indicates the type of the input `value`, and `R` indicates the return type of the `transform()` method.
 
-To implement `PipeTransfrom`, each pipe must declare a `transfrom()` method. This method has two parameters:
+To implement `PipeTransform`, each pipe must declare a `transform()` method. This method has two parameters:
 
 - `value`
 - `options`

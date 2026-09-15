@@ -380,7 +380,7 @@ export default {
 
 
 
-logger 的 level 和 Transport 的 level 可以分开设置，Tranport 的 level 优先级高于 logger 的 level。
+logger 的 level 和 Transport 的 level 可以分开设置，Transport 的 level 优先级高于 logger 的 level。
 
 ```typescript
 // src/config/config.default.ts

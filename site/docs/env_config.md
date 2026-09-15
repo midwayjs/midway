@@ -290,7 +290,7 @@ export class MainConfiguration {
 ### 配置合并规则
 
 
-默认会加载 `**/config.defaut.ts`  的文件以及 `**/config.{环境}.ts`  文件。
+默认会加载 `**/config.default.ts`  的文件以及 `**/config.{环境}.ts`  文件。
 
 
 比如，下面的代码在 `local` 环境会查找 `config.default.*` 和 `config.local.*` 文件，如果在其他环境，则只会查找 `config.default.*` 和 `config.{当前环境}.*` ，如果文件不存在，则不会加载，也不会报错。

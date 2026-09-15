@@ -130,7 +130,7 @@ BREAKING CHANGE:
   Breaks foo.bar api, foo.baz should be used instead
 ```
 
-Look at [these files](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit) for more detials.
+Look at [these files](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit) for more details.
 
 ## Release
 

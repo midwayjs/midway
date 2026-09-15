@@ -1,6 +1,6 @@
 # ETCD
 
-etcd 是云原生架构中重要的基础组件，由 CNCF 孵化托管。etcd 在微服务和 Kubernates 集群中可以作为服务注册于发现，也可以作为 key-value 存储的中间件。
+etcd 是云原生架构中重要的基础组件，由 CNCF 孵化托管。etcd 在微服务和 Kubernetes 集群中可以作为服务注册于发现，也可以作为 key-value 存储的中间件。
 
 Midway 提供基于 [etcd3](https://github.com/microsoft/etcd3) 模块封装的组件，提供 etcd 的客户端调用能力。
 
