@@ -62,7 +62,10 @@ export async function applyCrudValidation(
   }
 
   if (meta.bodyDto) {
-    const result = await validationService.validate(meta.bodyDto, payload?.body);
+    const result = await validationService.validate(
+      meta.bodyDto,
+      payload?.body
+    );
     if (payload && result && 'value' in result) {
       payload.body = result.value;
     }
