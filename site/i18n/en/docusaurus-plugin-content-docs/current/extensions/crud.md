@@ -319,10 +319,7 @@ import { UserCrudService } from '../service/user.crud';
   model: UserEntity,
   service: UserCrudService,
 })
-export class UserController {
-  @Inject()
-  crudService: UserCrudService;
-}
+export class UserController { }
 ```
 
 By default, it generates:
@@ -333,14 +330,40 @@ By default, it generates:
 - `PATCH /users/:id`
 - `DELETE /users/:id`
 
-### Why do I still need `@Inject() crudService`
+and sets a `crudService` property on the controller instance.
 
-Because `@Crud()` only declares that this controller is a CRUD resource. The actual behavior still comes from your bound `crudService`.
+### Customize the service property name
+
+```typescript
+import { Controller, Inject } from '@midwayjs/core';
+import { Crud } from '@midwayjs/crud';
+
+import { UserEntity } from '../entity/user';
+import { UserCrudService } from '../service/user.crud';
+
+@Controller('/users')
+@Crud<UserEntity>({
+  model: UserEntity,
+  service: 'userService',
+})
+export class UserController {
+  @Inject()
+  userService: UserCrudService
+}
+```
+
+:::tip
+If you only set the property name without manually injecting a service with the same name, calling the REST API will throw because no service instance can be resolved.
+:::
+
+### Why do I still need `@Inject() [name]`
+
+Because `@Crud()` only declares that this controller is a CRUD resource. The actual behavior still comes from the `[serviceName]` you bound.
 
 That means:
 
 - `@Crud()` defines the default route surface
-- `crudService` performs the actual CRUD operations
+- `[serviceName]` performs the actual CRUD operations
 
 This is one of the most important design rules in this component.
 
@@ -378,9 +401,9 @@ export class UserController {
 
 If you implement a method with the same name, your custom method overrides the generated default behavior.
 
-### Restrict default routes
+### Configure default routes
 
-If you do not want to expose the full default route set, use `routes.only` or `routes.exclude`.
+If you do not want to expose the full default route set, use `routes.only`, `routes.include`, or `routes.exclude`.
 
 ```typescript
 @Crud<UserEntity>({
@@ -393,6 +416,10 @@ If you do not want to expose the full default route set, use `routes.only` or `r
 ```
 
 This is useful for “read-only” resources or back-office modules that intentionally expose only part of the CRUD surface.
+
+- `routes.only` the only routes allowed; when set, it ignores `include` and `exclude`
+- `routes.include` when set, merges with the default routes (defaults to [list, detail, create, update, delete])
+- `routes.exclude` defaults to empty; exclusion takes precedence over `routes.include`
 
 ## Functional routing mode
 
@@ -433,6 +460,70 @@ export default defineApi('/users', api => ({
 ```
 
 This keeps standard resource actions and business-specific actions together in the same resource route group.
+
+## Route modes
+
+`routes.mode` supports RESTful | RPC | CUSTOM, and defaults to `RESTful`.
+
+- `RESTful` resource-based routes, expressing operations via the HTTP method (e.g. `POST /users`, `DELETE /users/:id`)
+- `RPC`     action-based routes, expressing operations via the URL (e.g. `POST /users/create`, `POST /users/delete/:id`)
+- `CUSTOM`  custom routes, describing data operations via `{ name, method, path }`
+
+### Override built-in routes
+
+When `routes.mode` is RESTful / RPC, you can still incrementally override routes with `routes.overrides`.
+
+```typescript
+@Controller('/users')
+@Crud<UserEntity>({
+  model: UserEntity,
+  service: UserCrudService,
+  routes: {
+    mode: 'RESTful',
+    overrides: {
+      list: {
+        path: '/list',
+        method: 'GET'
+      },
+      delete: {
+        enabled: false
+      }
+    }
+  }
+})
+export class UserController {
+
+}
+```
+
+### Custom routes
+
+When `routes.mode` is `CUSTOM`, `routes.overrides` is required, and you fully define the route path and method for each operation.
+
+```typescript
+@Controller('/users')
+@Crud<UserEntity>({
+  model: UserEntity,
+  service: UserCrudService,
+  routes: {
+    mode: 'CUSTOM',
+    overrides: {
+      create: {
+        path: '/add',
+        method: 'POST'
+      },
+      delete: {
+        path: '/del/:id',
+        method: 'POST'
+      }
+    }
+  }
+})
+export class UserController {
+
+}
+```
+
 
 ## Query protocol
 
