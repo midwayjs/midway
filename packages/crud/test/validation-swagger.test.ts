@@ -97,6 +97,32 @@ describe('validation and swagger helpers', () => {
     expect(validate).toHaveBeenNthCalledWith(2, UpdateDto, { name: 'neo' });
   });
 
+  it('should replace payload values with transformed validation results', async () => {
+    const validate = jest
+      .fn()
+      .mockReturnValueOnce({ value: { page: 1, limit: 20 } })
+      .mockReturnValueOnce({ value: { name: 'neo', status: 'active' } });
+    const context = {
+      requestContext: {
+        getAsync: jest.fn().mockResolvedValue({ validate }),
+      },
+    };
+    const queryPayload = {
+      query: { page: 1 },
+      ctx: context,
+    };
+    const bodyPayload = {
+      body: { name: 'neo' },
+      ctx: context,
+    };
+
+    await applyCrudValidation('list', options, queryPayload);
+    await applyCrudValidation('create', options, bodyPayload);
+
+    expect(queryPayload.query).toEqual({ page: 1, limit: 20 });
+    expect(bodyPayload.body).toEqual({ name: 'neo', status: 'active' });
+  });
+
   it('should fallback query validation payload to an empty object when query is missing', async () => {
     const validate = jest.fn();
     await applyCrudValidation('list', options, {

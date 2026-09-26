@@ -59,6 +59,32 @@ describe('route builder helpers', () => {
     await expect(handler({ query: {} })).rejects.toThrow(CrudConfigError);
   });
 
+  it('should apply controller CRUD options to the bound service', async () => {
+    const setCrudOptions = jest.fn();
+    const remove = jest.fn().mockResolvedValue(undefined);
+    const options = {
+      ...baseOptions,
+      delete: {
+        mode: 'soft' as const,
+      },
+    };
+    const handler = createCrudRouteHandler(
+      'delete',
+      {
+        crudService: {
+          setCrudOptions,
+          delete: remove,
+        },
+      },
+      options
+    );
+
+    await handler({ params: { id: '1' } });
+
+    expect(setCrudOptions).toHaveBeenCalledWith(options);
+    expect(remove).toHaveBeenCalledWith(1, { ctx: undefined });
+  });
+
   it('should route replace to replace() and fallback to update()', async () => {
     const replace = jest.fn().mockResolvedValue({ ok: 'replace' });
     const replaceHandler = createCrudRouteHandler(
@@ -242,5 +268,43 @@ describe('route builder helpers', () => {
     expect(create).toHaveBeenCalledWith({ name: 'neo' }, { ctx: undefined });
     expect(update).toHaveBeenCalledWith(3, { name: 'trinity' }, { ctx: undefined });
     expect(remove).toHaveBeenCalledWith(4, { ctx: undefined });
+  });
+
+  it('should pass validation defaults to the CRUD service', async () => {
+    const create = jest.fn().mockResolvedValue({ created: true });
+    const validate = jest.fn().mockReturnValue({
+      value: {
+        name: 'neo',
+        status: 'active',
+      },
+    });
+    const handler = createCrudRouteHandler(
+      'create',
+      {
+        crudService: {
+          create,
+        },
+      },
+      {
+        ...baseOptions,
+        dto: {
+          create: class CreateDto {} as any,
+        },
+      }
+    );
+
+    await handler({
+      body: { name: 'neo' },
+      ctx: {
+        requestContext: {
+          getAsync: jest.fn().mockResolvedValue({ validate }),
+        },
+      },
+    });
+
+    expect(create).toHaveBeenCalledWith(
+      { name: 'neo', status: 'active' },
+      expect.any(Object)
+    );
   });
 });
