@@ -6,6 +6,17 @@ import { JobsOptions, Job } from 'bullmq';
 import * as assert from 'node:assert';
 
 describe(`/test/index.test.ts`, () => {
+  it('should support retaining the latest deduplicated job while active', () => {
+    const options: JobsOptions = {
+      deduplication: {
+        id: 'deduplication-id',
+        keepLastIfActive: true,
+      },
+    };
+
+    expect(options.deduplication?.keepLastIfActive).toBe(true);
+  });
+
   it('test auto repeat processor', async () => {
     @Processor('HelloTask', {
       repeat: {
@@ -469,4 +480,3 @@ describe(`/test/index.test.ts`, () => {
     await close(app);
   });
 });
-
