@@ -7,6 +7,12 @@ git add .
 
 RELEASE_TYPE="$1"
 VERSION_BUMP="$2"
+LERNA_PUBLISH_VERSION="9.0.7"
+
+# Lerna 7 does not support npm trusted publishing, while the release runner uses Node.js 22.
+lerna() {
+  npx --yes --package="lerna@${LERNA_PUBLISH_VERSION}" lerna "$@"
+}
 
 version() {
   if [ -n "$VERSION_BUMP" ]; then
