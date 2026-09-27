@@ -1,6 +1,35 @@
 # Change Log
 
 
+## v4.2.4 (2026-09-27)
+
+#### :memo: Documentation
+* `view`
+  * [#4652](https://github.com/midwayjs/midway/pull/4652) docs: fix wrong identifiers and file paths in docs ([@toyeshhm](https://github.com/toyeshhm))
+* Other
+  * [#4656](https://github.com/midwayjs/midway/pull/4656) docs(cache-manager): clarify multi-cache TTL configuration ([@Lellansin](https://github.com/Lellansin))
+
+#### :package: Dependencies
+* `bullmq`, `redis`
+  * [#4666](https://github.com/midwayjs/midway/pull/4666) fix(bullmq): upgrade bullmq to 5.81.3 ([@czy88840616](https://github.com/czy88840616))
+* `grpc`
+  * [#4659](https://github.com/midwayjs/midway/pull/4659) fix(deps): update dependency @grpc/grpc-js to v1.14.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4662](https://github.com/midwayjs/midway/pull/4662) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.7.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4660](https://github.com/midwayjs/midway/pull/4660) fix(deps): update dependency express to v4.22.3 ([@renovate[bot]](https://github.com/apps/renovate))
+* `nextjs`
+  * [#4654](https://github.com/midwayjs/midway/pull/4654) fix(deps): update dependency next to ~16.3.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`, `validation-joi`
+  * [#4653](https://github.com/midwayjs/midway/pull/4653) fix(deps): update dependency joi to v17.13.6 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 3
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Lellansin Huang ([@Lellansin](https://github.com/Lellansin))
+- Toyeshh Medikonda ([@toyeshhm](https://github.com/toyeshhm))
+
+
+
 ## v4.2.3 (2026-09-06)
 
 #### :bug: Bug Fix
