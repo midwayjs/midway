@@ -18,6 +18,10 @@
     "plugin"
   ],
   "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
