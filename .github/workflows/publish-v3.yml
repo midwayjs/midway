@@ -1,0 +1,46 @@
+name: Publish v3 npm packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Release type
+        required: true
+        default: release
+        type: choice
+        options:
+          - release
+          - next
+          - beta
+          - canary
+      version_bump:
+        description: Version bump, or existing to retry a generated tag
+        required: true
+        default: patch
+        type: choice
+        options:
+          - existing
+          - patch
+          - minor
+          - major
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dispatch the v3 publish workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TYPE: ${{ inputs.release_type }}
+          VERSION_BUMP: ${{ inputs.version_bump }}
+        run: |
+          gh workflow run publish.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref 3.x \
+            --field release_type="$RELEASE_TYPE" \
+            --field version_bump="$VERSION_BUMP"
