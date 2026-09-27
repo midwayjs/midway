@@ -70,6 +70,9 @@ jobs:
       - name: Install dependencies
         run: npm run install_npm && npm install --no-package-lock
 
+      - name: Install Lerna with trusted publishing support
+        run: npm install --no-save --no-package-lock lerna@9.0.7
+
       - name: Configure git author
         run: |
           git config user.name "github-actions[bot]"
