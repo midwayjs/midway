@@ -1,0 +1,96 @@
+name: Publish v3 npm packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Release type
+        required: true
+        default: release
+        type: choice
+        options:
+          - release
+          - next
+          - beta
+          - canary
+      version_bump:
+        description: Version bump, or existing to retry a generated tag
+        required: true
+        default: patch
+        type: choice
+        options:
+          - existing
+          - patch
+          - minor
+          - major
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    timeout-minutes: 90
+    runs-on: ubuntu-latest
+    environment: npm-publish
+
+    steps:
+      - name: Validate branch
+        run: |
+          if [ "${GITHUB_REF_NAME}" != "3.x" ]; then
+            echo "Publishing is only allowed from 3.x."
+            exit 1
+          fi
+
+      - name: Git checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          registry-url: https://registry.npmjs.org
+
+      - name: Configure npm for trusted publishing
+        run: |
+          npmrc="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+          if [ -f "$npmrc" ]; then
+            sed -i '/_authToken/d' "$npmrc"
+          fi
+
+      - name: Use npm with trusted publishing support
+        run: npm install -g npm@11.19.0
+
+      - name: Install dependencies
+        run: npm run install_npm && npm install
+
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Publish packages
+        env:
+          GITHUB_AUTH: ${{ github.token }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          case "${{ inputs.release_type }}" in
+            beta)
+              bash scripts/publish.sh beta "${{ inputs.version_bump }}"
+              ;;
+            next)
+              bash scripts/publish.sh next "${{ inputs.version_bump }}"
+              ;;
+            canary)
+              bash scripts/publish.sh canary "${{ inputs.version_bump }}"
+              ;;
+            release)
+              bash scripts/publish.sh release "${{ inputs.version_bump }}"
+              ;;
+          esac
