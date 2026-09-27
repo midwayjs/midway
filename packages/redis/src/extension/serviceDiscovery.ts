@@ -18,7 +18,7 @@ import {
 import Redis from 'ioredis';
 
 class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
-  private unsubscribe: (() => void) | null = null;
+  private unsubscribe: (() => Promise<void>) | null = null;
   // 新增：定时刷新 TTL
   private ttlTimeout: NodeJS.Timeout | null = null;
   private instance: RedisInstanceMetadata | null = null;
@@ -48,7 +48,7 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
     return this.fetchInstancesByKeys(keys);
   }
 
-  onData(setData) {
+  async onData(setData) {
     // 订阅当前 serviceName 的变更消息
     const channel = `service:change:${this.serviceName}`;
     const handler = async (channelName, message) => {
@@ -66,20 +66,22 @@ class RedisDataListener extends DataListener<RedisInstanceMetadata[]> {
         this.logger.error('[midway:redis] Error on service change:', err);
       }
     };
-    this.pubsub.subscribe(channel);
     this.pubsub.on('message', handler);
+    // Wait until Redis confirms the subscription before initialization
+    // completes, otherwise an immediately published change can be missed.
+    await this.pubsub.subscribe(channel);
 
     // 提供取消订阅方法
-    this.unsubscribe = () => {
+    this.unsubscribe = async () => {
       this.pubsub.off('message', handler);
-      this.pubsub.unsubscribe(channel);
+      await this.pubsub.unsubscribe(channel);
     };
   }
 
   async destroyListener() {
     this.clearTTLRefresh();
     if (this.unsubscribe) {
-      this.unsubscribe();
+      await this.unsubscribe();
       this.unsubscribe = null;
     }
   }
