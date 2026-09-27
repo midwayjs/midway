@@ -68,7 +68,7 @@ jobs:
         run: npm install -g npm@11.19.0
 
       - name: Install dependencies
-        run: npm run install_npm && npm install
+        run: npm run install_npm && npm install --no-package-lock
 
       - name: Configure git author
         run: |
