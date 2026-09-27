@@ -6,8 +6,14 @@
   "@midwayjs/axios": "3.20.24",
   "@midwayjs/bootstrap": "3.20.24",
   "@midwayjs/bull": "3.20.24",
-  "@midwayjs/bull-board": "3.20.24",
-  "@midwayjs/bullmq": "3.20.24",
+  "@midwayjs/bull-board": [
+    "3.20.24",
+    "3.20.25"
+  ],
+  "@midwayjs/bullmq": [
+    "3.20.24",
+    "3.20.25"
+  ],
   "@midwayjs/busboy": "3.20.24",
   "@midwayjs/cache-manager": "3.20.24",
   "@midwayjs/captcha": "3.20.24",
@@ -56,7 +62,10 @@
   "@midwayjs/typeorm": "3.20.24",
   "@midwayjs/upload": "3.20.24",
   "@midwayjs/validate": "3.20.24",
-  "@midwayjs/version": "3.20.24",
+  "@midwayjs/version": [
+    "3.20.24",
+    "3.20.25"
+  ],
   "@midwayjs/view": "3.20.24",
   "@midwayjs/view-ejs": "3.20.24",
   "@midwayjs/view-nunjucks": "3.20.24",

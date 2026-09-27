@@ -1,6 +1,17 @@
 # Change Log
 
 
+## v3.20.25 (2026-09-27)
+
+#### :package: Dependencies
+* `bullmq`
+  * [#4665](https://github.com/midwayjs/midway/pull/4665) fix(bullmq): upgrade bullmq to 5.81.3 ([@czy88840616](https://github.com/czy88840616))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v3.20.24 (2026-04-25)
 
 #### :nail_care: Polish
