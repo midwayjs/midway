@@ -28,7 +28,7 @@
   "dependencies": {
     "@midwayjs/cache-manager": "workspace:^",
     "mini-svg-data-uri": "1.4.4",
-    "nanoid": "3.3.18",
+    "nanoid": "3.3.19",
     "svg-captcha-fixed": "1.5.2"
   },
   "devDependencies": {
