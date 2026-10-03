@@ -52,6 +52,13 @@ export function createCrudRouteHandler(
       );
     }
 
+    // Services resolved by the IoC container are constructed without the
+    // controller-level @Crud() options. Keep the bound service in sync so
+    // adapter behavior such as soft delete and query allowlists is honored.
+    if (typeof service.setCrudOptions === 'function') {
+      service.setCrudOptions(options);
+    }
+
     const ctxPayload = {
       ctx: payload.ctx,
     };

@@ -52,11 +52,23 @@ export async function applyCrudValidation(
   }
 
   if (meta.queryDto) {
-    await validationService.validate(meta.queryDto, payload?.query ?? {});
+    const result = await validationService.validate(
+      meta.queryDto,
+      payload?.query ?? {}
+    );
+    if (payload && result && 'value' in result) {
+      payload.query = result.value;
+    }
   }
 
   if (meta.bodyDto) {
-    await validationService.validate(meta.bodyDto, payload?.body);
+    const result = await validationService.validate(
+      meta.bodyDto,
+      payload?.body
+    );
+    if (payload && result && 'value' in result) {
+      payload.body = result.value;
+    }
   }
 
   return meta;
