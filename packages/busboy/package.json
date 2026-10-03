@@ -28,7 +28,7 @@
   "dependencies": {
     "@types/busboy": "1.5.4",
     "busboy": "1.6.0",
-    "file-type": "21.3.2"
+    "file-type": "21.3.4"
   },
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
