@@ -37,6 +37,6 @@
     "@midwayjs/mock": "workspace:^"
   },
   "dependencies": {
-    "piscina": "5.2.0"
+    "piscina": "5.3.2"
   }
 }
