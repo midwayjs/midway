@@ -20,10 +20,7 @@ export type SingleCacheOptions<S extends Store = any, T extends object = any> =
       options?: FactoryConfig<Parameters<FactoryStore<S, T>>[0]>;
     };
 
-export type CacheManagerOptions<
-  S extends Store = any,
-  T extends object = any,
-> =
+export type CacheManagerOptions<S extends Store = any, T extends object = any> =
   | SingleCacheOptions<S>
   | {
       store: Array<

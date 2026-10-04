@@ -5,8 +5,7 @@ export interface IValidatorModule<Schema> {
 }
 
 export type ValidatorLike<Schema> =
-  | IValidator<Schema>
-  | IValidatorModule<Schema>;
+  IValidator<Schema> | IValidatorModule<Schema>;
 
 export interface ValidationOptions {
   /**

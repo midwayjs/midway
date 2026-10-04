@@ -64,11 +64,7 @@ export interface QuestionMeta {
 }
 
 export type QuestionForType =
-  | 'validate'
-  | 'choices'
-  | 'message'
-  | 'default'
-  | 'when';
+  'validate' | 'choices' | 'message' | 'default' | 'when';
 
 export interface QuestionForOptions {
   name: string;

@@ -55,8 +55,7 @@ export declare type ExpressLikeCustomParamDecorator<T = unknown> = (
 ) => T | Promise<T>;
 
 export declare type CustomParamDecorator<T = unknown> =
-  | KoaLikeCustomParamDecorator<T>
-  | ExpressLikeCustomParamDecorator<T>;
+  KoaLikeCustomParamDecorator<T> | ExpressLikeCustomParamDecorator<T>;
 
 export const createRequestParamDecorator = function (
   transform: CustomParamDecorator,

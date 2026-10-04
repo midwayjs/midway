@@ -503,8 +503,7 @@ export function defineApi<
   // while defineApi creates an internal class that may not be bound directly.
   // If mock bind map exists, mark this generated controller as bound.
   const bindModuleMap = (DecoratorManager as any)?._bindModuleMap as
-    | WeakMap<any, boolean>
-    | undefined;
+    WeakMap<any, boolean> | undefined;
   if (bindModuleMap && typeof bindModuleMap.set === 'function') {
     bindModuleMap.set(FunctionalApiController, true);
   }

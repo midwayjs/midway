@@ -21,8 +21,7 @@ export class NextJSMiddleware implements IMiddleware<Context, NextFunction> {
   env: MidwayEnvironmentService;
   protected handle;
   protected webRouterService:
-    | MidwayWebRouterService
-    | MidwayServerlessFunctionService;
+    MidwayWebRouterService | MidwayServerlessFunctionService;
 
   @Config('next')
   protected nextConfig;

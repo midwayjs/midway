@@ -152,8 +152,7 @@ export class MidwayExpressFramework extends BaseFramework<
     this.defineApplicationProperties({
       useMiddleware: (
         routerPath:
-          | string
-          | CommonMiddlewareUnion<Context, Response, NextFunction>,
+          string | CommonMiddlewareUnion<Context, Response, NextFunction>,
         ...middleware: FunctionMiddleware<Context, Response, NextFunction>[]
       ) => {
         if (typeof routerPath === 'string' && middleware) {
