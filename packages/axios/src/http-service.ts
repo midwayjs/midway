@@ -39,38 +39,40 @@ export class HttpService {
     return this.instance.getUri(config);
   }
 
+  // Axios 1.20 uses a private default-response sentinel in its conditional return
+  // type. Keep the public Promise<R> contract for callers and response interceptors.
   request<T = any, R = AxiosResponse<T>, D = any>(
     config: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.request(config);
+    return this.instance.request<T, R, D>(config) as Promise<R>;
   }
 
   get<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.get(url, config);
+    return this.instance.get<T, R, D>(url, config) as Promise<R>;
   }
 
   delete<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.delete(url, config);
+    return this.instance.delete<T, R, D>(url, config) as Promise<R>;
   }
 
   head<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.head(url, config);
+    return this.instance.head<T, R, D>(url, config) as Promise<R>;
   }
 
   options<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.options(url, config);
+    return this.instance.options<T, R, D>(url, config) as Promise<R>;
   }
 
   post<T = any, R = AxiosResponse<T>, D = any>(
@@ -78,7 +80,7 @@ export class HttpService {
     data?: D,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.post(url, data, config);
+    return this.instance.post<T, R, D>(url, data, config) as Promise<R>;
   }
 
   put<T = any, R = AxiosResponse<T>, D = any>(
@@ -86,7 +88,7 @@ export class HttpService {
     data?: D,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.put(url, data, config);
+    return this.instance.put<T, R, D>(url, data, config) as Promise<R>;
   }
 
   patch<T = any, R = AxiosResponse<T>, D = any>(
@@ -94,7 +96,7 @@ export class HttpService {
     data?: D,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.patch(url, data, config);
+    return this.instance.patch<T, R, D>(url, data, config) as Promise<R>;
   }
 
   postForm<T = any, R = AxiosResponse<T>, D = any>(
@@ -102,7 +104,7 @@ export class HttpService {
     data?: D,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.postForm(url, data, config);
+    return this.instance.postForm<T, R, D>(url, data, config) as Promise<R>;
   }
 
   putForm<T = any, R = AxiosResponse<T>, D = any>(
@@ -110,7 +112,7 @@ export class HttpService {
     data?: D,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.putForm(url, data, config);
+    return this.instance.putForm<T, R, D>(url, data, config) as Promise<R>;
   }
 
   patchForm<T = any, R = AxiosResponse<T>, D = any>(
@@ -118,7 +120,7 @@ export class HttpService {
     data?: D,
     config?: AxiosRequestConfig<D>
   ): Promise<R> {
-    return this.instance.patchForm(url, data, config);
+    return this.instance.patchForm<T, R, D>(url, data, config) as Promise<R>;
   }
 }
 
