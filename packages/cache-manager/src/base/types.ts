@@ -31,9 +31,7 @@ export type FactoryStore<S extends Store, T extends object = never> = (
 ) => S | Promise<S>;
 
 export type Stores<S extends Store, T extends object> =
-  | 'memory'
-  | Store
-  | FactoryStore<S, T>;
+  'memory' | Store | FactoryStore<S, T>;
 export type CachingConfig<T> = MemoryConfig | StoreConfig | FactoryConfig<T>;
 export type WrapTTL<T> = Milliseconds | ((v: T) => Milliseconds);
 export type Cache<S extends Store = Store> = {

@@ -221,14 +221,11 @@ export class MidwayTraceService {
 
     const resolverWithDirection = resolver as {
       common?:
-        | TraceMetaRecord
-        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+        TraceMetaRecord | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
       entry?:
-        | TraceMetaRecord
-        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+        TraceMetaRecord | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
       exit?:
-        | TraceMetaRecord
-        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+        TraceMetaRecord | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
     };
     if (
       resolverWithDirection.common !== undefined ||

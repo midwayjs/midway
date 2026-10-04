@@ -9,14 +9,7 @@ export type CrudRouteName =
   | 'deleteMany';
 
 export type CrudFilterOperator =
-  | 'eq'
-  | 'ne'
-  | 'gt'
-  | 'gte'
-  | 'lt'
-  | 'lte'
-  | 'in'
-  | 'like';
+  'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'like';
 
 export interface CrudSort {
   field: string;

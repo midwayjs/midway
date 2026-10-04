@@ -40,8 +40,7 @@ export abstract class AbstractPassportMiddleware implements Pick<
   'authenticate'
 > {
   abstract getAuthenticateOptions():
-    | Promise<AuthenticateOptions>
-    | AuthenticateOptions;
+    Promise<AuthenticateOptions> | AuthenticateOptions;
   authenticate?(
     options: AuthenticateOptions,
     callback?: (...args: any[]) => any

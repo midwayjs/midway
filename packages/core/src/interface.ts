@@ -479,14 +479,11 @@ export type TraceMetaResolver =
   | ((args: TraceMetaResolverArgs) => TraceMetaRecord)
   | {
       common?:
-        | TraceMetaRecord
-        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+        TraceMetaRecord | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
       entry?:
-        | TraceMetaRecord
-        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+        TraceMetaRecord | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
       exit?:
-        | TraceMetaRecord
-        | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
+        TraceMetaRecord | ((args: TraceMetaResolverArgs) => TraceMetaRecord);
     };
 
 export type BaseServiceFactoryConfigOption<OPTIONS> = PowerPartial<OPTIONS> & {
@@ -907,8 +904,7 @@ export type CommonMiddleware<CTX, R, N> =
   | FunctionMiddleware<CTX, R, N>
   | CompositionMiddleware<CTX, R, N>;
 export type CommonMiddlewareUnion<CTX, R, N> =
-  | CommonMiddleware<CTX, R, N>
-  | Array<CommonMiddleware<CTX, R, N>>;
+  CommonMiddleware<CTX, R, N> | Array<CommonMiddleware<CTX, R, N>>;
 export type MiddlewareRespond<CTX, R, N> = (
   context: CTX,
   nextOrRes?: N extends true ? R : NextFunction,
@@ -938,8 +934,7 @@ export interface IGuard<CTX = unknown> {
 }
 
 export type CommonGuardUnion<CTX = unknown> =
-  | (new (...args) => IGuard<CTX>)
-  | Array<new (...args) => IGuard<CTX>>;
+  (new (...args) => IGuard<CTX>) | Array<new (...args) => IGuard<CTX>>;
 
 export interface IMiddlewareManager<CTX, R, N> {
   insertFirst(middleware: CommonMiddlewareUnion<CTX, R, N>): void;
@@ -1291,9 +1286,7 @@ export interface ServerStreamOptions<CTX extends IMidwayContext> {
  * The protocol used to serialize forwarded Server-Sent Events.
  */
 export type ServerSendEventForwardProtocol =
-  | 'eventsource'
-  | 'openai'
-  | 'anthropic';
+  'eventsource' | 'openai' | 'anthropic';
 
 /**
  * Options for forwarding async iterable SDK streams as Server-Sent Events.

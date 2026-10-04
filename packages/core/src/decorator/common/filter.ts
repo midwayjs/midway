@@ -27,10 +27,7 @@ export function Catch(
 }
 
 export type MatchPattern<CtxOrReq = any, Res = any> =
-  | ((ctxOrReq: CtxOrReq, res: Res) => boolean)
-  | string
-  | string[]
-  | boolean;
+  ((ctxOrReq: CtxOrReq, res: Res) => boolean) | string | string[] | boolean;
 
 export function Match(matchPattern: MatchPattern = true) {
   return function (target) {

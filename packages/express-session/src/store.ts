@@ -4,8 +4,7 @@ import { Provide, Scope, ScopeEnum, Types } from '@midwayjs/core';
 @Scope(ScopeEnum.Singleton)
 export class SessionStoreManager {
   private sessionStoreClz:
-    | (new (...args) => any)
-    | ((session: any) => new (...args) => any);
+    (new (...args) => any) | ((session: any) => new (...args) => any);
   private sessionStore;
   private sessionStoreOptions: any;
   setSessionStore(sessionStore, options = {}) {

@@ -410,8 +410,7 @@ export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
  * @deprecated
  */
 export type FaaSMiddleware =
-  | ((context: Context, next: () => Promise<any>) => any)
-  | string;
+  ((context: Context, next: () => Promise<any>) => any) | string;
 
 export interface FormatResponseOptions {
   supportBufferResponse?: boolean;

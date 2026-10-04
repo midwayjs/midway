@@ -9,8 +9,7 @@ export interface CasbinConfigOptions {
     | ((applicationContext: IMidwayContainer) => Promise<Adapter>)
     | Adapter;
   policyWatcher?:
-    | ((applicationContext: IMidwayContainer) => Promise<Watcher>)
-    | Watcher;
+    ((applicationContext: IMidwayContainer) => Promise<Watcher>) | Watcher;
   usernameFromContext: (ctx: IMidwayContext) => string;
 }
 

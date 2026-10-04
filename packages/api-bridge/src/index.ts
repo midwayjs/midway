@@ -46,9 +46,7 @@ export interface ApiBridgeBasePathOptions {
 }
 
 export type ApiBridgeBasePath =
-  | string
-  | ApiBridgeBasePathOptions
-  | (() => string | undefined);
+  string | ApiBridgeBasePathOptions | (() => string | undefined);
 
 export interface CreateClientOptions extends ApiBridgeOptions {
   basePath?: ApiBridgeBasePath;

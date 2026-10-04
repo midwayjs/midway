@@ -288,10 +288,7 @@ export type SecurityRequirementObject = Record<string, string[]>;
  * 非 open api spec
  */
 export type SwaggerEnumType =
-  | string[]
-  | number[]
-  | (string | number)[]
-  | Record<number, string>;
+  string[] | number[] | (string | number)[] | Record<number, string>;
 
 export interface Type<T = any> {
   new (...args: any[]): T;
@@ -309,12 +306,7 @@ export interface SchemaObjectMetadata extends Omit<
 }
 
 export type AuthType =
-  | 'basic'
-  | 'bearer'
-  | 'cookie'
-  | 'oauth2'
-  | 'apikey'
-  | 'custom';
+  'basic' | 'bearer' | 'cookie' | 'oauth2' | 'apikey' | 'custom';
 
 /**
  * 继承自 https://swagger.io/specification/#security-scheme-object
