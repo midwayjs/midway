@@ -58,18 +58,19 @@ jobs:
           npm install
           npm run build
 
-      # 安装并构建 tutorial 矩阵，然后合并到 site/build/tutorial
-      - name: Install and build tutorial matrix
+      # 构建交互式教程（独立 pnpm 项目，不属于根 workspace），然后合并到 site/build/tutorial
+      # 线上需要 CDN 为 /tutorial/ 路径添加 COOP / COEP 响应头，否则在线运行环境无法嵌入
+      - name: Install and build tutorial
         working-directory: tutorial
         run: |
-          npm install
-          npm run build:matrix
+          pnpm install --ignore-workspace --frozen-lockfile
+          pnpm run build
 
       - name: Merge tutorial output into site build
         run: |
           rm -rf site/build/tutorial
           mkdir -p site/build/tutorial
-          cp -R tutorial/dist-matrix/. site/build/tutorial/
+          cp -R tutorial/dist/. site/build/tutorial/
 
       # 打包文档，部署到阿里云 OSS
       - name: Zip output
