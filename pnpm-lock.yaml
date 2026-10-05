@@ -287,8 +287,8 @@ importers:
         specifier: 1.6.0
         version: 1.6.0
       file-type:
-        specifier: 21.3.2
-        version: 21.3.2
+        specifier: 21.3.4
+        version: 21.3.4
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -1470,8 +1470,8 @@ importers:
   packages/upload:
     dependencies:
       file-type:
-        specifier: 21.3.2
-        version: 21.3.2
+        specifier: 21.3.4
+        version: 21.3.4
       raw-body:
         specifier: 2.5.2
         version: 2.5.2
@@ -7791,8 +7791,8 @@ packages:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
 
-  file-type@21.3.2:
-    resolution: {integrity: sha512-DLkUvGwep3poOV2wpzbHCOnSKGk1LzyXTv+aHFgN2VFl96wnp8YA9YjO2qPzg5PuL8q/SW9Pdi6WTkYOIh995w==}
+  file-type@21.3.4:
+    resolution: {integrity: sha512-Ievi/yy8DS3ygGvT47PjSfdFoX+2isQueoYP1cntFW1JLYAuS4GD7NUPGg4zv2iZfV52uDyk5w5Z0TdpRS6Q1g==}
     engines: {node: '>=20'}
 
   file-uri-to-path@1.0.0:
@@ -19806,7 +19806,7 @@ snapshots:
     dependencies:
       flat-cache: 3.2.0
 
-  file-type@21.3.2:
+  file-type@21.3.4:
     dependencies:
       '@tokenizer/inflate': 0.4.1
       strtok3: 10.3.5
