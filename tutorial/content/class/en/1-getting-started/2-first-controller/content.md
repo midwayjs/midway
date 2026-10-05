@@ -1,17 +1,17 @@
 ---
 title: Create Your First Controller
 focus: /src/controller/home.controller.ts
+checks:
+  - /info
 ---
 
 # Create Your First Controller
 
-A controller handles HTTP requests and returns responses.
+A Controller handles HTTP requests and returns responses. The project on the right already has the smallest example: `GET /` returns a string.
 
 ## What is a Controller?
 
-In Midway, a controller is a class decorated with `@Controller()`. Its methods are mapped to routes using decorators like `@Get()`.
-
-## Example
+In Midway, a Controller is a class marked with `@Controller()`. Its methods map to HTTP routes.
 
 ```typescript
 @Controller('/')
@@ -23,29 +23,17 @@ export class HomeController {
 }
 ```
 
-## How it works
+## How to read it
 
-### `@Controller('/')`
-Defines a route prefix for all methods in this class.
+- `@Controller('/')` is the route prefix. Method paths are joined after it.
+- `@Get('/')` handles GET. Full path = prefix + method path, here `/`.
+- Return a string or an object: strings are sent as text, objects become JSON.
 
-### `@Get('/')`
-Maps the method to an HTTP GET route.
+Other method decorators: `@Post()`, `@Put()`, `@Del()`, `@Patch()`.
 
-### Return value
-- String values are returned as text responses.
-- Objects are returned as JSON.
+## Exercise
 
-## Try it
-
-Update the response text:
-
-```typescript
-async home() {
-  return 'Hello Midwayjs! Welcome to the interactive tutorial!';
-}
-```
-
-## Add one more route
+Add `GET /info` that returns JSON:
 
 ```typescript
 @Get('/info')
@@ -53,23 +41,8 @@ async info() {
   return {
     name: 'Midway.js',
     version: '4.0',
-    description: 'A future-ready Node.js framework',
   };
 }
 ```
 
-## Common method decorators
-
-- `@Get()`
-- `@Post()`
-- `@Put()`
-- `@Del()`
-- `@Patch()`
-
-## Summary
-
-- Controllers are defined with `@Controller()`
-- Routes are declared with HTTP decorators
-- Return values are automatically converted to HTTP responses
-
-Next, let's read request parameters.
+Save, then point the preview at `/info`. Use **Solve** in the toolbar if you get stuck.

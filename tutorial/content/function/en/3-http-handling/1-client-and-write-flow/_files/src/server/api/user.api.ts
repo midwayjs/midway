@@ -10,6 +10,15 @@ export const userApi = defineApi('/users', api => ({
     return { success: true, data: await service.getUsers() };
   }),
 
+  search: api
+    .get('/search')
+    .input({ query: z.object({ keyword: z.string().default('') }) })
+    .handle(async ({ input }) => {
+      const service = await useInject(UserService);
+      const users = await service.searchUsers(input.query.keyword);
+      return { success: true, data: users, count: users.length };
+    }),
+
   getOne: api
     .get('/:id')
     .input({ params: IdParams })
@@ -61,14 +70,5 @@ export const userApi = defineApi('/users', api => ({
       return ok
         ? { success: true, message: 'User deleted' }
         : { success: false, message: 'User not found' };
-    }),
-
-  search: api
-    .get('/search')
-    .input({ query: z.object({ keyword: z.string().default('') }) })
-    .handle(async ({ input }) => {
-      const service = await useInject(UserService);
-      const users = await service.searchUsers(input.query.keyword);
-      return { success: true, data: users, count: users.length };
     }),
 }));

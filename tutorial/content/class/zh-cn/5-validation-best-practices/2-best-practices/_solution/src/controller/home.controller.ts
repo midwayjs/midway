@@ -1,0 +1,14 @@
+import { Controller, Get } from '@midwayjs/core';
+
+@Controller('/')
+export class HomeController {
+  @Get('/')
+  async home() {
+    return 'Hello Midway!';
+  }
+
+  @Get('/health')
+  async health() {
+    return { ok: true };
+  }
+}

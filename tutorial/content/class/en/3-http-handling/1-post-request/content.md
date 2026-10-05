@@ -1,111 +1,57 @@
 ---
-title: Handle POST Requests
+title: Handling POST Requests
 focus: /src/controller/user.controller.ts
 ---
 
-# Handle POST Requests and Request Body
+# Handling POST Requests and Bodies
 
-So far we mostly used GET routes. Let's add write operations.
+So far we only handled GET. Writes usually use POST / PUT / DELETE, with data in the body via `@Body()`.
 
-## `@Post()` basics
+## `@Post` and `@Body`
 
-```typescript
-import { Controller, Post, Body, Inject } from '@midwayjs/core';
-import { UserService } from '../service/user.service';
-
-@Controller('/api/users')
-export class UserController {
-  @Inject()
-  userService: UserService;
-
-  @Post('/')
-  async create(@Body() body: any) {
-    const { name, email } = body;
-    const user = await this.userService.createUser(name, email);
-    return {
-      success: true,
-      message: 'User created successfully',
-      data: user,
-    };
-  }
-}
-```
-
-## Read body fields
-
-### Entire body
+`src/controller/user.controller.ts` already has a full user CRUD. Creating a user is the important part:
 
 ```typescript
-@Post('/user')
-async createUser(@Body() body: any) {
-  return body;
-}
-```
-
-### Specific fields
-
-```typescript
-@Post('/user')
-async createUser(
-  @Body('name') name: string,
-  @Body('email') email: string
-) {
-  return { name, email };
-}
-```
-
-### DTO style (recommended)
-
-```typescript
-export interface CreateUserDTO {
-  name: string;
-  email: string;
-  age?: number;
-}
-
 @Post('/')
 async create(@Body() dto: CreateUserDTO) {
   const user = await this.userService.createUser(dto.name, dto.email);
-  return { success: true, data: user };
-}
-```
-
-## Set status code and response headers
-
-```typescript
-import { Context } from '@midwayjs/koa';
-
-@Inject()
-ctx: Context;
-
-@Post('/')
-async create(@Body() body: any) {
-  this.ctx.status = 201;
-  this.ctx.set('X-Request-Id', this.ctx.requestId || 'local');
   return {
     success: true,
     message: 'User created successfully',
-    data: body,
+    data: user,
   };
 }
 ```
 
-## File upload basics
+- `@Body()` reads the whole JSON object
+- `@Body('name')` reads one field
+- Typing the body as a DTO/interface makes the next validation lesson drop in cleanly
+
+## Status codes
+
+Creating a resource usually returns 201. Inject Koa's `Context`:
 
 ```typescript
-import { Controller, Post, Files, Fields } from '@midwayjs/core';
+@Inject()
+ctx: Context;
 
-@Controller('/api/files')
-export class FileController {
-  @Post('/upload')
-  async upload(@Files() files, @Fields() fields) {
-    return { files, fields };
-  }
+@Post('/')
+async create(@Body() dto: CreateUserDTO) {
+  this.ctx.status = 201;
+  return { success: true, data: await this.userService.createUser(dto.name, dto.email) };
 }
 ```
 
-## Summary
+## Try it
 
-- Use `@Post()` for create/submit operations
-- Use `@Body()` for payload access
-- Use `ctx` to control status and headers when needed
+```bash
+curl -X POST http://localhost:7001/api/users \
+  -H 'content-type: application/json' \
+  -d '{"name":"harry","email":"harry@example.com"}'
+```
+
+List is `GET /api/users`, update is `PUT /api/users/:id`, delete is `DELETE /api/users/:id`. The request must send `Content-Type: application/json` or `@Body()` will be empty.
+
+## File uploads
+
+`@Files()` / `@Fields()` need an upload component. In v4 use [`@midwayjs/busboy`](https://midwayjs.org/docs/extensions/busboy), not the old `@midwayjs/upload`. Body size can be limited with `koa.bodyParser.jsonLimit`.

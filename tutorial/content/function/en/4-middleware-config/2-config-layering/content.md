@@ -1,14 +1,25 @@
 ---
-title: Config Layering and Local Port
+title: Config layering and local port
 focus: /src/server/config/config.default.ts
 preview: /api
 ---
 
-# Config Layering and Local Port
+# Config layering and local port
 
-Use layered config:
+Midway stacks config by environment. This lesson loads two layers:
 
-- `config.default.ts`
-- `config.local.ts` (overrides for local development, such as `koa.port`)
+- `config.default.ts`: the base for every environment. Here `koa.globalPrefix` is `/api`
+- `config.local.ts`: local overrides such as `koa.port`
 
-Declare both in `importConfigs` for clear environment boundaries.
+`NODE_ENV=local` merges `default + local`. Tests read `config.unittest.ts` (`port: null`) so they do not steal 7001 from dev.
+
+Read config in a handler with `useConfig`:
+
+```ts
+return {
+  name: useConfig('app.name'),
+  prefix: useConfig('koa.globalPrefix'),
+};
+```
+
+With `globalPrefix`, `/` becomes `/api`. That is why this lesson's preview opens `/api`. If the client's `basePath` is still empty, requests 404 until you set it to `/api`.

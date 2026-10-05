@@ -1,82 +1,63 @@
 ---
 title: Middleware Basics
 focus: /src/middleware/logger.middleware.ts
+checks:
+  - /health
 ---
 
 # Middleware Basics
 
-Middleware runs before and after controller execution.
-
-## Request pipeline
+Middleware runs before and after the controller. Think of it as checkpoints around the handler.
 
 ```text
 Request
-  -> Middleware A
-  -> Middleware B
+  -> Logger
   -> Controller
-  <- Middleware B
-  <- Middleware A
+  <- Logger
 Response
 ```
 
-## Typical middleware use cases
+Typical uses: auth, logging, timing, CORS, rate limiting.
 
-- Authentication
-- Logging
-- Performance timing
-- Security checks
-- Data transformation
-- Rate limiting
+## A logger middleware
 
-## Create a logger middleware
+The file on the right is already wired up:
 
 ```typescript
-import { Middleware } from '@midwayjs/core';
-import { Context, NextFunction } from '@midwayjs/koa';
-
 @Middleware()
 export class LoggerMiddleware {
   resolve() {
     return async (ctx: Context, next: NextFunction) => {
       const startTime = Date.now();
-      console.log(`-> ${ctx.method} ${ctx.url}`);
-
+      console.log(`→ ${ctx.method} ${ctx.url}`);
       await next();
-
       const duration = Date.now() - startTime;
-      console.log(`<- ${ctx.method} ${ctx.url} ${ctx.status} ${duration}ms`);
+      console.log(`← ${ctx.method} ${ctx.url} ${ctx.status} ${duration}ms`);
     };
   }
 }
 ```
 
-## Register middleware
+Register it in `onReady`:
 
 ```typescript
-import { Configuration, App, CommonJSFileDetector } from '@midwayjs/core';
-import * as koa from '@midwayjs/koa';
-import { LoggerMiddleware } from './middleware/logger.middleware';
-
-@Configuration({
-  imports: [koa],
-  detector: new CommonJSFileDetector(),
-})
-export class MainConfiguration {
-  @App()
-  app: koa.Application;
-
-  async onReady() {
-    this.app.useMiddleware([LoggerMiddleware]);
-  }
+async onReady() {
+  this.app.useMiddleware([LoggerMiddleware]);
 }
 ```
 
-## Verify in output panel
+Visit `/middleware-demo` and watch the terminal.
 
-Visit `GET /middleware-demo` (or any route) and check logs in `output`.
+You must `await next()`. If you forget, the controller never runs.
 
-## Summary
+## Exercise
 
-- Middleware wraps request lifecycle
-- `await next()` is required for proper flow
-- Register global middleware in `onReady`
+Add `GET /health` that returns `{ ok: true }`, and skip the logger for that path:
+
+```typescript
+if (ctx.path === '/health') {
+  return next();
+}
+```
+
+`/health` should not print `→` / `←`. Use **Solve** if you get stuck.

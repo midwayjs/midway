@@ -35,6 +35,8 @@ tutorial/
 
 每节课右侧的项目 = `templates/<风格>/` + 本课 `_files/`，同名文件以课程为准。课程之间互不继承，所以每节课的 `_files` 只需要放和模板不同的文件。
 
+练习课可以再放 `_solution/`：读者先改 `_files` 里的起点代码，点「查看答案」后会把 `_solution` 叠加进去。验证脚本会对答案再跑一遍。
+
 ## 写一节新课
 
 1. 在章节目录下新建 `<序号>-<slug>/`，目录名就是 URL 的一部分。
@@ -45,12 +47,15 @@ tutorial/
    title: 创建第一个 Controller
    focus: /src/controller/home.controller.ts   # 进入课程时打开的文件
    preview: /                                  # 可选，预览窗口打开的路径，默认 /
+   checks:                                     # 可选，应用答案后额外请求的路径
+     - /info
+   test: false                                 # 可选，为 true 时再执行 npm test
    ---
 
    正文使用普通 Markdown，代码块会在构建时高亮。
    ```
 
-3. 把本课需要的代码放进 `_files/`。
+3. 把本课起点代码放进 `_files/`。有练习时，把参考答案放进 `_solution/`（只放和起点不同的文件）。
 4. 运行 `pnpm verify` 确认能启动。
 
 两种语言的目录结构保持一致，切换语言时会停留在同一节课。

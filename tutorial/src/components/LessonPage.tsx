@@ -36,6 +36,10 @@ export function LessonPage({ variant, part, lesson }: Props) {
 
   const visited = useVisited(`${track}/${part.slug}/${lesson.slug}`);
   const files = useMemo(() => ({ ...variant.template, ...lesson.files }), [variant, lesson]);
+  const solution = useMemo(
+    () => (lesson.solution ? { ...files, ...lesson.solution } : null),
+    [files, lesson]
+  );
   const isPartStart = part.lessons[0] === lesson;
 
   useEffect(() => {
@@ -196,6 +200,7 @@ export function LessonPage({ variant, part, lesson }: Props) {
         <section className="workspace-pane">
           <Workspace
             files={files}
+            solution={solution}
             focus={lesson.focus}
             preview={lesson.preview}
             title={lesson.title}

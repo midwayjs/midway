@@ -1,60 +1,53 @@
 ---
-title: Best Practices Summary
-focus: /src/configuration.ts
+title: HTTP tests with mock
+focus: /test/home.test.ts
+test: true
+checks:
+  - /health
 ---
 
-# Midway.js Best Practices
+# HTTP tests with mock
 
-This section summarizes practical patterns for maintainable Midway projects.
+The previous lessons wired up routes, services, middleware, and validation. Before shipping, add at least one HTTP test that proves the route actually works.
 
-## Recommended structure
+This project now includes `jest` and `ts-jest`. `npm test` sets `NODE_ENV=unittest` and reads `koa.port: null` from `config.unittest.ts`, so it **does not bind 7001** and can run next to `npm run dev`.
 
-```text
-src/
-├── controller/
-├── service/
-├── middleware/
-├── filter/
-├── dto/
-├── entity/
-├── error/
-├── util/
-├── config/
-├── interface.ts
-├── configuration.ts
-└── bootstrap.ts
+```typescript
+import { createApp, close, createHttpRequest } from '@midwayjs/mock';
+import { Application } from '@midwayjs/koa';
+
+describe('home', () => {
+  let app: Application;
+
+  beforeAll(async () => {
+    app = await createApp(process.cwd());
+  });
+
+  afterAll(async () => {
+    await close(app);
+  });
+
+  it('GET /', async () => {
+    const res = await createHttpRequest(app).get('/');
+    expect(res.status).toBe(200);
+    expect(res.text).toBe('Hello Midway!');
+  });
+});
 ```
 
-## Design principles
+Open a second terminal:
 
-### Single responsibility
+```bash
+npm test
+```
 
-- Controller: HTTP orchestration
-- Service: business logic
-- Repository/data layer: persistence logic
+`GET /` should pass.
 
-### Depend on abstractions
+## Exercise
 
-Use interfaces where possible for better decoupling and testability.
+1. Add `GET /health` on `HomeController` returning `{ ok: true }`.
+2. Add a test: status 200 and `res.body.ok === true`.
 
-### Async-first coding
+Run `npm test` again. Use **Solve** if you get stuck.
 
-Prefer `async/await` for readable I/O flow.
-
-## API design guidelines
-
-- Follow RESTful route conventions
-- Keep response schema consistent
-- Return meaningful status codes and error messages
-
-## Testing guidance
-
-Use `@midwayjs/mock` + Jest for integration and endpoint tests.
-
-## Final checklist
-
-- Clear layering
-- Unified error handling
-- Strict validation
-- Environment-based configuration
-- Test coverage for core business flows
+Worth covering later: happy path, validation failures (422), and business errors (404). A test that runs in CI is more useful than a deployment checklist.

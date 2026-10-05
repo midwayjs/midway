@@ -1,12 +1,10 @@
 ---
-title: "Step 5: Validation and Best Practices"
+title: "Step 5: Validation and testing"
 ---
 
-# Validation and Best Practices
+# Validation and testing
 
-In the final part, you'll learn:
+The last part:
 
-- Request data validation
-- DTO usage patterns
-- Testing and maintainability basics
-- Practical architecture best practices
+- Validate requests with `@midwayjs/validation`
+- Write runnable HTTP tests with `@midwayjs/mock`

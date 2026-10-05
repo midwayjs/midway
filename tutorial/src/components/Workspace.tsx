@@ -1,12 +1,14 @@
 import sdk, { type Project, type VM } from '@stackblitz/sdk';
 import { useEffect, useRef, useState } from 'react';
 import type { messages } from '../i18n';
-import { ExternalLink, FileCode, RotateCcw, ShieldAlert } from '../icons';
+import { ExternalLink, FileCode, Lightbulb, RotateCcw, ShieldAlert } from '../icons';
 import type { Theme } from '../prefs';
 import type { ProjectFiles } from '../types';
 
 interface Props {
   files: ProjectFiles;
+  /** 应用参考答案后的完整项目文件，没有练习时为 null。 */
+  solution: ProjectFiles | null;
   focus: string;
   preview: string;
   title: string;
@@ -46,16 +48,19 @@ async function syncFiles(vm: VM, previous: ProjectFiles, next: ProjectFiles) {
 }
 
 /** 右侧的 StackBlitz 在线运行环境。 */
-export function Workspace({ files, focus, preview, title, theme, messages: t }: Props) {
+export function Workspace({ files, solution, focus, preview, title, theme, messages: t }: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const vmRef = useRef<VM>(undefined);
   const appliedRef = useRef<ProjectFiles>({});
   const queueRef = useRef<Promise<void>>(Promise.resolve());
   const latestRef = useRef({ files, focus, preview, title, theme });
   const [booting, setBooting] = useState(false);
+  const [solved, setSolved] = useState(false);
   const isolated = typeof window !== 'undefined' && window.crossOriginIsolated;
 
   latestRef.current = { files, focus, preview, title, theme };
+
+  useEffect(() => setSolved(false), [files]);
 
   const enqueue = (task: () => Promise<void>) => {
     queueRef.current = queueRef.current.then(task).catch(err => {
@@ -103,17 +108,30 @@ export function Workspace({ files, focus, preview, title, theme, messages: t }: 
     });
   }, [files, isolated]);
 
-  const reset = () => {
+  const apply = (target: ProjectFiles) => {
     const vm = vmRef.current;
     if (!vm) return;
     enqueue(async () => {
-      await syncFiles(vm, appliedRef.current, latestRef.current.files);
+      await syncFiles(vm, appliedRef.current, target);
+      appliedRef.current = target;
       await vm.editor.openFile(latestRef.current.focus);
     });
   };
 
+  const reset = () => {
+    setSolved(false);
+    apply(latestRef.current.files);
+  };
+
+  const solve = () => {
+    if (!solution) return;
+    setSolved(true);
+    apply(solution);
+  };
+
   const openExternal = () => {
-    sdk.openProject(project(title, files), { openFile: focus, newWindow: true });
+    const current = solved && solution ? solution : files;
+    sdk.openProject(project(title, current), { openFile: focus, newWindow: true });
   };
 
   return (
@@ -124,6 +142,17 @@ export function Workspace({ files, focus, preview, title, theme, messages: t }: 
           {focus}
         </span>
         <div className="workspace-actions">
+          {isolated && solution && (
+            <button
+              type="button"
+              className={`btn btn-sm ${solved ? 'btn-ghost' : 'btn-soft'}`}
+              onClick={solve}
+              disabled={solved || booting}
+              title={t.solveTip}
+            >
+              <Lightbulb size={14} /> {solved ? t.solved : t.solve}
+            </button>
+          )}
           {isolated && (
             <button type="button" className="btn btn-ghost btn-sm" onClick={reset} title={t.resetTip}>
               <RotateCcw size={14} /> {t.reset}

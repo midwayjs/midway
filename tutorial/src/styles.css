@@ -138,6 +138,19 @@ body.is-resizing iframe {
   background: var(--bg-subtle);
 }
 
+.btn-soft {
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.btn-soft:hover {
+  border-color: var(--brand-ring);
+}
+
+.btn:disabled {
+  cursor: default;
+}
+
 .btn-primary {
   color: #fff;
   background: var(--brand);

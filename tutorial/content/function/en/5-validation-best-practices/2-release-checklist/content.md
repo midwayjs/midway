@@ -1,14 +1,36 @@
 ---
-title: Pre-release Best-practice Checklist
-focus: /src/server/index.ts
+title: HTTP tests with mock
+focus: /test/home.test.ts
+test: true
+checks:
+  - /health
 ---
 
-# Pre-release Best-practice Checklist
+# HTTP tests with mock
 
-Before release, verify:
+Once contracts, middleware, and error shape are in place, add an HTTP test that actually runs. This project includes `jest` / `ts-jest`. `npm test` uses `NODE_ENV=unittest` and `koa.port: null`, so it will not fight `npm run dev` for port 7001.
 
-1. core APIs have `input/output` contracts
-2. middleware and error shape are unified
-3. local/production config boundaries are clear
-4. frontend only calls APIs via `createClient`
-5. tests cover read/write/error paths
+```ts
+import { createApp, close, createHttpRequest } from '@midwayjs/mock';
+
+it('GET /', async () => {
+  const res = await createHttpRequest(app).get('/');
+  expect(res.status).toBe(200);
+  expect(res.body.message).toBe('Hello Midway Functional!');
+});
+```
+
+`createApp(process.cwd())` boots a test app from the current project. In a second terminal:
+
+```bash
+npm test
+```
+
+## Exercise
+
+1. Add `GET /health` on `home.api.ts` returning `{ ok: true }`
+2. Add the matching assertion in `test/home.test.ts`
+
+Run `npm test` again. Use **Solve** if you get stuck.
+
+Also worth checking before a release: write APIs have `input/output`, errors are JSON, and `createClient` `basePath` matches `globalPrefix`.

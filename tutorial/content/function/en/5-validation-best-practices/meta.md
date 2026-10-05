@@ -1,11 +1,10 @@
 ---
-title: "Step 5: Validation, Testing, and Release Checks"
+title: "Step 5: Validation and testing"
 ---
 
-# Validation, Testing, and Release Checks
+# Validation and testing
 
-Final part focuses on production readiness:
+The last part:
 
-- `input/output` schema validation
-- error/log conventions
-- release checklist
+- Declare `input` / `output` on the contract
+- Write runnable HTTP tests with `@midwayjs/mock`

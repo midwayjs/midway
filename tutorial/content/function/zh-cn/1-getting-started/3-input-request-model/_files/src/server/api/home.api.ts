@@ -45,31 +45,4 @@ export const homeApi = defineApi('/', api => ({
         results: [],
       };
     }),
-
-  calculate: api
-    .get('/calc/:operation')
-    .input({
-      params: z.object({ operation: z.string() }),
-      query: z.object({
-        a: z.coerce.number().default(0),
-        b: z.coerce.number().default(0),
-      }),
-    })
-    .handle(async ({ input }) => {
-      const { operation } = input.params;
-      const { a, b } = input.query;
-
-      switch (operation) {
-        case 'add':
-          return { operation, a, b, result: a + b };
-        case 'subtract':
-          return { operation, a, b, result: a - b };
-        case 'multiply':
-          return { operation, a, b, result: a * b };
-        case 'divide':
-          return { operation, a, b, result: b === 0 ? null : a / b };
-        default:
-          return { error: 'unsupported operation' };
-      }
-    }),
 }));

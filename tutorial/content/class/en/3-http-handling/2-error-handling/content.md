@@ -85,6 +85,10 @@ export class NotFoundError extends MidwayHttpError {
 }
 ```
 
+## Exercise
+
+In `create`, reject emails that do not contain `@` by throwing `ValidationError`. A bad POST should come back as JSON from the filter, not as a new user in the service.
+
 ## Summary
 
 - Validate input early

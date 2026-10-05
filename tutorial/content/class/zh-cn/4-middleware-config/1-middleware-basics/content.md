@@ -1,6 +1,8 @@
 ---
 title: 理解中间件
 focus: /src/middleware/logger.middleware.ts
+checks:
+  - /health
 ---
 
 # 中间件（Middleware）
@@ -182,99 +184,18 @@ async onReady() {
 ← 响应
 ```
 
-## 动手实践
+## 练习
 
-尝试创建一个响应时间中间件，记录慢请求：
+给首页加一个 `GET /health`，并在日志中间件里跳过它（探活接口一般不打访问日志）：
 
 ```typescript
-import { Middleware } from '@midwayjs/core';
-import { Context, NextFunction } from '@midwayjs/koa';
-
-@Middleware()
-export class ResponseTimeMiddleware {
-  resolve() {
-    return async (ctx: Context, next: NextFunction) => {
-      const startTime = Date.now();
-
-      await next();
-
-      const duration = Date.now() - startTime;
-
-      // 添加响应头
-      ctx.set('X-Response-Time', `${duration}ms`);
-
-      // 记录慢请求（超过 1 秒）
-      if (duration > 1000) {
-        console.warn(`⚠️ 慢请求: ${ctx.method} ${ctx.url} ${duration}ms`);
-      }
-    };
-  }
+if (ctx.path === '/health') {
+  return next();
 }
 ```
 
-## 条件性跳过中间件
+写完后访问 `/health`，终端里不应该出现这条请求的 `→` / `←` 日志。卡住了点「查看答案」。
 
-有时候某些路由不需要中间件：
-
-```typescript
-@Middleware()
-export class AuthMiddleware {
-  resolve() {
-    return async (ctx: Context, next: NextFunction) => {
-      // 跳过登录接口
-      if (ctx.path === '/api/auth/login') {
-        return await next();
-      }
-
-      // 检查 token
-      const token = ctx.headers['authorization'];
-      if (!token) {
-        ctx.status = 401;
-        ctx.body = { message: '未登录' };
-        return;
-      }
-
-      await next();
-    };
-  }
-}
-```
-
-## 中间件配置
-
-中间件可以接收配置参数：
-
-```typescript
-import { Middleware, Config } from '@midwayjs/core';
-import { Context, NextFunction } from '@midwayjs/koa';
-
-@Middleware()
-export class LoggerMiddleware {
-  @Config('logger')
-  loggerConfig;
-
-  resolve() {
-    return async (ctx: Context, next: NextFunction) => {
-      if (this.loggerConfig.enabled) {
-        console.log(`${ctx.method} ${ctx.url}`);
-      }
-      await next();
-    };
-  }
-}
-```
-
-在 `config.default.ts` 中配置：
-
-```typescript
-export default {
-  logger: {
-    enabled: true,
-  },
-};
-```
-
-## 小结
 
 ✅ 中间件用于处理通用逻辑
 ✅ 使用 `@Middleware()` 装饰器定义中间件

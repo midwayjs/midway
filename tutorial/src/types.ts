@@ -18,6 +18,16 @@ export interface Lesson {
   html: string;
   /** 叠加在模板之上的课程文件。 */
   files: ProjectFiles;
+  /** 练习的参考答案，叠加在课程文件之上；没有练习的课程为 null。 */
+  solution: ProjectFiles | null;
+}
+
+/** 只在构建期使用的验证信息，不会打包到页面里。 */
+export interface LessonChecks {
+  /** 应用答案后必须命中路由的路径。 */
+  paths: string[];
+  /** 是否需要执行 `npm test`。 */
+  test: boolean;
 }
 
 /** 一个章节。 */

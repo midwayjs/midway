@@ -6,6 +6,7 @@ import { parse as parseYaml } from 'yaml';
 import type {
   CatalogEntry,
   Lesson,
+  LessonChecks,
   Locale,
   Part,
   ProjectFiles,
@@ -24,6 +25,7 @@ const LANGS = ['ts', 'tsx', 'js', 'json', 'bash', 'yaml', 'diff'] as const;
 export class ContentLoader {
   private highlighter?: Promise<Highlighter>;
   private readonly root: string;
+  private readonly lessonChecks = new WeakMap<Lesson, LessonChecks>();
 
   constructor(root: string) {
     this.root = root;
@@ -67,14 +69,21 @@ export class ContentLoader {
       for (const lessonSlug of await listDirs(partDir)) {
         const lessonDir = path.join(partDir, lessonSlug);
         const doc = await this.readMarkdown(path.join(lessonDir, 'content.md'));
-        lessons.push({
+        const solution = await readFiles(path.join(lessonDir, '_solution'));
+        const lesson: Lesson = {
           slug: lessonSlug,
           title: doc.data.title ?? lessonSlug,
           focus: normalizePath(doc.data.focus ?? 'README.md'),
           preview: doc.data.preview ?? '/',
           html: doc.html,
           files: await readFiles(path.join(lessonDir, '_files')),
+          solution: Object.keys(solution).length ? solution : null,
+        };
+        this.lessonChecks.set(lesson, {
+          paths: doc.data.checks ?? [],
+          test: doc.data.test === true,
         });
+        lessons.push(lesson);
       }
 
       parts.push({
@@ -88,6 +97,11 @@ export class ContentLoader {
     return { track, locale, template, parts };
   }
 
+  /** 课程 frontmatter 里声明的验证信息，供 `scripts/verify-lessons.ts` 使用。 */
+  checks(lesson: Lesson): LessonChecks {
+    return this.lessonChecks.get(lesson) ?? { paths: [], test: false };
+  }
+
   /** 把一段代码渲染成带高亮的 HTML，用于落地页示例。 */
   async highlight(code: string, lang: string) {
     const highlighter = await this.getHighlighter();
@@ -97,7 +111,13 @@ export class ContentLoader {
   private async readMarkdown(file: string) {
     const source = await fs.readFile(file, 'utf8').catch(() => '');
     const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
-    const data: { title?: string; focus?: string; preview?: string } = match
+    const data: {
+      title?: string;
+      focus?: string;
+      preview?: string;
+      checks?: string[];
+      test?: boolean;
+    } = match
       ? parseYaml(match[1]) ?? {}
       : {};
     const body = match ? source.slice(match[0].length) : source;

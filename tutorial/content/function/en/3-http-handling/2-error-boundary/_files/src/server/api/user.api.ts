@@ -7,7 +7,7 @@ import { ValidationError, NotFoundError } from '../error/custom.error';
 export const userApi = defineApi('/users', api => ({
   create: api
     .post('/')
-    // Fields are optional so the handler below can throw custom errors
+    // 字段都设为可选，交给下面的业务代码抛出自定义错误
     .input({
       body: z.object({
         name: z.string().optional(),

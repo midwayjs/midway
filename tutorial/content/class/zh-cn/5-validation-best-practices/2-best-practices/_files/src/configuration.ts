@@ -1,6 +1,7 @@
 import { Configuration, App, CommonJSFileDetector } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as DefaultConfig from './config/config.default';
+import * as UnittestConfig from './config/config.unittest';
 import { DefaultErrorFilter } from './filter/default.filter';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
@@ -10,6 +11,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
   importConfigs: [
     {
       default: DefaultConfig,
+      unittest: UnittestConfig,
     },
   ],
 })

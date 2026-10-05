@@ -303,34 +303,9 @@ export class UserService {
 }
 ```
 
-## 动手实践
+## 练习
 
-尝试添加以下验证逻辑：
-
-1. **用户名长度验证**
-
-```typescript
-if (name.length < 2 || name.length > 20) {
-  throw new ValidationError('用户名长度必须在 2-20 个字符之间');
-}
-```
-
-2. **邮箱唯一性检查**
-
-```typescript
-const existingUser = await this.userService.findByEmail(email);
-if (existingUser) {
-  throw new BusinessError('该邮箱已被注册');
-}
-```
-
-3. **年龄范围验证**
-
-```typescript
-if (age && (age < 0 || age > 150)) {
-  throw new ValidationError('年龄必须在 0-150 之间');
-}
-```
+在 `create` 里补一条邮箱格式检查：不含 `@` 就抛 `ValidationError`。发一个非法邮箱的 POST，应返回过滤器整理过的 JSON 错误，而不是把脏数据写入 Service。
 
 ## 小结
 

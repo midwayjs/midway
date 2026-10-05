@@ -3,6 +3,7 @@ import { defineConfiguration } from '@midwayjs/core/functional';
 import * as koa from '@midwayjs/koa';
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
+import * as UnittestConfig from './config/config.unittest';
 
 export default defineConfiguration({
   imports: [koa],
@@ -10,6 +11,7 @@ export default defineConfiguration({
     {
       default: DefaultConfig,
       local: LocalConfig,
+      unittest: UnittestConfig,
     },
   ],
   detector: new CommonJSFileDetector(),

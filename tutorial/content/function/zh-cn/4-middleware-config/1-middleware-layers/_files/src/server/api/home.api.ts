@@ -5,17 +5,14 @@ export const homeApi = defineApi(
   '/',
   api => ({
     home: api.get('/').handle(async () => ({
-      message: 'middleware demo, visit /api/middleware-demo',
+      message: 'Visit /middleware-demo — check the terminal for request logs',
     })),
 
-    middlewareDemo: api
-      .get('/middleware-demo')
-      .meta({ middleware: [loggerMiddleware] })
-      .handle(async () => ({
-        success: true,
-        lesson: 'middleware-basics',
-        timestamp: Date.now(),
-      })),
+    middlewareDemo: api.get('/middleware-demo').handle(async () => ({
+      success: true,
+      lesson: 'middleware-layers',
+      timestamp: Date.now(),
+    })),
   }),
   {
     middleware: [loggerMiddleware],

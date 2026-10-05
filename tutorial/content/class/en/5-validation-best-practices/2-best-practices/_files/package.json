@@ -1,0 +1,33 @@
+{
+  "name": "midway-tutorial",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=local mwtsc --watch --run @midwayjs/mock/app.js",
+    "test": "cross-env NODE_ENV=unittest jest --runInBand"
+  },
+  "dependencies": {
+    "@midwayjs/bootstrap": "^4.2.0",
+    "@midwayjs/core": "^4.2.0",
+    "@midwayjs/koa": "^4.2.0",
+    "@midwayjs/logger": "^4.0.0",
+    "@midwayjs/validation": "^4.2.0",
+    "@midwayjs/validation-joi": "^4.2.0",
+    "joi": "^17.13.3"
+  },
+  "devDependencies": {
+    "@midwayjs/mock": "^4.2.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^18.19.0",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "mwtsc": "^1.4.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.3.0"
+  },
+  "stackblitz": {
+    "installDependencies": true,
+    "startCommand": "npm run dev"
+  }
+}

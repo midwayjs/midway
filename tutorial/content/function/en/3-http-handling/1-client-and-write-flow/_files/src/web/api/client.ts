@@ -3,5 +3,5 @@ import { userApi } from '../../server/api/user.api';
 
 export const api = createClient(
   { user: userApi },
-  { basePath: '/api' }
+  { manifest: false }
 );

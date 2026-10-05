@@ -9,6 +9,14 @@ export const userApi = defineApi('/users', api => ({
     return { success: true, data: users };
   }),
 
+  search: api
+    .get('/search')
+    .input({ query: z.object({ keyword: z.string().default('') }) })
+    .handle(async ({ input }) => {
+      // Exercise: inject UserService and search by input.query.keyword
+      return { success: true, data: [], count: 0, keyword: input.query.keyword };
+    }),
+
   getOne: api
     .get('/:id')
     .input({ params: z.object({ id: z.string() }) })
@@ -21,14 +29,5 @@ export const userApi = defineApi('/users', api => ({
       }
 
       return { success: true, data: user };
-    }),
-
-  search: api
-    .get('/search')
-    .input({ query: z.object({ keyword: z.string().default('') }) })
-    .handle(async ({ input }) => {
-      const userService = await useInject(UserService);
-      const users = await userService.searchUsers(input.query.keyword);
-      return { success: true, data: users, count: users.length };
     }),
 }));

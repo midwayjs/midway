@@ -1,18 +1,15 @@
 ---
 title: input 参数模型
 focus: /src/server/api/home.api.ts
+checks:
+  - /calc/add?a=1&b=2
 ---
 
 # input 参数模型
 
-Functional API 统一从 `input` 读取请求数据。
+Functional API 统一从 `input` 读请求：`params`、`query`、`body`、`headers`。
 
-- `input.params`
-- `input.query`
-- `input.body`
-- `input.headers`
-
-用 `.input()` 为每一部分声明 schema（这里使用 zod），框架会在调用 handler 前完成校验，`input` 也会获得对应的类型：
+没有 `.input()` 时这些字段的类型是 `unknown`，不能直接读属性。用 zod 声明 schema 之后，框架会在进入 handler 前校验，并推断出类型：
 
 ```ts
 import { z } from 'zod';
@@ -23,11 +20,11 @@ getUserById: api
     params: z.object({ id: z.string() }),
   })
   .handle(async ({ input }) => {
-    return { id: input.params.id }; // id: string
+    return { id: input.params.id }; // string
   }),
 ```
 
-查询参数在 URL 里都是字符串，可以用 `z.coerce` 转成数字，再配合 `default` 给出默认值：
+查询参数在 URL 里都是字符串，用 `z.coerce` 转成数字，再用 `default` 给默认值：
 
 ```ts
 query: z.object({
@@ -35,4 +32,8 @@ query: z.object({
 }),
 ```
 
-没有声明 schema 的部分会被当作 `unknown`，不能直接读取字段。从这一层开始就可以形成稳定的请求契约。
+右侧已经有 `/greet`、`/user/:id`、`/search/:category`。`/greet?name=harry` 可以马上试。
+
+## 练习
+
+补一个 `GET /calc/:operation`，query 里的 `a`、`b` 用 `z.coerce.number()`，支持 `add` / `subtract` / `multiply` / `divide`。访问 `/calc/add?a=1&b=2` 应返回 `result: 3`。

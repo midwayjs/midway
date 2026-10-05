@@ -8,7 +8,7 @@ export class DefaultErrorFilter {
 
     return {
       success: false,
-      message: err.message || 'Internal server error',
+      message: err.message || '服务器内部错误',
       code: err['code'] || 'INTERNAL_ERROR',
       timestamp: new Date().toISOString(),
     };

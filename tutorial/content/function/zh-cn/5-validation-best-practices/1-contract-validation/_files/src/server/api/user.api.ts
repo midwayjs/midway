@@ -21,7 +21,6 @@ export const userApi = defineApi('/users', api => ({
   create: api
     .post('/')
     .input(CreateUserInputSchema)
-    .output(UserOutputSchema)
     .handle(async ({ input }) => {
       const service = await useInject(UserService);
       return service.createUser(
