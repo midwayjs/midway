@@ -1171,16 +1171,16 @@ container.bind(UserService);
 
 在 `4.0.0` 版本中，我们引入了 `detector` 的概念，用于扫描文件并进行绑定。
 
-简单的来说，框架默认会递归扫描整个 `src` 目录下的 ts/js 文件，然后进行 require 操作，当文件导出的为 class，且显式或隐式包含 `@Provide()` 装饰器时，会执行 `container.bind` 逻辑。
+v4 不再隐式扫描 `src`。不声明 `detector` 时，Controller、Service 等 class 不会被自动 `bind`，路由也会全部 404。需要在 `@Configuration`（或 `defineConfiguration`）里显式指定探测器。
 
-下面的逻辑显式的声明了文件的加载行为，用户可以自定义文件探测器，来实现不同的文件加载行为。
+探测器会递归加载匹配到的 ts/js 文件；当文件导出的是 class，且显式或隐式包含 `@Provide()` 时，会执行 `container.bind`。
 
 ```typescript
 // src/configuration.ts
-import { Configuration, CommonjsFileDetector } from '@midwayjs/core';
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
 
 @Configuration({
-  detector: new CommonjsFileDetector(),
+  detector: new CommonJSFileDetector(),
 })
 export class MainConfiguration {}
 ```
@@ -1226,7 +1226,7 @@ export class MainConfiguration {}
 </TabItem>
 </Tabs>
 
-默认情况下，会扫描 `src` 目录下的以下文件，并进行自动处理和绑定。
+声明 `detector` 之后，默认会扫描 `src` 目录下的以下文件，并进行自动处理和绑定。
 
 ```typescript
 export const DEFAULT_PATTERN = [
