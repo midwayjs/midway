@@ -82,7 +82,7 @@ async function main() {
   const releaseData = {
     tag_name: tag,
     target_commitish: process.env.GITHUB_REF_NAME || 'v4-next',
-    name: currentVersion,
+    name: tag,
     body,
     draft: false,
     prerelease: false,
