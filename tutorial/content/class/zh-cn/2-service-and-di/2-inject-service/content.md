@@ -1,6 +1,12 @@
 ---
 title: 依赖注入的使用
+preview: /api/users
 focus: /src/controller/user.controller.ts
+routes:
+  - /
+  - /api/users
+  - /api/users/1
+  - /api/users/search?keyword=张三
 ---
 
 # 在 Controller 中注入 Service

@@ -70,11 +70,14 @@ export class ContentLoader {
         const lessonDir = path.join(partDir, lessonSlug);
         const doc = await this.readMarkdown(path.join(lessonDir, 'content.md'));
         const solution = await readFiles(path.join(lessonDir, '_solution'));
+        const routes = uniqueRoutes(doc.data.preview ?? '/', doc.data.routes);
         const lesson: Lesson = {
           slug: lessonSlug,
           title: doc.data.title ?? lessonSlug,
           focus: normalizePath(doc.data.focus ?? 'README.md'),
-          preview: doc.data.preview ?? '/',
+          preview: normalizeRoute(doc.data.preview ?? '/'),
+          routes,
+          solutionRoutes: extraRoutes(routes, doc.data.checks),
           html: doc.html,
           files: await readFiles(path.join(lessonDir, '_files')),
           solution: Object.keys(solution).length ? solution : null,
@@ -115,6 +118,7 @@ export class ContentLoader {
       title?: string;
       focus?: string;
       preview?: string;
+      routes?: string[];
       checks?: string[];
       test?: boolean;
     } = match
@@ -187,6 +191,29 @@ function normalizeLang(lang: string) {
 
 function normalizePath(p: string) {
   return p.replace(/^\/+/, '');
+}
+
+function normalizeRoute(p: string) {
+  const value = (p || '/').trim();
+  return value.startsWith('/') ? value : `/${value}`;
+}
+
+function uniqueRoutes(preview: string, extra?: string[]) {
+  const routes = [normalizeRoute(preview)];
+  for (const item of extra ?? []) {
+    const route = normalizeRoute(item);
+    if (!routes.includes(route)) routes.push(route);
+  }
+  return routes;
+}
+
+function extraRoutes(existing: string[], extra?: string[]) {
+  const routes: string[] = [];
+  for (const item of extra ?? []) {
+    const route = normalizeRoute(item);
+    if (!existing.includes(route) && !routes.includes(route)) routes.push(route);
+  }
+  return routes;
 }
 
 async function listDirs(dir: string) {

@@ -1,6 +1,10 @@
 ---
 title: Contract validation (input / output)
+preview: /users
 focus: /src/server/api/user.api.ts
+routes:
+  - /users
+  - /users/u-1
 ---
 
 # Contract validation (input / output)

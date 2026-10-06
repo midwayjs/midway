@@ -1,6 +1,9 @@
 ---
 title: Create Your First Controller
 focus: /src/controller/home.controller.ts
+routes:
+  - /
+  - /info
 checks:
   - /info
 ---

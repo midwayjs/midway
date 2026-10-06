@@ -11,6 +11,30 @@
     "message": "🚧 Beta 版文档 (v4)",
     "description": "Beta版文档按钮的文本"
   },
+  "homepage.splash.titleLine1": {
+    "message": "全栈框架",
+    "description": "首页首屏主标题第一行"
+  },
+  "homepage.splash.titleLine2": {
+    "message": "为关键业务而生",
+    "description": "首页首屏主标题第二行"
+  },
+  "homepage.splash.subtitlePrefix": {
+    "message": "企业级 Node.js 框架，面向",
+    "description": "首页首屏副标题前缀，后接轮播词"
+  },
+  "homepage.splash.subtitleSuffix": {
+    "message": "从开发到上线，都能从容构建。",
+    "description": "首页首屏副标题后缀"
+  },
+  "homepage.splash.primaryBtn": {
+    "message": "开始使用",
+    "description": "首页首屏主按钮"
+  },
+  "homepage.splash.secondaryBtn": {
+    "message": "查看 GitHub",
+    "description": "首页首屏次按钮"
+  },
   "homepage.splash.target.web": {
     "message": "Web",
     "description": "首页首屏轮播关键词"
@@ -20,7 +44,7 @@
     "description": "首页首屏轮播关键词"
   },
   "homepage.splash.target.architecture": {
-    "message": "架构",
+    "message": "企业架构",
     "description": "首页首屏轮播关键词"
   },
   "homepage.splash.target.api": {
@@ -36,11 +60,11 @@
     "description": "首页首屏轮播关键词"
   },
   "homepage.splash.badge": {
-    "message": "Midway v4.0 // 系统就绪",
+    "message": "Midway v4.0 已就绪",
     "description": "首页首屏徽标文本"
   },
   "homepage.splash.stats.stars": {
-    "message": "GitHub Stars",
+    "message": "GitHub 星标",
     "description": "首页首屏统计标签"
   },
   "homepage.splash.stats.downloads": {
@@ -56,12 +80,104 @@
     "description": "首页首屏 HUD 标签"
   },
   "homepage.splash.hud.core": {
-    "message": "核心激活",
+    "message": "核心运行",
     "description": "首页首屏 HUD 标签"
   },
   "homepage.splash.hud.net": {
     "message": "网络在线",
     "description": "首页首屏 HUD 标签"
+  },
+  "homepage.section.capabilities": {
+    "message": "01 // 核心能力",
+    "description": "首页区块编号"
+  },
+  "homepage.section.development": {
+    "message": "02 // 开发方式",
+    "description": "首页区块编号"
+  },
+  "homepage.section.agility": {
+    "message": "03 // 灵活高效",
+    "description": "首页区块编号"
+  },
+  "homepage.section.ecosystem": {
+    "message": "04 // 生态系统",
+    "description": "首页区块编号"
+  },
+  "homepage.corefeatures.reliable.title": {
+    "message": "可靠高效",
+    "description": "核心特性卡片标题"
+  },
+  "homepage.corefeatures.api.title": {
+    "message": "API 与全栈",
+    "description": "核心特性卡片标题"
+  },
+  "homepage.corefeatures.progressive.title": {
+    "message": "渐进式",
+    "description": "核心特性卡片标题"
+  },
+  "homepage.essentials.showing": {
+    "message": "已展示 {count} / 50+ 组件",
+    "description": "核心组件展示数量"
+  },
+  "homepage.essentials.browseAll": {
+    "message": "查看全部组件",
+    "description": "核心组件查看全部按钮"
+  },
+  "homepage.preview.tag.decorators": {
+    "message": "装饰器",
+    "description": "Class 教程标签"
+  },
+  "homepage.preview.tag.ioc": {
+    "message": "IoC 容器",
+    "description": "Class 教程标签"
+  },
+  "homepage.preview.tag.zeroApi": {
+    "message": "零 API",
+    "description": "Function 教程标签"
+  },
+  "homepage.preview.tag.hooks": {
+    "message": "React Hooks",
+    "description": "Function 教程标签"
+  },
+  "homepage.preview.tag.lightweight": {
+    "message": "轻量",
+    "description": "Function 教程标签"
+  },
+  "homepage.footer.learn": {
+    "message": "文档",
+    "description": "页脚栏目标题"
+  },
+  "homepage.footer.intro": {
+    "message": "介绍",
+    "description": "页脚链接"
+  },
+  "homepage.footer.quickStart": {
+    "message": "快速开始",
+    "description": "页脚链接"
+  },
+  "homepage.footer.migration": {
+    "message": "从 v2 迁移到 v3",
+    "description": "页脚链接"
+  },
+  "homepage.footer.community": {
+    "message": "社区",
+    "description": "页脚栏目标题"
+  },
+  "homepage.footer.more": {
+    "message": "更多",
+    "description": "页脚栏目标题"
+  },
+  "homepage.footer.changelog": {
+    "message": "更新日志",
+    "description": "页脚链接"
+  },
+  "homepage.footer.status": {
+    "message": "系统运行正常",
+    "description": "页脚状态"
+  },
+  "homepage.footer.copyright": {
+    "message": "Copyright © {year} MidwayJS。基于 Docusaurus 构建。",
+    "description": "页脚版权"
   },
   "homepage.splash.scroll": {
     "message": "向下滚动",
@@ -104,7 +220,7 @@
     "description": "使用我们产品的团队部分的副标题"
   },
   "homepage.footer.title": {
-    "message": "Develop. Build. Ship.",
+    "message": "开发。构建。交付。",
     "description": "页脚部分的标题"
   },
   "homepage.footer.motto": {
@@ -152,7 +268,7 @@
     "description": "预览部分的副标题"
   },
   "homepage.preview.class.description": {
-    "message": "学习如何使用 Class 语法开发 Midway.js 应用",
+    "message": "基于装饰器的面向对象写法，适合需要清晰结构和依赖注入的大规模企业应用。",
     "description": "Class语法教程的描述"
   },
   "homepage.preview.class.feature1": {
@@ -172,7 +288,7 @@
     "description": "Class语法教程的第四个特性"
   },
   "homepage.preview.function.description": {
-    "message": "学习如何使用 Function 语法开发 Midway.js 应用",
+    "message": "基于 Hooks 的函数式写法，适合快速开发、Serverless，以及更轻量的心智模型。",
     "description": "Function语法教程的描述"
   },
   "homepage.preview.function.feature1": {

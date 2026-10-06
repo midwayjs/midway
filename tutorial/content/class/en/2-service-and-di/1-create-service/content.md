@@ -1,6 +1,9 @@
 ---
 title: Create Your First Service
 focus: /src/service/user.service.ts
+routes:
+  - /
+  - /info
 ---
 
 # Create Your First Service

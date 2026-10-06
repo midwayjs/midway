@@ -129,7 +129,7 @@ const SocialLink = styled('a', {
   alignItems: 'center',
   justifyContent: 'center',
   border: '1px solid var(--midway-border)',
-  borderRadius: '6px',
+  borderRadius: 'var(--midway-radius-sm)',
   color: 'var(--midway-text-sec)',
   textDecoration: 'none',
   transition: 'all 0.3s',
@@ -230,7 +230,7 @@ const StatusChip = styled('div', {
   color: 'var(--midway-text-sec)',
   border: '1px solid var(--midway-border)',
   padding: '4px 10px',
-  borderRadius: '4px',
+  borderRadius: '999px',
   background: 'var(--midway-surface)',
 })
 
@@ -272,31 +272,52 @@ export function Footer() {
           </LogoCol>
 
           <Col>
-            <ColTitle>Learn</ColTitle>
-            <Link href="/docs/intro">Introduction</Link>
-            <Link href="/docs/quick_guide">Quick Start</Link>
-            <Link href="/docs/upgrade_v3">Migration v2 → v3</Link>
+            <ColTitle>
+              <Translate id="homepage.footer.learn">Learn</Translate>
+            </ColTitle>
+            <Link href="/docs/intro">
+              <Translate id="homepage.footer.intro">Introduction</Translate>
+            </Link>
+            <Link href="/docs/quick_guide">
+              <Translate id="homepage.footer.quickStart">Quick Start</Translate>
+            </Link>
+            <Link href="/docs/upgrade_v3">
+              <Translate id="homepage.footer.migration">Migration v2 → v3</Translate>
+            </Link>
           </Col>
 
           <Col>
-            <ColTitle>Community</ColTitle>
+            <ColTitle>
+              <Translate id="homepage.footer.community">Community</Translate>
+            </ColTitle>
             <Link href="https://space.bilibili.com/1746017680" target="_blank">Bilibili</Link>
             <Link href="https://zhuanlan.zhihu.com/midwayjs" target="_blank">Zhihu</Link>
           </Col>
 
           <Col>
-            <ColTitle>More</ColTitle>
+            <ColTitle>
+              <Translate id="homepage.footer.more">More</Translate>
+            </ColTitle>
             <Link href="/blog">Blog</Link>
-            <Link href="/changelog">Changelog</Link>
+            <Link href="/changelog">
+              <Translate id="homepage.footer.changelog">Changelog</Translate>
+            </Link>
             <Link href="https://github.com/midwayjs/midway" target="_blank">GitHub Issues</Link>
           </Col>
         </FooterGrid>
 
         <BottomBar>
-          <span>Copyright © {new Date().getFullYear()} MidwayJS. Built with Docusaurus.</span>
+          <span>
+            <Translate
+              id="homepage.footer.copyright"
+              values={{ year: new Date().getFullYear() }}
+            >
+              {'Copyright © {year} MidwayJS. Built with Docusaurus.'}
+            </Translate>
+          </span>
           <StatusChip>
             <StatusDot />
-            ALL SYSTEMS OPERATIONAL
+            <Translate id="homepage.footer.status">ALL SYSTEMS OPERATIONAL</Translate>
           </StatusChip>
         </BottomBar>
       </Content>

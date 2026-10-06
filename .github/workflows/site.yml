@@ -10,8 +10,6 @@ on:
       - site/**
       - tutorial/**
       - CHANGELOG.md
-    # Review gh actions docs if you want to further define triggers, paths, etc
-    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
 
 jobs:
   build:
@@ -27,6 +25,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Cache TypeDoc API pages
+        uses: actions/cache@v4
+        id: typedoc-cache
+        with:
+          path: site/.typedoc-cache
+          key: typedoc-${{ hashFiles('packages/*/src/**', 'packages/*/package.json', 'site/docusaurus.config.js') }}
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -39,27 +44,47 @@ jobs:
           cache: 'pnpm'
 
       - name: Install root dependencies
+        if: steps.typedoc-cache.outputs.cache-hit != 'true'
         run: pnpm install
 
       - name: Build root project
+        if: steps.typedoc-cache.outputs.cache-hit != 'true'
         run: pnpm run build --if-present
 
-      # site 目录使用 npm，需要单独配置 npm 缓存
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: site/package-lock.json
 
-      # 安装和构建 site 目录
       - name: Install and build site
         working-directory: site
+        env:
+          SKIP_TYPEDOC: ${{ steps.typedoc-cache.outputs.cache-hit == 'true' && '1' || '' }}
         run: |
           npm install
           npm run build
 
-      # 构建交互式教程（独立 pnpm 项目，不属于根 workspace），然后合并到 site/build/tutorial
-      # 线上需要 CDN 为 /tutorial/ 路径添加 COOP / COEP 响应头，否则在线运行环境无法嵌入
+      - name: Restore cached API docs
+        if: steps.typedoc-cache.outputs.cache-hit == 'true'
+        run: |
+          rm -rf site/build/api site/build/en/api
+          mkdir -p site/build/en
+          cp -R site/.typedoc-cache/api site/build/api
+          if [ -d site/.typedoc-cache/en-api ]; then
+            cp -R site/.typedoc-cache/en-api site/build/en/api
+          fi
+
+      - name: Save TypeDoc API pages for later runs
+        if: steps.typedoc-cache.outputs.cache-hit != 'true'
+        run: |
+          rm -rf site/.typedoc-cache
+          mkdir -p site/.typedoc-cache
+          cp -R site/build/api site/.typedoc-cache/api
+          if [ -d site/build/en/api ]; then
+            cp -R site/build/en/api site/.typedoc-cache/en-api
+          fi
+
       - name: Install and build tutorial
         working-directory: tutorial
         run: |
@@ -72,10 +97,10 @@ jobs:
           mkdir -p site/build/tutorial
           cp -R tutorial/dist/. site/build/tutorial/
 
-      # 打包文档，部署到阿里云 OSS
       - name: Zip output
         working-directory: site
         run: zip -r build/document_archive.zip docs i18n blog versioned_docs versioned_sidebars
+
       - name: upload files to OSS
         if: github.event_name == 'push' && github.ref == 'refs/heads/v4-next'
         uses: fangbinwei/aliyun-oss-website-action@v1
@@ -83,11 +108,9 @@ jobs:
           accessKeyId: ${{ secrets.DEPLOY_SITE_ACCESS_KEY_ID }}
           accessKeySecret: ${{ secrets.DEPLOY_SITE_ACCESS_KEY_SECRET }}
           bucket: midway-next-site-hk
-          # use your own endpoint
           endpoint: oss-cn-hongkong.aliyuncs.com
           folder: site/build
 
-      # 部署到 GitHub Pages
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -96,17 +119,12 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     needs: build
-
-    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source
-
-    # Deploy to the github-pages environment
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages

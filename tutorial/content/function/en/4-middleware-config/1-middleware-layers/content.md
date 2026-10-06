@@ -1,6 +1,10 @@
 ---
 title: Route-level and module-level middleware
+preview: /middleware-demo
 focus: /src/server/middleware/logger.middleware.ts
+routes:
+  - /
+  - /middleware-demo
 checks:
   - /middleware-demo
 ---

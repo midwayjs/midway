@@ -1,6 +1,10 @@
 ---
 title: Handling POST Requests
+preview: /api/users
 focus: /src/controller/user.controller.ts
+routes:
+  - /api/users
+  - /api/users/1
 ---
 
 # Handling POST Requests and Bodies

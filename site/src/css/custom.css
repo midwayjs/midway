@@ -26,16 +26,21 @@
   --ifm-footer-title-color: #fff;
 
   /* Style G: Light Mode (Laboratory Style) */
-  --midway-bg: #F2F4F8;
-  --midway-surface: rgba(255, 255, 255, 0.7);
-  --midway-border: rgba(0, 0, 0, 0.1);
+  --midway-bg: #F4F6FB;
+  --midway-surface: rgba(255, 255, 255, 0.88);
+  --midway-border: rgba(26, 32, 44, 0.08);
   --midway-primary: #4A00E0; /* Deep Purple */
-  --midway-secondary: #00D2FF; /* Cyan */
+  --midway-secondary: #00B8D9; /* Cyan, slightly muted for light UI */
   --midway-text-main: #1A202C;
   --midway-text-sec: #5A6A85;
-  --midway-grid: rgba(0, 0, 0, 0.05);
-  --midway-glow: rgba(74, 0, 224, 0.15);
+  --midway-grid: rgba(74, 0, 224, 0.05);
+  --midway-glow: rgba(74, 0, 224, 0.18);
   --midway-code-bg: #0E1116;
+  --midway-on-primary: #ffffff;
+  --midway-radius: 12px;
+  --midway-radius-sm: 8px;
+  --ifm-navbar-background-color: rgba(255, 255, 255, 0.78);
+  --ifm-navbar-shadow: 0 1px 0 rgba(26, 32, 44, 0.06);
 }
 
 nav input:focus-visible {
@@ -61,7 +66,7 @@ nav input:focus-visible {
   --ifm-color-area: #242527;
   --ifm-color-icon: #ffffff;
   --ifm-footer-title-color: #fff;
-  --ifm-navbar-background-color: #000000;
+  --ifm-navbar-background-color: rgba(3, 3, 8, 0.86);
 
   --ice-users-fill-filter: drop-shadow(0 40px rgba(255, 255, 255, .72));
   --ice-users-fill-transform: translateY(-40px);
@@ -77,6 +82,9 @@ nav input:focus-visible {
   --midway-grid: rgba(0, 240, 255, 0.08);
   --midway-glow: rgba(0, 240, 255, 0.15);
   --midway-code-bg: #0E1116;
+  --midway-on-primary: #030308;
+  --midway-radius: 12px;
+  --midway-radius-sm: 8px;
 }
 
 
@@ -89,6 +97,11 @@ nav input:focus-visible {
 
 body {
   font-family: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+.navbar {
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
 }
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {

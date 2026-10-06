@@ -1,6 +1,10 @@
 ---
 title: Client and write APIs
+preview: /users
 focus: /src/web/api/client.ts
+routes:
+  - /users
+  - /users/u-1
 ---
 
 # Client and write APIs

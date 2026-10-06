@@ -1,6 +1,10 @@
 ---
 title: Middleware Basics
+preview: /middleware-demo
 focus: /src/middleware/logger.middleware.ts
+routes:
+  - /
+  - /middleware-demo
 checks:
   - /health
 ---

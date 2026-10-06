@@ -34,6 +34,10 @@ const zh = {
   theme: '切换主题',
   loading: '正在加载课程…',
   booting: '正在启动在线环境…',
+  bootError: '在线环境启动失败',
+  retry: '重试',
+  previewRoutes: '预览路径',
+  previewRouteTip: (route: string) => `在预览窗口打开 ${route}`,
   isolationTitle: '当前页面无法嵌入在线运行环境',
   isolationDesc:
     '在线运行环境基于 WebContainer，需要页面开启跨域隔离（COOP / COEP 响应头）。你可以在新窗口中打开本课的完整项目继续学习。',
@@ -78,6 +82,10 @@ const en: Dict = {
   theme: 'Toggle theme',
   loading: 'Loading lesson…',
   booting: 'Starting the runtime…',
+  bootError: 'Failed to start the runtime',
+  retry: 'Retry',
+  previewRoutes: 'Preview routes',
+  previewRouteTip: (route: string) => `Open ${route} in the preview`,
   isolationTitle: 'The runtime cannot be embedded on this page',
   isolationDesc:
     'The in-browser runtime is powered by WebContainer and requires cross-origin isolation (COOP / COEP headers). You can open the full project for this lesson in a new window instead.',

@@ -1,6 +1,10 @@
 ---
 title: 路由级与模块级中间件
+preview: /middleware-demo
 focus: /src/server/middleware/logger.middleware.ts
+routes:
+  - /
+  - /middleware-demo
 checks:
   - /middleware-demo
 ---

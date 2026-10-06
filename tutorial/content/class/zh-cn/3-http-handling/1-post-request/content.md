@@ -1,6 +1,10 @@
 ---
 title: 处理 POST 请求
+preview: /api/users
 focus: /src/controller/user.controller.ts
+routes:
+  - /api/users
+  - /api/users/1
 ---
 
 # 处理 POST 请求和请求体

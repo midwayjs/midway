@@ -1,6 +1,12 @@
 ---
 title: input 参数模型
+preview: /greet?name=Midway
 focus: /src/server/api/home.api.ts
+routes:
+  - /
+  - /greet?name=Midway
+  - /user/1
+  - /search/book?keyword=midway
 checks:
   - /calc/add?a=1&b=2
 ---

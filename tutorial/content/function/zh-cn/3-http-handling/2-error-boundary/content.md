@@ -1,6 +1,10 @@
 ---
 title: 错误边界与返回规范
+preview: /users/u-1
 focus: /src/server/api/user.api.ts
+routes:
+  - /users/u-1
+  - /users/missing
 ---
 
 # 错误边界与返回规范

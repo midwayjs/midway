@@ -13,8 +13,12 @@ export interface Lesson {
   title: string;
   /** 进入课程时在编辑器中打开的文件。 */
   focus: string;
-  /** 预览窗口打开的路径。 */
+  /** 预览窗口默认打开的路径。 */
   preview: string;
+  /** 预览窗口可切换的 GET 路径，多于一条时显示为可点击标签。 */
+  routes: string[];
+  /** 应用参考答案后额外可预览的 GET 路径（通常来自 checks）。 */
+  solutionRoutes: string[];
   html: string;
   /** 叠加在模板之上的课程文件。 */
   files: ProjectFiles;

@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from '@theme/Layout'
 import { Splash } from '../components/Splash'
 import { CoreFeatures } from '../components/CoreFeatures'
-import { PreviewClassSyntax, PreviewFunctionSyntax, PreviewDivider } from '../components/Preview'
+import { PreviewClassSyntax, PreviewFunctionSyntax, PreviewDivider, PreviewShell } from '../components/Preview'
 import { EssentialsComponents } from '../components/EssentialsComponents'
 import { UsedBy } from '../components/UsedBy'
 import { Footer } from '../components/Footer'
@@ -72,9 +72,11 @@ export default function Home(): JSX.Element {
       >
         <Splash />
         <CoreFeatures />
-        <PreviewClassSyntax />
-        <PreviewDivider />
-        <PreviewFunctionSyntax />
+        <PreviewShell>
+          <PreviewClassSyntax />
+          <PreviewDivider />
+          <PreviewFunctionSyntax />
+        </PreviewShell>
         <EssentialsComponents />
         <Example />
         <Recommend />

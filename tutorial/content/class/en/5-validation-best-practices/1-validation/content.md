@@ -1,6 +1,10 @@
 ---
 title: Data Validation
+preview: /api/users
 focus: /src/dto/user.dto.ts
+routes:
+  - /api/users
+  - /api/users/1
 ---
 
 # Data Validation

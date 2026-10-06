@@ -28,7 +28,7 @@ const Container = styled('div', {
 
 const ExtensionCard = styled('a', {
   display: 'block',
-  borderRadius: '4px',
+  borderRadius: 'var(--midway-radius)',
   overflow: 'hidden',
   cursor: 'pointer',
   transition: 'all 0.4s ease',

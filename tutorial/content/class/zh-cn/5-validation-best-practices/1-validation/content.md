@@ -1,6 +1,10 @@
 ---
 title: 数据验证
+preview: /api/users
 focus: /src/dto/user.dto.ts
+routes:
+  - /api/users
+  - /api/users/1
 ---
 
 # 数据验证（Validation）
