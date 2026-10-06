@@ -1501,8 +1501,8 @@ importers:
         specifier: workspace:^
         version: link:../i18n
       joi:
-        specifier: 17.13.7
-        version: 17.13.7
+        specifier: 17.13.8
+        version: 17.13.8
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -1586,8 +1586,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       joi:
-        specifier: 17.13.7
-        version: 17.13.7
+        specifier: 17.13.8
+        version: 17.13.8
       tsup:
         specifier: 8.5.1
         version: 8.5.1(postcss@8.5.28)(tsx@4.23.15)(typescript@5.6.3)(yaml@2.9.1)
@@ -1982,7 +1982,7 @@ importers:
         version: link:../../packages/validation-joi
       joi:
         specifier: ^17.13.3
-        version: 17.13.7
+        version: 17.13.8
     devDependencies:
       '@midwayjs/mock':
         specifier: workspace:*
@@ -5080,6 +5080,9 @@ packages:
   '@types/node@22.12.0':
     resolution: {integrity: sha512-Fll2FZ1riMjNmlmJOdAyY5pUbkftXslB5DgEzlIuNaiWhXd00FhWxVC/r4yV/4wBb9JfImTu+jiSvXTkJ7F/gA==}
 
+  '@types/node@26.6.4':
+    resolution: {integrity: sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg==}
+
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
 
@@ -5496,6 +5499,11 @@ packages:
 
   acorn@8.18.0:
     resolution: {integrity: sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==}
+    engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  acorn@8.19.0:
+    resolution: {integrity: sha512-oJlA3XiRm7Cyk6qFD2Jn8ak9B7jSy0qy00ADO3+8dpT0LSjFihQYv4C02LFCSYJV3Q37xYwwRy5m+IpIiUzqWw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -9190,8 +9198,8 @@ packages:
       node-notifier:
         optional: true
 
-  joi@17.13.7:
-    resolution: {integrity: sha512-MF80Dm5Y2veNy8QWVx9Bj3ui4mo7+VPSPsR1M+oaHXV0Gx6zGX9a2F+OZG3Blby9tOlzU9Rs5FUimlEhbKtfnQ==}
+  joi@17.13.8:
+    resolution: {integrity: sha512-iPKOGmiRw1jxf/JOPwxmCcUQAOdF359mdzYiP2DJ+TMX0YK2zjK3D+zYOaGjpumWxOFF/l2xVWjRVK5bGSLdEw==}
 
   jose@6.2.12:
     resolution: {integrity: sha512-9NiFmJEex0sy2Dk58j2UGBSHgUs2ypF9eZSu4L6vjOX3Dp96Sw1F3uL+H+D1sx02jZZdzUT0HgvCy59CuvXcWw==}
@@ -12904,6 +12912,9 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
+  undici-types@8.9.0:
+    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
+
   undici@6.29.0:
     resolution: {integrity: sha512-R+RODBqp6i2pPflGdq+xIOUkl+RNfGgHwoinecKu/JCuf2uO06cOKoDbI2P7Dn6KcswdKwrczbU6IYJ6K8X+wg==}
     engines: {node: '>=18.17'}
@@ -16256,6 +16267,10 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
+  '@types/node@26.6.4':
+    dependencies:
+      undici-types: 8.9.0
+
   '@types/normalize-package-data@2.4.4': {}
 
   '@types/passport-local@1.0.38':
@@ -16815,6 +16830,8 @@ snapshots:
   acorn@7.4.1: {}
 
   acorn@8.18.0: {}
+
+  acorn@8.19.0: {}
 
   add-stream@1.0.0: {}
 
@@ -21443,7 +21460,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 20.19.43
+      '@types/node': 26.6.4
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -21466,7 +21483,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  joi@17.13.7:
+  joi@17.13.8:
     dependencies:
       '@hapi/hoek': 9.3.0
       '@hapi/topo': 5.1.0
@@ -25504,7 +25521,7 @@ snapshots:
   terser@5.51.2:
     dependencies:
       '@jridgewell/source-map': 0.3.11
-      acorn: 8.18.0
+      acorn: 8.19.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -25954,6 +25971,8 @@ snapshots:
   undici-types@6.20.0: {}
 
   undici-types@6.21.0: {}
+
+  undici-types@8.9.0: {}
 
   undici@6.29.0: {}
 
