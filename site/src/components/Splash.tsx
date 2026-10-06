@@ -241,11 +241,11 @@ const Badge = styled('div', {
   alignItems: 'center',
   gap: '8px',
   padding: '6px 14px',
-  border: '1px solid var(--midway-primary)',
+  border: '1px solid color-mix(in srgb, var(--midway-primary) 28%, transparent)',
   color: 'var(--midway-primary)',
-  borderRadius: '4px',
+  borderRadius: '999px',
   marginBottom: '24px',
-  background: 'rgba(0,0,0,0.05)',
+  background: 'color-mix(in srgb, var(--midway-primary) 8%, transparent)',
   fontSize: '0.85rem',
   fontFamily: '"JetBrains Mono", "Fira Code", monospace',
   letterSpacing: '0.05em',
@@ -281,7 +281,7 @@ const BadgeDot = styled('div', {
 const Title = styled('h1', {
   fontSize: 'clamp(3rem, 6vw, 5rem)',
   fontWeight: 800,
-  lineHeight: 1,
+  lineHeight: 1.15,
   marginBottom: '24px',
   letterSpacing: '-0.03em',
   background: 'linear-gradient(135deg, var(--midway-text-main) 30%, var(--midway-primary) 100%)',
@@ -327,9 +327,9 @@ const ButtonGroup = styled('div', {
 
 const PrimaryButton = styled('a', {
   position: 'relative',
-  padding: '16px 40px',
+  padding: '16px 36px',
   background: 'var(--midway-primary)',
-  color: 'var(--midway-bg)',
+  color: 'var(--midway-on-primary)',
   textDecoration: 'none',
   fontWeight: 700,
   textTransform: 'uppercase',
@@ -337,8 +337,9 @@ const PrimaryButton = styled('a', {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)',
-  transition: 'all 0.3s',
+  borderRadius: 'var(--midway-radius)',
+  boxShadow: '0 8px 24px var(--midway-glow)',
+  transition: 'all 0.25s ease',
   cursor: 'pointer',
   overflow: 'hidden',
 
@@ -349,15 +350,15 @@ const PrimaryButton = styled('a', {
     left: '-100%',
     width: '100%',
     height: '100%',
-    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)',
     transition: 'left 0.5s',
   },
 
   '&:hover': {
     transform: 'translateY(-2px)',
-    boxShadow: '0 0 30px var(--midway-glow), 0 8px 20px rgba(0,0,0,0.3)',
-    filter: 'brightness(1.15)',
-    color: 'var(--midway-bg)',
+    boxShadow: '0 12px 32px var(--midway-glow)',
+    filter: 'brightness(1.08)',
+    color: 'var(--midway-on-primary)',
     textDecoration: 'none',
 
     '&::before': { left: '100%' },
@@ -365,11 +366,12 @@ const PrimaryButton = styled('a', {
 });
 
 const SecondaryButton = styled('a', {
-  padding: '16px 40px',
-  background: 'transparent',
+  padding: '16px 36px',
+  background: 'var(--midway-surface)',
   color: 'var(--midway-text-main)',
   border: '1px solid var(--midway-border)',
-  borderRadius: '4px',
+  borderRadius: 'var(--midway-radius)',
+  backdropFilter: 'blur(12px)',
   textDecoration: 'none',
   fontWeight: 600,
   display: 'inline-flex',
@@ -617,9 +619,9 @@ const DataPoint = styled('div', {
   color: 'var(--midway-primary)',
   fontSize: '10px',
   fontFamily: 'monospace',
-  borderRadius: '2px',
+  borderRadius: 'var(--midway-radius-sm)',
   backdropFilter: 'blur(8px)',
-  animation: `${blink} 2s infinite`,
+  animation: `${blink} 4s ease-in-out infinite`,
   letterSpacing: '0.05em',
 
   variants: {

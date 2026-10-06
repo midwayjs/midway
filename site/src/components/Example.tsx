@@ -87,7 +87,7 @@ const BlockSubtitle = styled('p', {
 
 const ShowCaseContainer = styled('a', {
   display: 'block',
-  borderRadius: '4px',
+  borderRadius: 'var(--midway-radius)',
   overflow: 'hidden',
   cursor: 'pointer',
   transition: 'all 0.3s ease',

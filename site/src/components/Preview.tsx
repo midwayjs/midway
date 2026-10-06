@@ -36,14 +36,35 @@ const Container = styled('div', {
   gap: '72px',
   alignItems: 'center',
   maxWidth: '1200px',
-  margin: '0 auto 140px',
-  padding: '120px 24px 0',
+  margin: '0 auto',
+  padding: '64px 24px',
 
   '@mobile': {
     gridTemplateColumns: '1fr',
     gap: '40px',
-    padding: '60px 16px 0',
-    marginBottom: '80px',
+    padding: '40px 16px',
+  }
+});
+
+export const PreviewShell = styled('section', {
+  backgroundColor: 'var(--midway-bg)',
+  position: 'relative',
+  overflow: 'hidden',
+  padding: '40px 0 88px',
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '60%',
+    height: '1px',
+    background: 'linear-gradient(90deg, transparent, var(--midway-border), transparent)',
+  },
+
+  '@mobile': {
+    padding: '24px 0 56px',
   }
 });
 
@@ -108,7 +129,7 @@ const EcoTag = styled('div', {
   background: 'var(--midway-surface)',
   cursor: 'default',
   transition: 'all 0.3s',
-  borderRadius: '4px',
+  borderRadius: '999px',
   fontFamily: '"JetBrains Mono", "Fira Code", monospace',
   letterSpacing: '0.02em',
 
@@ -117,7 +138,7 @@ const EcoTag = styled('div', {
     color: 'var(--midway-secondary)',
     transform: 'translateY(-2px)',
     boxShadow: '0 4px 12px var(--midway-glow)',
-    background: 'rgba(0,0,0,0.05)',
+    background: 'color-mix(in srgb, var(--midway-secondary) 10%, var(--midway-surface))',
   }
 })
 
@@ -128,8 +149,8 @@ const StartButton = styled('a', {
   padding: '13px 22px',
   marginTop: 0,
   backgroundColor: 'var(--midway-primary)',
-  color: '#ffffff',
-  borderRadius: '6px',
+  color: 'var(--midway-on-primary)',
+  borderRadius: 'var(--midway-radius)',
   textDecoration: 'none',
   fontWeight: 600,
   fontSize: '0.95rem',
@@ -149,11 +170,12 @@ const StartButton = styled('a', {
   },
 
   '&:hover': {
-    backgroundColor: 'var(--midway-secondary)',
-    color: '#000000',
+    backgroundColor: 'var(--midway-primary)',
+    color: 'var(--midway-on-primary)',
     textDecoration: 'none',
     transform: 'translateY(-2px)',
-    boxShadow: '0 8px 20px var(--midway-glow)',
+    boxShadow: '0 10px 28px var(--midway-glow)',
+    filter: 'brightness(1.08)',
 
     '&::before': { left: '100%' },
   },
@@ -180,7 +202,7 @@ const CodeWindowWrapper = styled('div', {
     content: '""',
     position: 'absolute',
     inset: '-1px',
-    borderRadius: '10px',
+    borderRadius: 'var(--midway-radius)',
     background: 'linear-gradient(135deg, var(--midway-primary), var(--midway-secondary))',
     opacity: 0,
     transition: 'opacity 0.4s',
@@ -196,7 +218,7 @@ const CodeWindow = styled('div', {
   // 亮色：GitHub Light 风格；暗色：Cyber Dark
   background: '#F6F8FA',
   border: '1px solid rgba(0,0,0,0.12)',
-  borderRadius: '8px',
+  borderRadius: 'var(--midway-radius)',
   overflow: 'hidden',
   transition: 'all 0.4s',
   position: 'relative',
@@ -285,7 +307,7 @@ const FileName = styled('div', {
 
 const CodeStatusBar = styled('div', {
   // 亮色：用品牌主色系渐变，文字白色
-  background: 'linear-gradient(90deg, #4A00E0 0%, #00D2FF 100%)',
+  background: 'linear-gradient(90deg, var(--midway-primary) 0%, var(--midway-secondary) 100%)',
   padding: '4px 16px',
   display: 'flex',
   justifyContent: 'space-between',
@@ -297,7 +319,7 @@ const CodeStatusBar = styled('div', {
 
   '[data-theme="dark"] &': {
     background: 'linear-gradient(90deg, var(--midway-primary) 0%, var(--midway-secondary) 100%)',
-    color: '#000',
+    color: 'var(--midway-on-primary)',
   }
 })
 
@@ -407,7 +429,9 @@ export function PreviewClassSyntax() {
   return (
     <Container>
       <div>
-        <SectionLabel>02 // Development</SectionLabel>
+        <SectionLabel>
+          <Translate id="homepage.section.development">02 // Development</Translate>
+        </SectionLabel>
         <Title>
           <Translate id="homepage.preview.class.title">Class Syntax</Translate>
         </Title>
@@ -417,8 +441,12 @@ export function PreviewClassSyntax() {
           </Translate>
         </Description>
         <EcoStrip>
-          <EcoTag>Decorators</EcoTag>
-          <EcoTag>IoC Container</EcoTag>
+          <EcoTag>
+            <Translate id="homepage.preview.tag.decorators">Decorators</Translate>
+          </EcoTag>
+          <EcoTag>
+            <Translate id="homepage.preview.tag.ioc">IoC Container</Translate>
+          </EcoTag>
           <EcoTag>TypeORM</EcoTag>
         </EcoStrip>
 
@@ -500,7 +528,9 @@ export function PreviewFunctionSyntax() {
       </CodeWindowWrapper>
 
       <MobileFirstPanel>
-        <SectionLabel>03 // Agility</SectionLabel>
+        <SectionLabel>
+          <Translate id="homepage.section.agility">03 // Agility</Translate>
+        </SectionLabel>
         <Title>
           <Translate id="homepage.preview.function.title">Function Syntax</Translate>
         </Title>
@@ -510,9 +540,15 @@ export function PreviewFunctionSyntax() {
           </Translate>
         </Description>
         <EcoStrip>
-          <EcoTag>Zero API</EcoTag>
-          <EcoTag>React Hooks</EcoTag>
-          <EcoTag>Lightweight</EcoTag>
+          <EcoTag>
+            <Translate id="homepage.preview.tag.zeroApi">Zero API</Translate>
+          </EcoTag>
+          <EcoTag>
+            <Translate id="homepage.preview.tag.hooks">React Hooks</Translate>
+          </EcoTag>
+          <EcoTag>
+            <Translate id="homepage.preview.tag.lightweight">Lightweight</Translate>
+          </EcoTag>
         </EcoStrip>
         <StartButtonGroup>
           <StartButton href={`/tutorial/function/${locale}/`}>
@@ -561,7 +597,7 @@ const DividerWrapper = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: '80px',
+  height: '64px',
 
   '@mobile': { padding: '0 16px', height: '60px' },
 });

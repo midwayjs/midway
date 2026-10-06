@@ -135,7 +135,7 @@ const Grid = styled('div', {
 // 流光边框容器
 const CardWrapper = styled('div', {
   position: 'relative',
-  borderRadius: '6px',
+  borderRadius: 'var(--midway-radius)',
   padding: '1px',
   background: 'var(--midway-border)',
   transition: 'background 0.3s',
@@ -166,7 +166,7 @@ const ComponentCard = styled('a', {
   alignItems: 'center',
   padding: '20px 22px',
   background: 'var(--midway-surface)',
-  borderRadius: '5px',
+  borderRadius: 'calc(var(--midway-radius) - 1px)',
   textDecoration: 'none',
   transition: 'all 0.3s',
   cursor: 'pointer',
@@ -205,7 +205,7 @@ const IconWrapper = styled('div', {
   justifyContent: 'center',
   background: 'var(--midway-bg)',
   border: '1px solid var(--midway-border)',
-  borderRadius: '6px',
+  borderRadius: 'var(--midway-radius-sm)',
   marginRight: '16px',
   flexShrink: 0,
   transition: 'all 0.3s',
@@ -384,7 +384,7 @@ const ViewAllButton = styled('a', {
   border: '1px solid var(--midway-border)',
   color: 'var(--midway-text-main)',
   background: 'var(--midway-surface)',
-  borderRadius: '6px',
+  borderRadius: 'var(--midway-radius)',
   textDecoration: 'none',
   fontWeight: 600,
   fontSize: '0.9rem',
@@ -427,7 +427,9 @@ export function EssentialsComponents() {
     <Container>
       <Content>
         <SectionTitle>
-          <SectionLabel>04 // Ecosystem</SectionLabel>
+          <SectionLabel>
+            <Translate id="homepage.section.ecosystem">04 // Ecosystem</Translate>
+          </SectionLabel>
           <SectionHeading>
             <Translate id="homepage.essentials.title">
               Core Extensions
@@ -446,9 +448,16 @@ export function EssentialsComponents() {
         </GridFadeWrapper>
 
         <ViewAllRow>
-          <ComponentCount>Showing {components.length} of 50+ extensions</ComponentCount>
+          <ComponentCount>
+            <Translate
+              id="homepage.essentials.showing"
+              values={{ count: components.length }}
+            >
+              {'Showing {count} of 50+ extensions'}
+            </Translate>
+          </ComponentCount>
           <ViewAllButton href="/docs/extensions/orm">
-            Browse all extensions
+            <Translate id="homepage.essentials.browseAll">Browse all extensions</Translate>
             <i className="iconfont icon-arrow-right" />
           </ViewAllButton>
         </ViewAllRow>

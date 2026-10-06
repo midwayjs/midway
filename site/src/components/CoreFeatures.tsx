@@ -30,13 +30,13 @@ const blink = keyframes({
 
 type FeatureProps = {
   icon: string
-  title: string
+  title: React.ReactNode
   description: React.ReactNode
   accentColor?: string
 }
 
 const Container = styled('section', {
-  padding: '140px 0',
+  padding: '96px 0',
   width: '100%',
   backgroundColor: 'var(--midway-bg)',
   position: 'relative',
@@ -109,17 +109,18 @@ const FeaturesGrid = styled('div', {
 const FeatureCard = styled('div', {
   background: 'var(--midway-surface)',
   backdropFilter: 'blur(20px)',
-  borderRadius: '4px',
+  borderRadius: 'var(--midway-radius)',
   padding: '40px 32px',
   textAlign: 'left',
   border: '1px solid var(--midway-border)',
-  transition: 'all 0.4s ease',
+  transition: 'all 0.35s ease',
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   overflow: 'hidden',
   height: '100%',
   cursor: 'default',
+  boxShadow: '0 8px 24px -16px rgba(26, 32, 44, 0.18)',
 
   // 点阵背景
   '&::before': {
@@ -150,9 +151,9 @@ const FeatureCard = styled('div', {
   },
 
   '&:hover': {
-    transform: 'translateY(-6px)',
-    borderColor: 'var(--midway-secondary)',
-    boxShadow: '0 20px 50px -10px var(--midway-glow), 0 0 0 1px var(--midway-secondary)',
+    transform: 'translateY(-4px)',
+    borderColor: 'color-mix(in srgb, var(--midway-primary) 35%, var(--midway-border))',
+    boxShadow: '0 18px 40px -18px var(--midway-glow), inset 0 2px 0 0 var(--midway-primary)',
 
     '&::before': { opacity: 0.7 },
     '&::after': {
@@ -165,10 +166,10 @@ const FeatureCard = styled('div', {
     },
 
     '& .icon-container': {
-      borderColor: 'var(--midway-secondary)',
-      color: 'var(--midway-secondary)',
+      borderColor: 'color-mix(in srgb, var(--midway-primary) 40%, var(--midway-border))',
+      color: 'var(--midway-primary)',
       boxShadow: '0 0 20px var(--midway-glow)',
-      background: 'rgba(0,0,0,0.1)',
+      background: 'color-mix(in srgb, var(--midway-primary) 8%, var(--midway-bg))',
     }
   },
 })
@@ -186,27 +187,6 @@ const StatusLight = styled('div', {
   zIndex: 2,
 })
 
-// HUD Corners - 四个角的装饰线
-const HudCorner = styled('div', {
-  position: 'absolute',
-  width: '20px',
-  height: '20px',
-  border: '2px solid var(--midway-primary)',
-  transition: 'all 0.4s ease',
-  opacity: 0.6,
-  pointerEvents: 'none',
-  zIndex: 2,
-
-  variants: {
-    pos: {
-      tl: { top: '-1px', left: '-1px', borderRight: 'none', borderBottom: 'none' },
-      tr: { top: '-1px', right: '-1px', borderLeft: 'none', borderBottom: 'none' },
-      bl: { bottom: '-1px', left: '-1px', borderRight: 'none', borderTop: 'none' },
-      br: { bottom: '-1px', right: '-1px', borderLeft: 'none', borderTop: 'none' },
-    }
-  }
-})
-
 const IconContainer = styled('div', {
   width: '52px',
   height: '52px',
@@ -217,7 +197,7 @@ const IconContainer = styled('div', {
   border: '1px solid var(--midway-border)',
   background: 'var(--midway-bg)',
   color: 'var(--midway-primary)',
-  borderRadius: '6px',
+  borderRadius: 'var(--midway-radius-sm)',
   position: 'relative',
   zIndex: 1,
   transition: 'all 0.4s ease',
@@ -353,7 +333,11 @@ const features = [
   {
     icon: 'icon-huojiancopy',
     index: '01',
-    title: 'Reliable & Fast',
+    title: (
+      <Translate id="homepage.corefeatures.reliable.title">
+        Reliable & Fast
+      </Translate>
+    ),
     progress: '98%',
     description: (
       <>
@@ -370,7 +354,11 @@ const features = [
   {
     icon: 'icon-nintendogamecube',
     index: '02',
-    title: 'API & Fullstack',
+    title: (
+      <Translate id="homepage.corefeatures.api.title">
+        API & Fullstack
+      </Translate>
+    ),
     progress: '96%',
     description: <Translate id="homepage.corefeatures.api.description">
       不仅支持开发 API 服务，也提供业界首创的一体化全栈开发模式
@@ -379,7 +367,11 @@ const features = [
   {
     icon: 'icon-MPIS-Upgrade',
     index: '03',
-    title: 'Progressive',
+    title: (
+      <Translate id="homepage.corefeatures.progressive.title">
+        Progressive
+      </Translate>
+    ),
     progress: '100%',
     description: <Translate id="homepage.corefeatures.progressive.description">
       渐进式设计，提供从基础到入门再到企业级的升级方案，解决应用维护与拓展性难题
@@ -390,10 +382,6 @@ const features = [
 function Feature(props: FeatureProps & { index: string; progress: string }) {
   return (
     <FeatureCard>
-      <HudCorner pos="tl" />
-      <HudCorner pos="tr" />
-      <HudCorner pos="bl" />
-      <HudCorner pos="br" />
       <StatusLight className="status-light" />
       <CardIndex>{props.index}</CardIndex>
 
@@ -419,7 +407,9 @@ export function CoreFeatures() {
       <BgOrb pos="right" />
 
       <SectionTitle>
-        <SectionLabel>01 // Capabilities</SectionLabel>
+        <SectionLabel>
+          <Translate id="homepage.section.capabilities">01 // Capabilities</Translate>
+        </SectionLabel>
         <SectionHeading>
           <Translate id="homepage.corefeatures.title">
             Core Architecture
@@ -429,7 +419,7 @@ export function CoreFeatures() {
 
       <FeaturesGrid>
         {features.map((feature, index) => (
-          <div key={feature.title} style={{ animation: `${fadeInUp} 0.7s ease-out ${0.1 + index * 0.15}s both` }}>
+          <div key={feature.index} style={{ animation: `${fadeInUp} 0.7s ease-out ${0.1 + index * 0.15}s both` }}>
             <Feature {...feature} />
           </div>
         ))}

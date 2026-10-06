@@ -39,6 +39,30 @@
     "message": "Midway v4.0 // System Ready",
     "description": "Homepage hero badge text"
   },
+  "homepage.splash.titleLine1": {
+    "message": "Fullstack Framework",
+    "description": "Homepage hero title line 1"
+  },
+  "homepage.splash.titleLine2": {
+    "message": "For Mission Critical",
+    "description": "Homepage hero title line 2"
+  },
+  "homepage.splash.subtitlePrefix": {
+    "message": "Enterprise-grade Node.js architecture for",
+    "description": "Homepage hero subtitle prefix before rotating keyword"
+  },
+  "homepage.splash.subtitleSuffix": {
+    "message": "Build scalable serverless and traditional applications with confidence.",
+    "description": "Homepage hero subtitle suffix"
+  },
+  "homepage.splash.primaryBtn": {
+    "message": "Initialize Project",
+    "description": "Homepage hero primary button"
+  },
+  "homepage.splash.secondaryBtn": {
+    "message": "View on GitHub",
+    "description": "Homepage hero secondary button"
+  },
   "homepage.splash.stats.stars": {
     "message": "GitHub Stars",
     "description": "Homepage hero stats label"
@@ -66,6 +90,98 @@
   "homepage.splash.scroll": {
     "message": "Scroll",
     "description": "Homepage scroll indicator"
+  },
+  "homepage.section.capabilities": {
+    "message": "01 // Capabilities",
+    "description": "Homepage section label"
+  },
+  "homepage.section.development": {
+    "message": "02 // Development",
+    "description": "Homepage section label"
+  },
+  "homepage.section.agility": {
+    "message": "03 // Agility",
+    "description": "Homepage section label"
+  },
+  "homepage.section.ecosystem": {
+    "message": "04 // Ecosystem",
+    "description": "Homepage section label"
+  },
+  "homepage.corefeatures.reliable.title": {
+    "message": "Reliable & Fast",
+    "description": "Core feature card title"
+  },
+  "homepage.corefeatures.api.title": {
+    "message": "API & Fullstack",
+    "description": "Core feature card title"
+  },
+  "homepage.corefeatures.progressive.title": {
+    "message": "Progressive",
+    "description": "Core feature card title"
+  },
+  "homepage.essentials.showing": {
+    "message": "Showing {count} of 50+ extensions",
+    "description": "Essentials component count"
+  },
+  "homepage.essentials.browseAll": {
+    "message": "Browse all extensions",
+    "description": "Essentials browse all button"
+  },
+  "homepage.preview.tag.decorators": {
+    "message": "Decorators",
+    "description": "Class tutorial tag"
+  },
+  "homepage.preview.tag.ioc": {
+    "message": "IoC Container",
+    "description": "Class tutorial tag"
+  },
+  "homepage.preview.tag.zeroApi": {
+    "message": "Zero API",
+    "description": "Function tutorial tag"
+  },
+  "homepage.preview.tag.hooks": {
+    "message": "React Hooks",
+    "description": "Function tutorial tag"
+  },
+  "homepage.preview.tag.lightweight": {
+    "message": "Lightweight",
+    "description": "Function tutorial tag"
+  },
+  "homepage.footer.learn": {
+    "message": "Learn",
+    "description": "Footer column title"
+  },
+  "homepage.footer.intro": {
+    "message": "Introduction",
+    "description": "Footer link"
+  },
+  "homepage.footer.quickStart": {
+    "message": "Quick Start",
+    "description": "Footer link"
+  },
+  "homepage.footer.migration": {
+    "message": "Migration v2 → v3",
+    "description": "Footer link"
+  },
+  "homepage.footer.community": {
+    "message": "Community",
+    "description": "Footer column title"
+  },
+  "homepage.footer.more": {
+    "message": "More",
+    "description": "Footer column title"
+  },
+  "homepage.footer.changelog": {
+    "message": "Changelog",
+    "description": "Footer link"
+  },
+  "homepage.footer.status": {
+    "message": "ALL SYSTEMS OPERATIONAL",
+    "description": "Footer status chip"
+  },
+  "homepage.footer.copyright": {
+    "message": "Copyright © {year} MidwayJS. Built with Docusaurus.",
+    "description": "Footer copyright"
   },
   "homepage.recommend.title": {
     "message": "Recommended Projects",
