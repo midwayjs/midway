@@ -1,149 +1,74 @@
 # Midway.js 交互式教程
 
-这是一个基于 TutorialKit 构建的 Midway.js 交互式教程，帮助开发者从零开始学习 Midway.js 框架。
+部署在 `https://midwayjs.org/tutorial/`。左侧是课程讲解，右侧通过 [StackBlitz SDK](https://developer.stackblitz.com/platform/api/javascript-sdk) 嵌入一个可运行的 Midway 项目（基于 WebContainer）。
 
-## 教程内容
+这是一个独立的 Vite + React 项目，不属于仓库根目录的 pnpm workspace。
 
-### 第一部分：创建应用
-1. **项目结构介绍** - 了解 Midway 应用的基本结构
-2. **创建第一个 Controller** - 学习如何处理 HTTP 请求
-3. **获取请求参数** - 掌握各种参数获取方式
-
-### 第二部分：依赖注入与 Service
-1. **创建第一个 Service** - 学习如何组织业务逻辑
-2. **依赖注入的使用** - 理解 IoC 容器和依赖注入
-
-### 第三部分：处理请求与响应
-1. **处理 POST 请求** - 学习 RESTful API 开发
-2. **错误处理** - 掌握异常处理和错误响应
-
-### 第四部分：中间件与配置
-1. **理解中间件** - 学习中间件的概念和使用
-2. **应用配置管理** - 掌握多环境配置
-
-### 第五部分：数据验证与最佳实践
-1. **数据验证** - 学习如何验证请求数据
-2. **最佳实践总结** - 了解开发规范和最佳实践
-
-## 特点
-
-✅ **交互式学习** - 边学边练，实时查看效果
-✅ **循序渐进** - 从基础到进阶，逐步深入
-✅ **代码示例** - 丰富的可运行代码示例
-✅ **最佳实践** - 学习业界认可的开发规范
-
-## 本地运行
-
-### 安装依赖
+## 本地开发
 
 ```bash
-pnpm install
+cd tutorial
+pnpm install --ignore-workspace
+pnpm dev        # http://localhost:5180/tutorial/
+pnpm build      # 输出到 dist/
+pnpm verify     # 逐课编译并启动项目，检查预览路径是否有响应
 ```
 
-### 启动开发服务器
+## 目录结构
 
-```bash
-pnpm dev
+```
+tutorial/
+├── content/                 # 课程内容
+│   └── <class|function>/<zh-cn|en>/
+│       └── 1-getting-started/          # 章节，按数字前缀排序
+│           ├── meta.md                 # 章节标题 + 导读
+│           └── 2-first-controller/     # 一节课
+│               ├── content.md          # 课程讲解
+│               └── _files/             # 本课叠加在模板上的文件
+├── templates/
+│   ├── class/               # 装饰器风格的基础项目
+│   └── function/            # 函数式风格的基础项目
+├── build/                   # 构建期读取 content/ 的 Vite 插件
+├── scripts/verify-lessons.ts
+└── src/                     # 前端界面
 ```
 
-访问 http://localhost:4321 开始学习。
+每节课右侧的项目 = `templates/<风格>/` + 本课 `_files/`，同名文件以课程为准。课程之间互不继承，所以每节课的 `_files` 只需要放和模板不同的文件。
 
-### 构建生产版本
+练习课可以再放 `_solution/`：读者先改 `_files` 里的起点代码，点「查看答案」后会把 `_solution` 叠加进去。验证脚本会对答案再跑一遍。
 
-```bash
-pnpm build
+## 写一节新课
+
+1. 在章节目录下新建 `<序号>-<slug>/`，目录名就是 URL 的一部分。
+2. 写 `content.md`：
+
+   ```md
+   ---
+   title: 创建第一个 Controller
+   focus: /src/controller/home.controller.ts   # 进入课程时打开的文件
+   preview: /                                  # 可选，预览窗口打开的路径，默认 /
+   checks:                                     # 可选，应用答案后额外请求的路径
+     - /info
+   test: false                                 # 可选，为 true 时再执行 npm test
+   ---
+
+   正文使用普通 Markdown，代码块会在构建时高亮。
+   ```
+
+3. 把本课起点代码放进 `_files/`。有练习时，把参考答案放进 `_solution/`（只放和起点不同的文件）。
+4. 运行 `pnpm verify` 确认能启动。
+
+两种语言的目录结构保持一致，切换语言时会停留在同一节课。
+
+## 部署注意
+
+在线运行环境要求页面开启跨域隔离，`/tutorial/` 路径需要返回下面两个响应头，否则右侧会显示“在 StackBlitz 中打开”的兜底提示：
+
+```
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: credentialless
 ```
 
-### 多教程 + 多语言构建
+OSS 无法设置这两个头，需要在 Cloudflare 上用 Transform Rules（修改响应头）为 `/tutorial/` 路径添加。
 
-当前支持通过“构建矩阵”产出四套静态站点：
-
-- `class/zh-cn`
-- `class/en`
-- `function/zh-cn`
-- `function/en`
-
-内容来源目录：
-
-```text
-sources/
-  class/zh-cn/tutorial
-  class/en/tutorial
-  function/zh-cn/tutorial
-  function/en/tutorial
-```
-
-执行构建：
-
-```bash
-npm run build:matrix
-```
-
-产物目录：
-
-```text
-dist-matrix/
-  index.html
-  class/zh-cn
-  class/en
-  function/zh-cn
-  function/en
-```
-
-默认会按 `midwayjs.org/tutorial/...` 路径生成路由前缀，例如：
-
-- `/tutorial/class/zh-cn/`
-- `/tutorial/class/en/`
-- `/tutorial/function/zh-cn/`
-- `/tutorial/function/en/`
-
-可通过环境变量覆盖前缀：
-
-```bash
-TUTORIAL_PATH_PREFIX=/custom npm run build:matrix
-```
-
-## 技术栈
-
-- [Astro](https://astro.build/) - 现代静态站点生成器
-- [TutorialKit](https://tutorialkit.dev/) - 交互式教程框架
-- [Midway.js](https://midwayjs.org/) - Node.js 框架
-
-## 反馈
-
-如果您在学习过程中遇到问题或有改进建议，欢迎提交 Issue。
-
-## 相关链接
-
-- [Midway.js 官方文档](https://midwayjs.org/)
-- [Midway.js GitHub](https://github.com/midwayjs/midway)
-- [TutorialKit 官网](https://tutorialkit.dev/)
-
-## 许可证
-
-MIT
-
-### 本地快速切换教程源
-
-不再手动复制目录，直接使用脚本：
-
-```bash
-npm run use:function:zh-cn
-npm run dev
-```
-
-可用命令：
-
-```bash
-npm run use:class:zh-cn
-npm run use:class:en
-npm run use:function:zh-cn
-npm run use:function:en
-```
-
-也可使用通用命令：
-
-```bash
-npm run use -- function zh-cn
-npm run use -- class en
-```
+模板的 `package.json` 或 `.npmrc` 变化时，右侧会重新创建环境并安装依赖；同一风格内切换课程只同步变化的文件，服务会自动重启。

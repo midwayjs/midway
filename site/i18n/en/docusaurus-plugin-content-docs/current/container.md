@@ -1190,16 +1190,16 @@ container.bind(UserService);
 
 In version `4.0.0`, we introduced the concept of `detector` for scanning files and binding.
 
-Simply put, the framework will recursively scan the ts/js files in the entire `src` directory by default, and then perform require operations. When the file is exported as a class and explicitly or implicitly contains the `@Provide()` decorator, it will execute the `container.bind` logic.
+v4 no longer scans `src` implicitly. Without a `detector`, classes such as Controllers and Services are not bound, and every route returns 404. Declare a detector on `@Configuration` (or `defineConfiguration`).
 
-The following logic explicitly declares the file loading behavior, and users can customize the file detector to implement different file loading behaviors.
+The detector recursively loads matching ts/js files. When a file exports a class that has `@Provide()` (explicit or implied), it runs `container.bind`.
 
 ```typescript
 // src/configuration.ts
-import { Configuration, CommonjsFileDetector } from '@midwayjs/core';
+import { Configuration, CommonJSFileDetector } from '@midwayjs/core';
 
 @Configuration({
-  detector: new CommonjsFileDetector(),
+  detector: new CommonJSFileDetector(),
 })
 export class MainConfiguration {}
 ```
@@ -1244,7 +1244,7 @@ export class MainConfiguration {}
 </TabItem>
 </Tabs>
 
-By default, the following files in the `src` directory will be scanned and automatically processed and bound.
+After you declare a `detector`, these files under `src` are scanned and bound by default.
 
 ```typescript
 export const DEFAULT_PATTERN = [

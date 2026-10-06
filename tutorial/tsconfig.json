@@ -1,16 +1,17 @@
 {
-  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "baseUrl": "./",
-    "jsxImportSource": "react",
-    "paths": {
-      "@*": [
-        "src/*"
-      ]
-    }
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "types": ["vite/client", "node"]
   },
-  "exclude": [
-    "dist"
-  ]
+  "include": ["src", "build", "scripts", "vite.config.ts"]
 }
