@@ -2,6 +2,9 @@
 title: HTTP tests with mock
 focus: /test/home.test.ts
 test: true
+routes:
+  - /
+  - /health
 checks:
   - /health
 ---

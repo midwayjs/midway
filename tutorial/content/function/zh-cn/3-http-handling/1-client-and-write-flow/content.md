@@ -1,6 +1,10 @@
 ---
 title: client 接入与写接口
+preview: /users
 focus: /src/web/api/client.ts
+routes:
+  - /users
+  - /users/u-1
 ---
 
 # client 接入与写接口

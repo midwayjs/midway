@@ -1,6 +1,9 @@
 ---
 title: 创建第一个 Service
 focus: /src/service/user.service.ts
+routes:
+  - /
+  - /info
 ---
 
 # 创建第一个 Service

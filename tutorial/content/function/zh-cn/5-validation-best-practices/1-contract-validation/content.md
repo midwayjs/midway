@@ -1,6 +1,10 @@
 ---
 title: 契约校验（input / output）
+preview: /users
 focus: /src/server/api/user.api.ts
+routes:
+  - /users
+  - /users/u-1
 ---
 
 # 契约校验（input / output）

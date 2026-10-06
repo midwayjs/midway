@@ -1,6 +1,9 @@
 ---
 title: 创建第一个 Controller
 focus: /src/controller/home.controller.ts
+routes:
+  - /
+  - /info
 checks:
   - /info
 ---

@@ -1,6 +1,10 @@
 ---
 title: 理解中间件
+preview: /middleware-demo
 focus: /src/middleware/logger.middleware.ts
+routes:
+  - /
+  - /middleware-demo
 checks:
   - /health
 ---

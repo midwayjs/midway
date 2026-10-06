@@ -1,6 +1,9 @@
 ---
 title: 第一个 API 契约
 focus: /src/server/api/home.api.ts
+routes:
+  - /
+  - /info
 checks:
   - /ping
 ---

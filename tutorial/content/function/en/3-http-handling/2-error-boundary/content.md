@@ -1,6 +1,10 @@
 ---
 title: Error boundary
+preview: /users/u-1
 focus: /src/server/api/user.api.ts
+routes:
+  - /users/u-1
+  - /users/missing
 ---
 
 # Error boundary

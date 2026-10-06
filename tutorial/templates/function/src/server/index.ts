@@ -15,4 +15,18 @@ export default defineConfiguration({
     },
   ],
   detector: new CommonJSFileDetector(),
+  async onReady(_container, app) {
+    // StackBlitz preview.setUrl 会把 `?` 编成 %3F，这里还原成 query
+    app.useMiddleware(async (ctx, next) => {
+      const raw = String(ctx.req.url || '');
+      if (/%3F/i.test(raw) && !raw.includes('?')) {
+        try {
+          ctx.url = decodeURIComponent(raw);
+        } catch {
+          // ignore malformed percent-encoding
+        }
+      }
+      await next();
+    });
+  },
 });

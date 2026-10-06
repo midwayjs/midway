@@ -46,7 +46,10 @@ tutorial/
    ---
    title: 创建第一个 Controller
    focus: /src/controller/home.controller.ts   # 进入课程时打开的文件
-   preview: /                                  # 可选，预览窗口打开的路径，默认 /
+   preview: /                                  # 可选，预览窗口默认打开的路径，默认 /
+   routes:                                     # 可选，预览窗口可点击切换的 GET 路径
+     - /
+     - /info
    checks:                                     # 可选，应用答案后额外请求的路径
      - /info
    test: false                                 # 可选，为 true 时再执行 npm test

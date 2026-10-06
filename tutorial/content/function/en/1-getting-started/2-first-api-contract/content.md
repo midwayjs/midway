@@ -1,6 +1,9 @@
 ---
 title: First API contract
 focus: /src/server/api/home.api.ts
+routes:
+  - /
+  - /info
 checks:
   - /ping
 ---

@@ -1,6 +1,11 @@
 ---
 title: Request Parameters
+preview: /greet?name=Midway
 focus: /src/controller/home.controller.ts
+routes:
+  - /
+  - /greet?name=Midway
+  - /user/1
 checks:
   - /calc/add?a=1&b=2
 ---

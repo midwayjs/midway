@@ -1,6 +1,10 @@
 ---
 title: Error Handling
+preview: /api/users/1
 focus: /src/filter/default.filter.ts
+routes:
+  - /api/users/1
+  - /api/users/999
 ---
 
 # Error Handling and Exceptions

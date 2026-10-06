@@ -1,6 +1,12 @@
 ---
 title: Inject Service in Controller
+preview: /api/users
 focus: /src/controller/user.controller.ts
+routes:
+  - /
+  - /api/users
+  - /api/users/1
+  - /api/users/search?keyword=张三
 ---
 
 # Inject Service in Controller

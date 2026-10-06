@@ -203,6 +203,8 @@ export function LessonPage({ variant, part, lesson }: Props) {
             solution={solution}
             focus={lesson.focus}
             preview={lesson.preview}
+            routes={lesson.routes}
+            solutionRoutes={lesson.solutionRoutes}
             title={lesson.title}
             theme={theme}
             messages={t}

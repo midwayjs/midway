@@ -833,11 +833,92 @@ body.is-resizing .divider::after {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  height: 40px;
+  min-height: 40px;
   flex: none;
-  padding: 0 8px 0 14px;
+  flex-wrap: wrap;
+  padding: 6px 8px 6px 14px;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
+}
+
+.workspace-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.workspace-preview-float {
+  position: absolute;
+  top: 52px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(240px, calc(100% - 20px));
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg-elevated) 86%, transparent);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.workspace-preview-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.workspace-preview-label svg {
+  color: var(--brand);
+}
+
+.workspace-routes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workspace-route {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: left;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-route:hover:not(:disabled) {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.workspace-route.active {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.workspace-route:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .workspace-file {
@@ -880,13 +961,19 @@ body.is-resizing .divider::after {
 .workspace-booting {
   position: absolute;
   inset: 0;
+  z-index: 4;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   font-size: 14px;
   color: var(--text-muted);
   background: var(--bg-subtle);
+}
+
+.workspace-booting p {
+  margin: 0;
 }
 
 .spinner {

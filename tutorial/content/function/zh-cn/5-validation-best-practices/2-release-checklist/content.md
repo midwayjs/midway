@@ -2,6 +2,9 @@
 title: 用 mock 写接口测试
 focus: /test/home.test.ts
 test: true
+routes:
+  - /
+  - /health
 checks:
   - /health
 ---

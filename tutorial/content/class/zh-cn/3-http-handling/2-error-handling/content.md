@@ -1,6 +1,10 @@
 ---
 title: 错误处理
+preview: /api/users/1
 focus: /src/filter/default.filter.ts
+routes:
+  - /api/users/1
+  - /api/users/999
 ---
 
 # 错误处理与异常

@@ -1,6 +1,12 @@
 ---
 title: useInject 注入服务
+preview: /users
 focus: /src/server/api/user.api.ts
+routes:
+  - /
+  - /users
+  - /users/u-1
+  - /users/search?keyword=harry
 checks:
   - /users/search?keyword=harry
 ---

@@ -1,7 +1,7 @@
 import sdk, { type Project, type VM } from '@stackblitz/sdk';
 import { useEffect, useRef, useState } from 'react';
 import type { messages } from '../i18n';
-import { ExternalLink, FileCode, Lightbulb, RotateCcw, ShieldAlert } from '../icons';
+import { ExternalLink, FileCode, Globe, Lightbulb, RotateCcw, ShieldAlert } from '../icons';
 import type { Theme } from '../prefs';
 import type { ProjectFiles } from '../types';
 
@@ -11,6 +11,9 @@ interface Props {
   solution: ProjectFiles | null;
   focus: string;
   preview: string;
+  routes: string[];
+  /** 应用答案后追加显示、并自动打开的预览路径。 */
+  solutionRoutes: string[];
   title: string;
   theme: Theme;
   messages: (typeof messages)['en'];
@@ -18,6 +21,51 @@ interface Props {
 
 /** 这些文件变化时需要重新创建 VM（依赖要重新安装）。 */
 const BOOT_FILES = ['package.json', '.npmrc'];
+
+function sleep(ms: number) {
+  return new Promise<void>(resolve => setTimeout(resolve, ms));
+}
+
+async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T | null> {
+  return Promise.race([promise, sleep(ms).then(() => null)]);
+}
+
+/** 等到 WebContainer 里的服务起来再切预览路径，避免启动瞬间被忽略。 */
+async function setPreviewRoute(vm: VM, route: string, waitForRestart = false) {
+  const path = route.startsWith('/') ? route : `/${route}`;
+  if (waitForRestart) await sleep(1600);
+  const attempts = waitForRestart ? 20 : 90;
+  for (let i = 0; i < attempts; i++) {
+    const url = await withTimeout(vm.preview.getUrl().catch(() => null), 1000);
+    if (url) {
+      await vm.preview.setUrl(path).catch(() => {});
+      return true;
+    }
+    await sleep(400);
+  }
+  return false;
+}
+
+async function embedProject(mount: HTMLElement, projectData: Project, theme: Theme, focus: string) {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      return await sdk.embedProject(mount, projectData, {
+        openFile: focus,
+        view: 'default',
+        height: '100%',
+        terminalHeight: 38,
+        theme,
+        crossOriginIsolated: true,
+      });
+    } catch (err) {
+      lastError = err;
+      mount.replaceChildren();
+      await sleep(1200 * (attempt + 1));
+    }
+  }
+  throw lastError;
+}
 
 function project(title: string, files: ProjectFiles): Project {
   return { title, template: 'node', files };
@@ -48,19 +96,37 @@ async function syncFiles(vm: VM, previous: ProjectFiles, next: ProjectFiles) {
 }
 
 /** 右侧的 StackBlitz 在线运行环境。 */
-export function Workspace({ files, solution, focus, preview, title, theme, messages: t }: Props) {
+export function Workspace({
+  files,
+  solution,
+  focus,
+  preview,
+  routes,
+  solutionRoutes,
+  title,
+  theme,
+  messages: t,
+}: Props) {
   const hostRef = useRef<HTMLDivElement>(null);
   const vmRef = useRef<VM>(undefined);
   const appliedRef = useRef<ProjectFiles>({});
   const queueRef = useRef<Promise<void>>(Promise.resolve());
   const latestRef = useRef({ files, focus, preview, title, theme });
   const [booting, setBooting] = useState(false);
+  const [bootError, setBootError] = useState(false);
+  const [bootId, setBootId] = useState(0);
   const [solved, setSolved] = useState(false);
+  const [activeRoute, setActiveRoute] = useState(preview);
+  const [previewReady, setPreviewReady] = useState(false);
   const isolated = typeof window !== 'undefined' && window.crossOriginIsolated;
+  const visibleRoutes = solved ? [...routes, ...solutionRoutes] : routes;
 
   latestRef.current = { files, focus, preview, title, theme };
 
-  useEffect(() => setSolved(false), [files]);
+  useEffect(() => {
+    setSolved(false);
+    setActiveRoute(preview);
+  }, [files, preview]);
 
   const enqueue = (task: () => Promise<void>) => {
     queueRef.current = queueRef.current.then(task).catch(err => {
@@ -83,19 +149,29 @@ export function Workspace({ files, solution, focus, preview, title, theme, messa
 
       if (needsBoot) {
         setBooting(true);
-        host.replaceChildren();
-        const mount = document.createElement('div');
-        host.appendChild(mount);
-        vmRef.current = await sdk.embedProject(mount, project(target.title, target.files), {
-          openFile: target.focus,
-          view: 'default',
-          height: '100%',
-          terminalHeight: 38,
-          theme: target.theme,
-          crossOriginIsolated: true,
-        });
-        appliedRef.current = target.files;
-        setBooting(false);
+        setBootError(false);
+        setPreviewReady(false);
+        try {
+          host.replaceChildren();
+          const mount = document.createElement('div');
+          host.appendChild(mount);
+          vmRef.current = await embedProject(
+            mount,
+            project(target.title, target.files),
+            target.theme,
+            target.focus
+          );
+          appliedRef.current = target.files;
+          setBooting(false);
+          setPreviewReady(await setPreviewRoute(vmRef.current, target.preview));
+        } catch (err) {
+          vmRef.current = undefined;
+          setBootError(true);
+          setPreviewReady(false);
+          throw err;
+        } finally {
+          setBooting(false);
+        }
         return;
       }
 
@@ -103,30 +179,50 @@ export function Workspace({ files, solution, focus, preview, title, theme, messa
       await syncFiles(vm, appliedRef.current, target.files);
       appliedRef.current = target.files;
       await vm.editor.openFile(target.focus);
-      // 预览接口仍是实验特性，服务还没就绪时可能失败，不影响课程切换
-      await vm.preview.setUrl(target.preview).catch(() => {});
+      setPreviewReady(await setPreviewRoute(vm, target.preview));
     });
-  }, [files, isolated]);
+  }, [files, isolated, bootId]);
 
-  const apply = (target: ProjectFiles) => {
+  const retryBoot = () => {
+    vmRef.current = undefined;
+    appliedRef.current = {};
+    setBootError(false);
+    setPreviewReady(false);
+    setBootId(id => id + 1);
+  };
+
+  const apply = (target: ProjectFiles, route: string) => {
     const vm = vmRef.current;
     if (!vm) return;
     enqueue(async () => {
       await syncFiles(vm, appliedRef.current, target);
       appliedRef.current = target;
       await vm.editor.openFile(latestRef.current.focus);
+      await setPreviewRoute(vm, route, true);
     });
   };
 
   const reset = () => {
     setSolved(false);
-    apply(latestRef.current.files);
+    setActiveRoute(preview);
+    apply(latestRef.current.files, preview);
   };
 
   const solve = () => {
     if (!solution) return;
+    const route = solutionRoutes[0] ?? activeRoute;
     setSolved(true);
-    apply(solution);
+    setActiveRoute(route);
+    apply(solution, route);
+  };
+
+  const openPreview = (route: string) => {
+    setActiveRoute(route);
+    const vm = vmRef.current;
+    if (!vm) return;
+    enqueue(async () => {
+      await setPreviewRoute(vm, route);
+    });
   };
 
   const openExternal = () => {
@@ -137,10 +233,12 @@ export function Workspace({ files, solution, focus, preview, title, theme, messa
   return (
     <div className="workspace">
       <div className="workspace-bar">
-        <span className="workspace-file">
-          <FileCode size={14} />
-          {focus}
-        </span>
+        <div className="workspace-meta">
+          <span className="workspace-file">
+            <FileCode size={14} />
+            {focus}
+          </span>
+        </div>
         <div className="workspace-actions">
           {isolated && solution && (
             <button
@@ -167,10 +265,42 @@ export function Workspace({ files, solution, focus, preview, title, theme, messa
       {isolated ? (
         <div className="workspace-body">
           <div className="workspace-host" ref={hostRef} />
+          {previewReady && visibleRoutes.length > 1 && (
+            <div className="workspace-preview-float">
+              <span className="workspace-preview-label">
+                <Globe size={13} />
+                {t.previewRoutes}
+              </span>
+              <div className="workspace-routes" role="tablist" aria-label={t.previewRoutes}>
+                {visibleRoutes.map(route => (
+                  <button
+                    key={route}
+                    type="button"
+                    role="tab"
+                    aria-selected={route === activeRoute}
+                    className={`workspace-route${route === activeRoute ? ' active' : ''}`}
+                    onClick={() => openPreview(route)}
+                    disabled={booting}
+                    title={t.previewRouteTip(route)}
+                  >
+                    {route}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           {booting && (
             <div className="workspace-booting">
               <span className="spinner" />
               {t.booting}
+            </div>
+          )}
+          {bootError && !booting && (
+            <div className="workspace-booting">
+              <p>{t.bootError}</p>
+              <button type="button" className="btn btn-primary btn-sm" onClick={retryBoot}>
+                {t.retry}
+              </button>
             </div>
           )}
         </div>
