@@ -8,6 +8,117 @@ const {themes} = require('prism-react-renderer');
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
 
+/** 文档 Markdown 变更、packages/src 没变时跳过 TypeDoc，复用 CI 缓存的 /api 页面。 */
+const skipTypedoc = process.env.SKIP_TYPEDOC === '1';
+
+const typedocBannerPatchPlugin = function typedocVersionBannerPatchPlugin() {
+  return {
+    name: 'typedoc-version-banner-patch',
+    configureWebpack() {
+      return {
+        plugins: [
+          new webpack.NormalModuleReplacementPlugin(
+            /docusaurus-plugin-typedoc-api[\\/]lib[\\/]components[\\/]VersionBanner\.js$/,
+            path.resolve(__dirname, './src/patches/typedoc-version-banner.js')
+          ),
+        ],
+      };
+    },
+  };
+};
+
+const typedocApiPlugin = [
+  'docusaurus-plugin-typedoc-api',
+  {
+    projectRoot: join(__dirname, '..'),
+    packages: [
+      "packages/axios",
+      "packages/bootstrap",
+      "packages/bull-board",
+      "packages/bull",
+      "packages/bullmq",
+      "packages/busboy",
+      "packages/cache-manager",
+      "packages/captcha",
+      "packages/casbin-redis-adapter",
+      "packages/casbin-typeorm-adapter",
+      "packages/casbin",
+      "packages/code-dye",
+      "packages/consul",
+      "packages/core",
+      "packages/cos",
+      "packages/cron",
+      "packages/cross-domain",
+      "packages/etcd",
+      "packages/event-emitter",
+      "packages/express-session",
+      "packages/faas",
+      "packages/grpc",
+      "packages/http-proxy",
+      "packages/i18n",
+      "packages/info",
+      "packages/jwt",
+      "packages/kafka",
+      "packages/leoric",
+      "packages/mcp",
+      "packages/mikro",
+      "packages/mock",
+      "packages/mongoose",
+      "packages/mqtt",
+      "packages/nextjs",
+      "packages/oss",
+      "packages/otel",
+      "packages/passport",
+      "packages/prometheus-socket-io",
+      "packages/prometheus",
+      "packages/rabbitmq",
+      "packages/redis",
+      "packages/security",
+      "packages/sequelize",
+      "packages/session",
+      "packages/socketio",
+      "packages/static-file",
+      "packages/swagger",
+      "packages/tablestore",
+      "packages/tenant",
+      "packages/typegoose",
+      "packages/typeorm",
+      "packages/upload",
+      "packages/validate",
+      "packages/validation-class-validator",
+      "packages/validation-joi",
+      "packages/validation-zod",
+      "packages/validation",
+      "packages/version",
+      "packages/view-ejs",
+      "packages/view-nunjucks",
+      "packages/view",
+      "packages/web-express",
+      "packages/web-koa",
+      "packages/web",
+      "packages/ws"
+    ],
+    debug:true,
+    minimal: true,
+    gitRefName: '3.x',
+    versions: {
+      current: {
+        label: '4.0.0',
+      },
+      '3.0.0': {
+        banner: 'none',
+      },
+      '2.0.0': {
+        banner: 'none',
+      },
+      '1.0.0': {
+        banner: 'none',
+      },
+    },
+    lastVersion: 'current',
+  },
+];
+
 const config = {
   title: 'Midway',
   tagline: 'Midway is a fullstack framework for web & Serverless',
@@ -24,21 +135,7 @@ const config = {
     locales: ['zh-cn', 'en'],
   },
   plugins: [
-    function typedocVersionBannerPatchPlugin() {
-      return {
-        name: 'typedoc-version-banner-patch',
-        configureWebpack() {
-          return {
-            plugins: [
-              new webpack.NormalModuleReplacementPlugin(
-                /docusaurus-plugin-typedoc-api[\\/]lib[\\/]components[\\/]VersionBanner\.js$/,
-                path.resolve(__dirname, './src/patches/typedoc-version-banner.js')
-              ),
-            ],
-          };
-        },
-      };
-    },
+    ...(!skipTypedoc ? [typedocBannerPatchPlugin, typedocApiPlugin] : []),
     [
       require.resolve('./src/plugins/changelog/index.js'),
       {
@@ -74,97 +171,6 @@ const config = {
           enableLlmsFullTxt: true
         }
       }
-    ],
-    [
-      'docusaurus-plugin-typedoc-api',
-      {
-        projectRoot: join(__dirname, '..'),
-        packages: [
-          "packages/axios",
-          "packages/bootstrap",
-          "packages/bull-board",
-          "packages/bull",
-          "packages/bullmq",
-          "packages/busboy",
-          "packages/cache-manager",
-          "packages/captcha",
-          "packages/casbin-redis-adapter",
-          "packages/casbin-typeorm-adapter",
-          "packages/casbin",
-          "packages/code-dye",
-          "packages/consul",
-          "packages/core",
-          "packages/cos",
-          "packages/cron",
-          "packages/cross-domain",
-          "packages/etcd",
-          "packages/event-emitter",
-          "packages/express-session",
-          "packages/faas",
-          "packages/grpc",
-          "packages/http-proxy",
-          "packages/i18n",
-          "packages/info",
-          "packages/jwt",
-          "packages/kafka",
-          "packages/leoric",
-          "packages/mcp",
-          "packages/mikro",
-          "packages/mock",
-          "packages/mongoose",
-          "packages/mqtt",
-          "packages/nextjs",
-          "packages/oss",
-          "packages/otel",
-          "packages/passport",
-          "packages/prometheus-socket-io",
-          "packages/prometheus",
-          "packages/rabbitmq",
-          "packages/redis",
-          "packages/security",
-          "packages/sequelize",
-          "packages/session",
-          "packages/socketio",
-          "packages/static-file",
-          "packages/swagger",
-          "packages/tablestore",
-          "packages/tenant",
-          "packages/typegoose",
-          "packages/typeorm",
-          "packages/upload",
-          "packages/validate",
-          "packages/validation-class-validator",
-          "packages/validation-joi",
-          "packages/validation-zod",
-          "packages/validation",
-          "packages/version",
-          "packages/view-ejs",
-          "packages/view-nunjucks",
-          "packages/view",
-          "packages/web-express",
-          "packages/web-koa",
-          "packages/web",
-          "packages/ws"
-        ],
-        debug:true,
-        minimal: true,
-        gitRefName: '3.x',
-        versions: {
-          current: {
-            label: '4.0.0',
-          },
-          '3.0.0': {
-            banner: 'none',
-          },
-          '2.0.0': {
-            banner: 'none',
-          },
-          '1.0.0': {
-            banner: 'none',
-          },
-        },
-        lastVersion: 'current',
-      },
     ],
   ],
   presets: [

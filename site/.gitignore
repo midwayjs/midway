@@ -8,6 +8,7 @@ node_modules
 # Generated files
 .docusaurus
 .cache-loader
+.typedoc-cache
 
 # Misc
 .DS_Store

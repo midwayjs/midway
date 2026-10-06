@@ -12,7 +12,7 @@ module.exports = [
     "position": "left"
   },
   {
-    to: 'api',
+    href: '/api/',
     label: 'API',
     position: 'left',
   },
