@@ -13,7 +13,7 @@
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@types/express-session": "1.18.1",
-    "memorystore": "1.6.7"
+    "memorystore": "1.6.8"
   },
   "dependencies": {
     "cookie-session": "^2.0.0",

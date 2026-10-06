@@ -681,8 +681,8 @@ importers:
         specifier: 1.18.1
         version: 1.18.1
       memorystore:
-        specifier: 1.6.7
-        version: 1.6.7
+        specifier: 1.6.8
+        version: 1.6.8
 
   packages/faas:
     dependencies:
@@ -5079,9 +5079,6 @@ packages:
 
   '@types/node@22.12.0':
     resolution: {integrity: sha512-Fll2FZ1riMjNmlmJOdAyY5pUbkftXslB5DgEzlIuNaiWhXd00FhWxVC/r4yV/4wBb9JfImTu+jiSvXTkJ7F/gA==}
-
-  '@types/node@26.6.4':
-    resolution: {integrity: sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -9807,8 +9804,8 @@ packages:
   memory-pager@1.5.0:
     resolution: {integrity: sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==}
 
-  memorystore@1.6.7:
-    resolution: {integrity: sha512-OZnmNY/NDrKohPQ+hxp0muBcBKrzKNtHr55DbqSx9hLsYVNnomSAMRAtI7R64t3gf3ID7tHQA7mG4oL3Hu9hdw==}
+  memorystore@1.6.8:
+    resolution: {integrity: sha512-kC3svB2LXnLAnndjxKjXy8FkrScazufhNweSd2JyJAKbK3jXYfL38qf/GI6tAQp6VXQ5QoNLdcO2qIg5g45EVQ==}
     engines: {node: '>=0.10'}
 
   meow@8.1.2:
@@ -12911,9 +12908,6 @@ packages:
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
-
-  undici-types@8.9.0:
-    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
   undici@6.29.0:
     resolution: {integrity: sha512-R+RODBqp6i2pPflGdq+xIOUkl+RNfGgHwoinecKu/JCuf2uO06cOKoDbI2P7Dn6KcswdKwrczbU6IYJ6K8X+wg==}
@@ -16266,10 +16260,6 @@ snapshots:
   '@types/node@22.12.0':
     dependencies:
       undici-types: 6.20.0
-
-  '@types/node@26.6.4':
-    dependencies:
-      undici-types: 8.9.0
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -21460,7 +21450,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 26.6.4
+      '@types/node': 20.19.43
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -22256,7 +22246,7 @@ snapshots:
 
   memory-pager@1.5.0: {}
 
-  memorystore@1.6.7:
+  memorystore@1.6.8:
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       lru-cache: 4.1.5
@@ -25971,8 +25961,6 @@ snapshots:
   undici-types@6.20.0: {}
 
   undici-types@6.21.0: {}
-
-  undici-types@8.9.0: {}
 
   undici@6.29.0: {}
 
