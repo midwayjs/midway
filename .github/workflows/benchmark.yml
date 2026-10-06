@@ -4,13 +4,21 @@ on:
   push:
     branches: [v4-next]
     paths-ignore:
+      - '.github/workflows/**'
+      - '!.github/workflows/benchmark.yml'
       - 'site/**'
+      - 'tutorial/**'
       - '*.md'
+      - '**/*.md'
   pull_request:
     branches: [v4-next]
     paths-ignore:
+      - '.github/workflows/**'
+      - '!.github/workflows/benchmark.yml'
       - 'site/**'
+      - 'tutorial/**'
       - '*.md'
+      - '**/*.md'
 
 jobs:
   build:

@@ -4,12 +4,20 @@ on:
   push:
     branches: [v4-next]
     paths-ignore:
+      - '.github/workflows/**'
+      - '!.github/workflows/precheck.yml'
       - 'site/**'
+      - 'tutorial/**'
       - '*.md'
+      - '**/*.md'
   pull_request:
     paths-ignore:
+      - '.github/workflows/**'
+      - '!.github/workflows/precheck.yml'
       - 'site/**'
+      - 'tutorial/**'
       - '*.md'
+      - '**/*.md'
 
 jobs:
   lintAndTestLegacy:

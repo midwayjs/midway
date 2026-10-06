@@ -7,13 +7,17 @@ on:
       - '.github/workflows/**'
       - '!.github/workflows/nodejs.yml'
       - 'site/**'
+      - 'tutorial/**'
       - '*.md'
+      - '**/*.md'
   pull_request:
     paths-ignore:
       - '.github/workflows/**'
       - '!.github/workflows/nodejs.yml'
       - 'site/**'
+      - 'tutorial/**'
       - '*.md'
+      - '**/*.md'
 
 jobs:
   build:
