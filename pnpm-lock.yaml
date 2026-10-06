@@ -1750,8 +1750,8 @@ importers:
         specifier: 2.15.2
         version: 2.15.2
       dayjs:
-        specifier: 1.11.20
-        version: 1.11.20
+        specifier: 1.11.23
+        version: 1.11.23
       egg-logger:
         specifier: 3.6.1
         version: 3.6.1
