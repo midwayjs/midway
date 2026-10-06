@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/commander",
-  "version": "4.2.3",
+  "version": "4.2.5",
   "description": "Midway Commander Framework",
   "main": "dist/index.js",
   "typings": "index.d.ts",

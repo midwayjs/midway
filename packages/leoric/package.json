@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/leoric",
-  "version": "4.2.3",
+  "version": "4.2.5",
   "description": "Leoric as a Midway model component",
   "main": "dist/index.js",
   "typings": "index.d.ts",

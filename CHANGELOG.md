@@ -1,6 +1,34 @@
 # Change Log
 
 
+## v4.2.5 (2026-10-06)
+
+#### :memo: Documentation
+* [#4679](https://github.com/midwayjs/midway/pull/4679) docs: rebuild interactive tutorial with Vite and StackBlitz ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* `busboy`, `upload`
+  * [#4647](https://github.com/midwayjs/midway/pull/4647) fix(deps): update dependency file-type to v21.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `captcha`, `security`
+  * [#4663](https://github.com/midwayjs/midway/pull/4663) fix(deps): update dependency nanoid to v3.3.19 ([@renovate[bot]](https://github.com/apps/renovate))
+* `bullmq`
+  * [#4672](https://github.com/midwayjs/midway/pull/4672) fix(deps): update dependency bullmq to v5.81.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `api-bridge`, `axios`, `cache-manager`, `casbin`, `commander`, `core`, `crud`, `express-session`, `faas`, `http-proxy`, `nextjs`, `passport`, `swagger`, `validation`, `web-express`, `web-koa`
+  * [#4676](https://github.com/midwayjs/midway/pull/4676) fix(deps): update dependency axios to v1.20.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* Other
+  * [#4674](https://github.com/midwayjs/midway/pull/4674) chore(deps): update dependency next to v16.3.6 [security] - autoclosed ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`, `validation-joi`
+  * [#4675](https://github.com/midwayjs/midway/pull/4675) fix(deps): update dependency joi to v17.13.7 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `piscina`
+  * [#4677](https://github.com/midwayjs/midway/pull/4677) fix(deps): update dependency piscina to v5.3.2 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`, `i18n`, `info`, `security`
+  * [#4673](https://github.com/midwayjs/midway/pull/4673) fix(deps): update dependency picomatch to v4.0.7 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+
+
+
 ## v4.2.4 (2026-09-27)
 
 #### :memo: Documentation

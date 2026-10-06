@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/validation-class-validator",
-  "version": "4.2.4",
+  "version": "4.2.5",
   "description": "Midway validation component based on class-validator",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
