@@ -681,8 +681,8 @@ importers:
         specifier: 1.18.1
         version: 1.18.1
       memorystore:
-        specifier: 1.6.7
-        version: 1.6.7
+        specifier: 1.6.8
+        version: 1.6.8
 
   packages/faas:
     dependencies:
@@ -9804,8 +9804,8 @@ packages:
   memory-pager@1.5.0:
     resolution: {integrity: sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==}
 
-  memorystore@1.6.7:
-    resolution: {integrity: sha512-OZnmNY/NDrKohPQ+hxp0muBcBKrzKNtHr55DbqSx9hLsYVNnomSAMRAtI7R64t3gf3ID7tHQA7mG4oL3Hu9hdw==}
+  memorystore@1.6.8:
+    resolution: {integrity: sha512-kC3svB2LXnLAnndjxKjXy8FkrScazufhNweSd2JyJAKbK3jXYfL38qf/GI6tAQp6VXQ5QoNLdcO2qIg5g45EVQ==}
     engines: {node: '>=0.10'}
 
   meow@8.1.2:
@@ -22246,7 +22246,7 @@ snapshots:
 
   memory-pager@1.5.0: {}
 
-  memorystore@1.6.7:
+  memorystore@1.6.8:
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       lru-cache: 4.1.5
