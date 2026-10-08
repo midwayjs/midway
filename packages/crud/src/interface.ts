@@ -58,6 +58,12 @@ export type CrudIdValue = string | number;
 export interface CrudContext {
   ctx?: any;
   operator?: string;
+  /**
+   * Options for this call. Route handlers pass the merge of service-level
+   * options and the controller `@Crud()` options so a shared service instance
+   * is never rewritten between requests.
+   */
+  crudOptions?: CrudOptions;
   [key: string]: any;
 }
 

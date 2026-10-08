@@ -123,6 +123,74 @@ describe('validation and swagger helpers', () => {
     expect(bodyPayload.body).toEqual({ name: 'neo', status: 'active' });
   });
 
+  it('should keep coerced update fields and drop defaults for absent keys', async () => {
+    const validate = jest.fn().mockImplementation((_dto, value) => ({
+      value: {
+        name: value?.name,
+        visits: value?.visits === undefined ? 0 : Number(value.visits),
+        role: value?.role ?? 'guest',
+        profile: value?.profile
+          ? {
+              city: value.profile.city,
+              zip: value.profile.zip ?? '000000',
+            }
+          : undefined,
+      },
+    }));
+    const payload = {
+      body: {
+        name: 'neo',
+        visits: '8',
+        profile: {
+          city: 'hangzhou',
+        },
+      },
+      ctx: {
+        requestContext: {
+          getAsync: jest.fn().mockResolvedValue({ validate }),
+        },
+      },
+    };
+
+    await applyCrudValidation('update', options, payload);
+
+    expect(payload.body).toEqual({
+      name: 'neo',
+      visits: 8,
+      profile: {
+        city: 'hangzhou',
+      },
+    });
+  });
+
+  it('should keep defaults for create and replace bodies', async () => {
+    const validate = jest.fn().mockImplementation((_dto, value) => ({
+      value: {
+        name: value?.name,
+        role: value?.role ?? 'guest',
+      },
+    }));
+    const context = {
+      requestContext: {
+        getAsync: jest.fn().mockResolvedValue({ validate }),
+      },
+    };
+    const createPayload = {
+      body: { name: 'neo' },
+      ctx: context,
+    };
+    const replacePayload = {
+      body: { name: 'neo' },
+      ctx: context,
+    };
+
+    await applyCrudValidation('create', options, createPayload);
+    await applyCrudValidation('replace', options, replacePayload);
+
+    expect(createPayload.body).toEqual({ name: 'neo', role: 'guest' });
+    expect(replacePayload.body).toEqual({ name: 'neo', role: 'guest' });
+  });
+
   it('should fallback query validation payload to an empty object when query is missing', async () => {
     const validate = jest.fn();
     await applyCrudValidation('list', options, {

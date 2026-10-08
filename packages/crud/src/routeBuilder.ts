@@ -1,6 +1,12 @@
 import { CRUD_SERVICE_KEY } from './constants';
 import { CrudConfigError, CrudNotFoundError } from './error';
-import { CrudOptions, CrudRouteDefinition, CrudRouteName } from './interface';
+import {
+  CrudContext,
+  CrudOptions,
+  CrudRouteDefinition,
+  CrudRouteName,
+} from './interface';
+import { mergeCrudOptions } from './options';
 import { parseCrudId, parseCrudQuery } from './queryParser';
 import { applyCrudValidation } from './validation';
 
@@ -37,6 +43,18 @@ export function buildCrudRoutes(options: CrudOptions): CrudRouteDefinition[] {
 }
 
 /**
+ * Builds the options for one request.
+ * Service options are the base and controller options override fields that are set.
+ */
+function resolveCallOptions(service: any, options: CrudOptions): CrudOptions {
+  const serviceOptions =
+    service && typeof service.getCrudOptions === 'function'
+      ? service.getCrudOptions()
+      : undefined;
+  return mergeCrudOptions(serviceOptions, options) ?? options;
+}
+
+/**
  * Creates a runtime handler that forwards to the bound CRUD service.
  */
 export function createCrudRouteHandler(
@@ -52,22 +70,21 @@ export function createCrudRouteHandler(
       );
     }
 
-    // Services resolved by the IoC container are constructed without the
-    // controller-level @Crud() options. Keep the bound service in sync so
-    // adapter behavior such as soft delete and query allowlists is honored.
-    if (typeof service.setCrudOptions === 'function') {
-      service.setCrudOptions(options);
-    }
-
-    const ctxPayload = {
+    // IoC services are constructed without controller @Crud() options.
+    // Pass the merged options on the call instead of writing them onto the
+    // service. A shared singleton must not observe another controller's options
+    // while this handler awaits validation.
+    const callOptions = resolveCallOptions(service, options);
+    const ctxPayload: CrudContext = {
       ctx: payload.ctx,
+      crudOptions: callOptions,
     };
 
     switch (route) {
       case 'list':
-        await applyCrudValidation(route, options, payload);
+        await applyCrudValidation(route, callOptions, payload);
         return service.list(
-          parseCrudQuery(payload.query ?? {}, options),
+          parseCrudQuery(payload.query ?? {}, callOptions),
           ctxPayload
         );
       case 'detail':
@@ -80,17 +97,17 @@ export function createCrudRouteHandler(
             return entity;
           });
       case 'create':
-        await applyCrudValidation(route, options, payload);
+        await applyCrudValidation(route, callOptions, payload);
         return service.create(payload.body, ctxPayload);
       case 'update':
-        await applyCrudValidation(route, options, payload);
+        await applyCrudValidation(route, callOptions, payload);
         return service.update(
           parseCrudId(payload.params?.id, options),
           payload.body,
           ctxPayload
         );
       case 'replace':
-        await applyCrudValidation(route, options, payload);
+        await applyCrudValidation(route, callOptions, payload);
         if (typeof service.replace === 'function') {
           return service.replace(
             parseCrudId(payload.params?.id, options),
