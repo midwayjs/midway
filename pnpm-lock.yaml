@@ -440,8 +440,8 @@ importers:
         specifier: 5.38.0
         version: 5.38.0
       typeorm:
-        specifier: 1.1.0
-        version: 1.1.0(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        specifier: 1.1.2
+        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/code-dye:
     devDependencies:
@@ -633,8 +633,8 @@ importers:
         specifier: 5.1.7
         version: 5.1.7
       typeorm:
-        specifier: 1.1.0
-        version: 1.1.0(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        specifier: 1.1.2
+        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/etcd:
     dependencies:
@@ -1464,8 +1464,8 @@ importers:
         specifier: 12.9.0
         version: 12.9.0
       typeorm:
-        specifier: 1.1.0
-        version: 1.1.0(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        specifier: 1.1.2
+        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/upload:
     dependencies:
@@ -12803,8 +12803,8 @@ packages:
     peerDependencies:
       typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x
 
-  typeorm@1.1.0:
-    resolution: {integrity: sha512-iX/kvsV42/htCNAQUyElGW87E4Z12neZc6YUFBTEu0BnLiREYDNT5Wfw3wRqZw9vyOEC36zUBAY6Qvywoig06Q==}
+  typeorm@1.1.2:
+    resolution: {integrity: sha512-UDQ8++2oFCK4fETiRKEC0eCES/i+/1SB4NBqXWeJNosI1i2SVFCDPhqIsXHWpFzFHTBOA553upQZj0NKVbNdUQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.11.0}
     hasBin: true
     peerDependencies:
@@ -22882,7 +22882,7 @@ snapshots:
       proc-log: 6.1.0
       semver: 7.8.5
       tar: 7.5.11
-      tinyglobby: 0.2.12
+      tinyglobby: 0.2.17
       undici: 6.29.0
       which: 6.0.1
 
@@ -25898,7 +25898,7 @@ snapshots:
       typescript: 5.6.3
       yaml: 2.9.1
 
-  typeorm@1.1.0(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
+  typeorm@1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
     dependencies:
       '@sqltools/formatter': 1.2.5
       ansis: 4.4.0
