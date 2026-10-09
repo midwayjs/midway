@@ -27,8 +27,12 @@ class TestCrudService extends BaseCrudService<any> {
     return this.assertEntityFound(entity, message);
   }
 
-  exposeResolveDeleteMode() {
-    return this.resolveDeleteMode();
+  exposeResolveDeleteMode(ctx?: { crudOptions?: any }) {
+    return this.resolveDeleteMode(ctx);
+  }
+
+  exposeResolveCrudOptions(ctx?: { crudOptions?: any }) {
+    return this.resolveCrudOptions(ctx);
   }
 
   exposeAssertSoftDeleteSupported(supported: boolean) {
@@ -68,14 +72,52 @@ describe('BaseCrudService helpers', () => {
     );
     expect(service.exposeResolveDeleteMode()).toBe('hard');
 
-    service.setCrudOptions({
+    const serviceOptions = {
       model: class TestModel {} as any,
       service: class TestService {} as any,
+      id: 'uid',
       delete: {
-        mode: 'soft',
+        mode: 'soft' as const,
       },
-    });
+      query: {
+        searchable: ['name'],
+      },
+    };
+    service.setCrudOptions(serviceOptions);
     expect(service.exposeResolveDeleteMode()).toBe('soft');
+    expect(service.getCrudOptions()).toBe(serviceOptions);
+    expect(
+      service.exposeResolveDeleteMode({
+        crudOptions: {
+          model: class TestModel {} as any,
+          service: class TestService {} as any,
+        },
+      })
+    ).toBe('soft');
+    expect(
+      service.exposeResolveCrudOptions({
+        crudOptions: {
+          model: class TestModel {} as any,
+          service: class TestService {} as any,
+          delete: {
+            mode: 'hard',
+          },
+          query: {
+            maxLimit: 5,
+          },
+        },
+      })
+    ).toEqual(
+      expect.objectContaining({
+        id: 'uid',
+        delete: { mode: 'hard' },
+        query: {
+          searchable: ['name'],
+          maxLimit: 5,
+        },
+      })
+    );
+    expect(service.getCrudOptions()).toBe(serviceOptions);
     expect(() => service.exposeAssertSoftDeleteSupported(true)).not.toThrow();
     expect(() => service.exposeAssertSoftDeleteSupported(false)).toThrow(
       CrudFeatureNotSupportedError
