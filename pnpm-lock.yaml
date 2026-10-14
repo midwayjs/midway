@@ -441,7 +441,7 @@ importers:
         version: 5.38.0
       typeorm:
         specifier: 1.1.2
-        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.6(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/code-dye:
     devDependencies:
@@ -625,7 +625,7 @@ importers:
         version: 8.24.1(socks@2.8.10)
       sequelize:
         specifier: 6.37.8
-        version: 6.37.8(mysql2@3.24.5(@types/node@22.12.0))(sqlite3@5.1.7)
+        version: 6.37.8(mysql2@3.24.6(@types/node@22.12.0))(sqlite3@5.1.7)
       sequelize-typescript:
         specifier: 2.1.6
         version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(sqlite3@5.1.7))
@@ -634,7 +634,7 @@ importers:
         version: 5.1.7
       typeorm:
         specifier: 1.1.2
-        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.6(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/etcd:
     dependencies:
@@ -842,7 +842,7 @@ importers:
     dependencies:
       leoric:
         specifier: 2.14.0
-        version: 2.14.0(mysql2@3.24.5(@types/node@22.12.0))(sqlite3@5.1.7)
+        version: 2.14.0(mysql2@3.24.6(@types/node@22.12.0))(sqlite3@5.1.7)
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -1285,7 +1285,7 @@ importers:
         version: link:../mock
       sequelize:
         specifier: 6.37.8
-        version: 6.37.8(mysql2@3.24.5(@types/node@22.12.0))(sqlite3@5.1.7)
+        version: 6.37.8(mysql2@3.24.6(@types/node@22.12.0))(sqlite3@5.1.7)
       sequelize-typescript:
         specifier: 2.1.6
         version: 2.1.6(@types/node@22.12.0)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(sqlite3@5.1.7))
@@ -1422,7 +1422,7 @@ importers:
         version: link:../web
       mysql2:
         specifier: ^3.0.0
-        version: 3.24.5(@types/node@22.12.0)
+        version: 3.24.6(@types/node@22.12.0)
 
   packages/tenant:
     devDependencies:
@@ -1465,7 +1465,7 @@ importers:
         version: 12.9.0
       typeorm:
         specifier: 1.1.2
-        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
+        version: 1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.6(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3))
 
   packages/upload:
     dependencies:
@@ -10383,8 +10383,8 @@ packages:
     resolution: {integrity: sha512-BzQguy9W9NJgoVn2mRWzbFrFWWztGCcng2QI9+41frfk+Athwgx3qhqhvStz7ExeUUu7Kzw427sNzHpEZNINog==}
     engines: {node: '>=16.0.0'}
 
-  mysql2@3.24.5:
-    resolution: {integrity: sha512-X6Ujsr2QSkkLpkQGjxzpKRAPn9nu4axpR63ntBzquFVEvPOArgbUQ1sJjFKI7hnaYtiVZxa17Z7q18KSubW0IQ==}
+  mysql2@3.24.6:
+    resolution: {integrity: sha512-enu73KhbAua2L3dIxjc6qg6ZJ7H3pt1BImZASWNWY5xSsmJ1ZuUPULTDGXgmJbI61vb+nJAG19IZclIq19UidQ==}
     engines: {node: '>= 8.0'}
     peerDependencies:
       '@types/node': '>= 8'
@@ -22028,7 +22028,7 @@ snapshots:
       picocolors: 1.1.1
       shell-quote: 1.12.0
 
-  leoric@2.14.0(mysql2@3.24.5(@types/node@22.12.0))(sqlite3@5.1.7):
+  leoric@2.14.0(mysql2@3.24.6(@types/node@22.12.0))(sqlite3@5.1.7):
     dependencies:
       dayjs: 1.11.20
       debug: 3.2.7
@@ -22040,7 +22040,7 @@ snapshots:
       tslib: 2.8.1
       validator: 13.15.35
     optionalDependencies:
-      mysql2: 3.24.5(@types/node@22.12.0)
+      mysql2: 3.24.6(@types/node@22.12.0)
       sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color
@@ -22975,7 +22975,7 @@ snapshots:
 
   mylas@2.1.14: {}
 
-  mysql2@3.24.5(@types/node@22.12.0):
+  mysql2@3.24.6(@types/node@22.12.0):
     dependencies:
       '@types/node': 22.12.0
       aws-ssl-profiles: 1.1.2
@@ -24884,9 +24884,9 @@ snapshots:
       '@types/validator': 13.15.10
       glob: 7.2.0
       reflect-metadata: 0.2.2
-      sequelize: 6.37.8(mysql2@3.24.5(@types/node@22.12.0))(sqlite3@5.1.7)
+      sequelize: 6.37.8(mysql2@3.24.6(@types/node@22.12.0))(sqlite3@5.1.7)
 
-  sequelize@6.37.8(mysql2@3.24.5(@types/node@22.12.0))(sqlite3@5.1.7):
+  sequelize@6.37.8(mysql2@3.24.6(@types/node@22.12.0))(sqlite3@5.1.7):
     dependencies:
       '@types/debug': 4.1.13
       '@types/validator': 13.15.10
@@ -24905,7 +24905,7 @@ snapshots:
       validator: 13.15.35
       wkx: 0.5.0
     optionalDependencies:
-      mysql2: 3.24.5(@types/node@22.12.0)
+      mysql2: 3.24.6(@types/node@22.12.0)
       sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color
@@ -26167,7 +26167,7 @@ snapshots:
       typescript: 5.6.3
       yaml: 2.9.1
 
-  typeorm@1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.5(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
+  typeorm@1.1.2(better-sqlite3@12.9.0)(ioredis@5.11.1)(mysql2@3.24.6(@types/node@22.12.0))(ts-node@10.9.2(@types/node@22.12.0)(typescript@5.6.3)):
     dependencies:
       '@sqltools/formatter': 1.2.5
       ansis: 4.4.0
@@ -26182,7 +26182,7 @@ snapshots:
     optionalDependencies:
       better-sqlite3: 12.9.0
       ioredis: 5.11.1
-      mysql2: 3.24.5(@types/node@22.12.0)
+      mysql2: 3.24.6(@types/node@22.12.0)
       ts-node: 10.9.2(@types/node@22.12.0)(typescript@5.6.3)
     transitivePeerDependencies:
       - babel-plugin-macros
