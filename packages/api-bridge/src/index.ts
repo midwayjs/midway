@@ -104,13 +104,32 @@ interface HttpClientInputShape {
   headers?: Record<string, string>;
 }
 
-type ApiModuleRouteKeys<TModule> = Exclude<keyof TModule, '__midwayApiMeta'>;
+type _RequiredKeys<T> = {
+  [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
+}[keyof T];
+type HasRequiredKey<T> = [_RequiredKeys<T>] extends [never] ? false : true;
+
+type _ApiRouteClientCall<TRoute> = TRoute extends {
+  handle: (args: infer TArgs) => infer TOutput;
+}
+  ? TArgs extends { input: infer TInput }
+    ? HasRequiredKey<TInput> extends true
+      ? <TScopedR = Awaited<TOutput>>(args: TInput) => Promise<TScopedR>
+      : <TScopedR = Awaited<TOutput>>(args?: TInput) => Promise<TScopedR>
+    : <TScopedR = Awaited<TOutput>>(args?: unknown) => Promise<TScopedR>
+  : TRoute extends {
+        options: { input?: infer TInput; output?: infer TOutput };
+      }
+    ? HasRequiredKey<TInput> extends true
+      ? <TScopedR = Awaited<TOutput>>(args: TInput) => Promise<TScopedR>
+      : <TScopedR = Awaited<TOutput>>(args?: TInput) => Promise<TScopedR>
+    : <TScopedR = unknown>(args?: unknown) => Promise<TScopedR>;
 
 export type ClientFromApiModules<TModules extends ApiModulesMap> = {
   [TNamespace in keyof TModules]: {
-    [TRoute in ApiModuleRouteKeys<TModules[TNamespace]>]: (
-      input: unknown
-    ) => Promise<unknown>;
+    [TRoute in keyof TModules[TNamespace] as TRoute extends '__midwayApiMeta'
+      ? never
+      : TRoute]: _ApiRouteClientCall<TModules[TNamespace][TRoute]>;
   };
 };
 
