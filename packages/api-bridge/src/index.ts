@@ -48,18 +48,22 @@ export interface ApiBridgeBasePathOptions {
 export type ApiBridgeBasePath =
   string | ApiBridgeBasePathOptions | (() => string | undefined);
 
-export interface CreateClientOptions extends ApiBridgeOptions {
+export interface CreateClientOptions<
+  TManifest extends ApiRouteManifestLike[] = never,
+> extends ApiBridgeOptions {
   basePath?: ApiBridgeBasePath;
   manifest?:
-    | ApiRouteManifestLike[]
-    | Promise<ApiRouteManifestLike[]>
-    | (() => ApiRouteManifestLike[] | Promise<ApiRouteManifestLike[]>)
+    | TManifest
+    | Promise<TManifest>
+    | (() => TManifest | Promise<TManifest>)
     | string
     | false;
 }
 
-export interface CreateManifestClientOptions extends CreateClientOptions {
-  manifest: Exclude<NonNullable<CreateClientOptions['manifest']>, false>;
+export interface CreateManifestClientOptions<
+  TManifest extends ApiRouteManifestLike[] = any,
+> extends CreateClientOptions<TManifest> {
+  manifest: Exclude<NonNullable<TManifest>, false>;
 }
 
 export interface ApiClientDefinition {
@@ -133,9 +137,17 @@ export type ClientFromApiModules<TModules extends ApiModulesMap> = {
   };
 };
 
-export interface ApiCallClient {
+type TupleToObject<T extends readonly any[], TField extends keyof T[number]> = {
+  [K in T[number] as K[TField]]: K;
+};
+
+export interface ApiCallClient<TManifest extends ApiRouteManifestLike[] = []> {
   call<TOutput = unknown>(
-    operationId: string,
+    operationId: TManifest extends { length: infer TLength }
+      ? TLength extends 0
+        ? string
+        : Exclude<keyof TupleToObject<TManifest, 'operationId'>, number>
+      : string,
     input: unknown
   ): Promise<TOutput>;
   has(operationId: string): Promise<boolean> | boolean;
@@ -511,13 +523,16 @@ function resolveVersionedPrefix(moduleMeta?: ApiModuleMetaLike): string {
   return joinUrlPath(`/${versionPrefix}${normalizedVersion}`, prefix);
 }
 
-export function createClient(
-  options: CreateManifestClientOptions
-): ApiCallClient;
-export function createClient<TModules extends ApiModulesMap>(
+export function createClient<
+  const TManifest extends ApiRouteManifestLike[] = [],
+>(options: CreateManifestClientOptions<TManifest>): ApiCallClient<TManifest>;
+export function createClient<
+  TModules extends ApiModulesMap,
+  const TManifest extends ApiRouteManifestLike[] = [],
+>(
   modules: TModules,
-  options?: CreateClientOptions
-): ClientFromApiModules<TModules> & ApiCallClient;
+  options?: CreateClientOptions<TManifest>
+): ClientFromApiModules<TModules> & ApiCallClient<TManifest>;
 export function createClient<TModules extends ApiModulesMap>(
   modulesOrOptions: TModules | CreateManifestClientOptions,
   options: CreateClientOptions = {}
