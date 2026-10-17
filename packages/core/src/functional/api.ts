@@ -112,7 +112,7 @@ export interface FunctionalRouteDefinition<
   options: FunctionalRouteOptions<TInput, TOutput>;
   handle: (
     args: FunctionalRouteHandlerArgs<TInput>
-  ) => Promise<unknown> | unknown;
+  ) => Promise<InferSchemaValue<TOutput>> | InferSchemaValue<TOutput>;
 }
 
 export interface FunctionalRouteOptions<
@@ -168,9 +168,9 @@ export interface RouteBuilder<
   meta(
     options: Omit<FunctionalRouteOptions<TInput, TOutput>, 'input' | 'output'>
   ): RouteBuilder<TInput, TOutput>;
-  handle(
-    fn: FunctionalRouteDefinition<TInput, TOutput>['handle']
-  ): FunctionalRouteDefinition<TInput, TOutput>;
+  handle<TFn extends FunctionalRouteDefinition<TInput, TOutput>['handle']>(
+    fn: TFn
+  ): Omit<FunctionalRouteDefinition<TInput, TOutput>, 'handle'> & { handle: NoInfer<TFn> };
 }
 
 interface RouteBuilderInternal<
@@ -232,7 +232,7 @@ function createRouteBuilder<
     },
     handle(fn) {
       route.handle = fn;
-      return builder.__build();
+      return builder.__build() as Omit<FunctionalRouteDefinition<TInput, TOutput>, 'handle'> & { handle: typeof fn };
     },
     __build() {
       if (!route.handle) {
@@ -363,8 +363,8 @@ function normalizeRouteDefinition<
 type NormalizeDefinedRoute<T> =
   T extends RouteBuilderInternal<infer TInput, infer TOutput>
     ? FunctionalRouteDefinition<TInput, TOutput>
-    : T extends FunctionalRouteDefinition<infer TInput, infer TOutput>
-      ? FunctionalRouteDefinition<TInput, TOutput>
+    : T extends FunctionalRouteDefinition<infer _TInput, infer _TOutput>
+      ? T
       : never;
 
 type NormalizeDefinedRoutes<
