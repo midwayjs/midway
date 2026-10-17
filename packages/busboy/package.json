@@ -26,7 +26,7 @@
     "url": "https://github.com/midwayjs/midway.git"
   },
   "dependencies": {
-    "@types/busboy": "1.5.4",
+    "@types/busboy": "1.5.5",
     "busboy": "1.6.0",
     "file-type": "21.3.4"
   },
