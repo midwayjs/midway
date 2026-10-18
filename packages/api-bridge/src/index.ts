@@ -48,22 +48,29 @@ export interface ApiBridgeBasePathOptions {
 export type ApiBridgeBasePath =
   string | ApiBridgeBasePathOptions | (() => string | undefined);
 
+export type ApiRouteManifestArray = readonly ApiRouteManifestLike[];
+
+export type ApiRouteManifestSource =
+  | ApiRouteManifestArray
+  | Promise<ApiRouteManifestArray>
+  | (() => ApiRouteManifestArray | Promise<ApiRouteManifestArray>)
+  | string
+  | false;
+
 export interface CreateClientOptions<
-  TManifest extends ApiRouteManifestLike[] = never,
+  TManifestSource extends ApiRouteManifestSource = ApiRouteManifestSource,
 > extends ApiBridgeOptions {
   basePath?: ApiBridgeBasePath;
-  manifest?:
-    | TManifest
-    | Promise<TManifest>
-    | (() => TManifest | Promise<TManifest>)
-    | string
-    | false;
+  manifest?: TManifestSource;
 }
 
 export interface CreateManifestClientOptions<
-  TManifest extends ApiRouteManifestLike[] = any,
-> extends CreateClientOptions<TManifest> {
-  manifest: Exclude<NonNullable<TManifest>, false>;
+  TManifestSource extends ApiRouteManifestSource = Exclude<
+    ApiRouteManifestSource,
+    false
+  >,
+> extends CreateClientOptions<TManifestSource> {
+  manifest: TManifestSource;
 }
 
 export interface ApiClientDefinition {
@@ -76,6 +83,17 @@ export interface ApiRouteManifestLike {
   path: string;
   fullPath: string;
 }
+
+type ApiRouteManifestFromSource<TSource> = TSource extends
+  false | string | null | undefined
+  ? []
+  : TSource extends Promise<infer TResolved>
+    ? ApiRouteManifestFromSource<TResolved>
+    : TSource extends () => infer TReturned
+      ? ApiRouteManifestFromSource<Awaited<TReturned>>
+      : TSource extends ApiRouteManifestArray
+        ? TSource
+        : [];
 
 export interface ApiModuleMetaLike {
   prefix?: string;
@@ -143,7 +161,7 @@ type TupleToObject<T extends readonly any[], TField extends keyof T[number]> = {
   [K in T[number] as K[TField]]: K;
 };
 
-export interface ApiCallClient<TManifest extends ApiRouteManifestLike[] = []> {
+export interface ApiCallClient<TManifest extends ApiRouteManifestArray = []> {
   call<TOutput = unknown>(
     operationId: TManifest extends { length: infer TLength }
       ? TLength extends 0
@@ -186,7 +204,7 @@ export function createApiClientDefinition(
 }
 
 export function createOperationsFromManifest(
-  manifest: ApiRouteManifestLike[]
+  manifest: readonly ApiRouteManifestLike[]
 ): ApiBridgeOperation[] {
   return (manifest || []).map(item => ({
     operationId: item.operationId,
@@ -483,8 +501,8 @@ function isManifestClientOptions(
 }
 
 async function resolveManifestSource(
-  source: CreateManifestClientOptions['manifest']
-): Promise<ApiRouteManifestLike[]> {
+  source: ApiRouteManifestSource | undefined
+): Promise<readonly ApiRouteManifestLike[]> {
   if (typeof source === 'string') {
     const mod = await import(
       /* webpackIgnore: true */
@@ -525,16 +543,29 @@ function resolveVersionedPrefix(moduleMeta?: ApiModuleMetaLike): string {
   return joinUrlPath(`/${versionPrefix}${normalizedVersion}`, prefix);
 }
 
+export function createClient<const TManifest extends ApiRouteManifestArray>(
+  options: CreateManifestClientOptions<() => TManifest | Promise<TManifest>>
+): ApiCallClient<TManifest>;
 export function createClient<
-  const TManifest extends ApiRouteManifestLike[] = [],
->(options: CreateManifestClientOptions<TManifest>): ApiCallClient<TManifest>;
+  const TManifestSource extends ApiRouteManifestSource = [],
+>(
+  options: CreateManifestClientOptions<TManifestSource>
+): ApiCallClient<ApiRouteManifestFromSource<TManifestSource>>;
 export function createClient<
   TModules extends ApiModulesMap,
-  const TManifest extends ApiRouteManifestLike[] = [],
+  const TManifest extends ApiRouteManifestArray,
 >(
   modules: TModules,
-  options?: CreateClientOptions<TManifest>
+  options: CreateClientOptions<() => TManifest | Promise<TManifest>>
 ): ClientFromApiModules<TModules> & ApiCallClient<TManifest>;
+export function createClient<
+  TModules extends ApiModulesMap,
+  const TManifestSource extends ApiRouteManifestSource = [],
+>(
+  modules: TModules,
+  options?: CreateClientOptions<TManifestSource>
+): ClientFromApiModules<TModules> &
+  ApiCallClient<ApiRouteManifestFromSource<TManifestSource>>;
 export function createClient<TModules extends ApiModulesMap>(
   modulesOrOptions: TModules | CreateManifestClientOptions,
   options: CreateClientOptions = {}

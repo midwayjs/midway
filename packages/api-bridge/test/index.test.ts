@@ -75,11 +75,14 @@ describe('api bridge', () => {
       }
     );
 
-    expect(fetchMock).toHaveBeenCalledWith('/users/u-1?expand=profile&tags=a&tags=b', {
-      method: 'GET',
-      headers: {},
-      body: undefined,
-    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/users/u-1?expand=profile&tags=a&tags=b',
+      {
+        method: 'GET',
+        headers: {},
+        body: undefined,
+      }
+    );
     expect(result).toEqual({ id: 'u-1', name: 'harry' });
     (globalThis as any).fetch = originalFetch;
   });
@@ -323,6 +326,36 @@ describe('api bridge', () => {
     expect(user).toEqual({ id: 'u-2' });
     await expect(api.has('getUser')).resolves.toBe(true);
     await expect(api.operationIds()).resolves.toEqual(['getUser']);
+  });
+
+  it('should accept promise and loader manifest sources', async () => {
+    const adapter = jest.fn().mockResolvedValue({ id: 'u-4' });
+    const manifest = [
+      {
+        operationId: 'getUser',
+        method: 'get',
+        path: '/:id',
+        fullPath: '/api/users/:id',
+      },
+    ];
+
+    const promiseClient = createClient({
+      manifest: Promise.resolve(manifest),
+      adapter,
+    });
+    await expect(
+      promiseClient.call('getUser', { params: { id: 'u-4' } })
+    ).resolves.toEqual({ id: 'u-4' });
+
+    const loaderClient = createClient({
+      manifest: () => manifest,
+      adapter,
+    });
+    await expect(
+      loaderClient.call('getUser', { params: { id: 'u-4' } })
+    ).resolves.toEqual({ id: 'u-4' });
+
+    expect(adapter).toHaveBeenCalledTimes(2);
   });
 
   it('should route module method calls via manifest when manifest is provided', async () => {

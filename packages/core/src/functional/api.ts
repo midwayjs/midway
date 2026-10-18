@@ -171,7 +171,7 @@ export interface RouteBuilder<
   handle<TFn extends FunctionalRouteDefinition<TInput, TOutput>['handle']>(
     fn: TFn
   ): Omit<FunctionalRouteDefinition<TInput, TOutput>, 'handle'> & {
-    handle: NoInfer<TFn>;
+    handle: (args: FunctionalRouteHandlerArgs<TInput>) => ReturnType<TFn>;
   };
 }
 
@@ -237,7 +237,11 @@ function createRouteBuilder<
       return builder.__build() as Omit<
         FunctionalRouteDefinition<TInput, TOutput>,
         'handle'
-      > & { handle: typeof fn };
+      > & {
+        handle: (
+          args: FunctionalRouteHandlerArgs<TInput>
+        ) => ReturnType<typeof fn>;
+      };
     },
     __build() {
       if (!route.handle) {
