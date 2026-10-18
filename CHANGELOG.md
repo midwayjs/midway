@@ -1,6 +1,52 @@
 # Change Log
 
 
+## v4.2.6 (2026-10-18)
+
+#### :nail_care: Polish
+* `api-bridge`, `core`
+  * [#4700](https://github.com/midwayjs/midway/pull/4700) feat: optimize type narrowing in createClient ([@megumichai](https://github.com/megumichai))
+
+#### :memo: Documentation
+* [#4686](https://github.com/midwayjs/midway/pull/4686) docs: host README images in-repo so GitHub can render them ([@czy88840616](https://github.com/czy88840616))
+* [#4683](https://github.com/midwayjs/midway/pull/4683) docs: skip TypeDoc in CI and add tutorial preview routes ([@czy88840616](https://github.com/czy88840616))
+
+#### :package: Dependencies
+* Other
+  * [#4703](https://github.com/midwayjs/midway/pull/4703) chore(deps): update dependency @types/react to v18.3.31 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4701](https://github.com/midwayjs/midway/pull/4701) chore(deps): update dependency @babel/plugin-proposal-decorators to v7.29.7 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4698](https://github.com/midwayjs/midway/pull/4698) chore(deps): update dependency vue to v3.5.44 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4696](https://github.com/midwayjs/midway/pull/4696) chore(deps): update dependency vite to v8.3.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4695](https://github.com/midwayjs/midway/pull/4695) chore(deps): update dependency mysql2 to v3.24.6 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4694](https://github.com/midwayjs/midway/pull/4694) chore(deps): update dependency @types/node to v26.6.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4691](https://github.com/midwayjs/midway/pull/4691) chore(deps): update dependency vite to v6.4.4 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4681](https://github.com/midwayjs/midway/pull/4681) chore(deps): update dependency @vitejs/plugin-react to v6.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mcp`
+  * [#4702](https://github.com/midwayjs/midway/pull/4702) chore(deps): update dependency @modelcontextprotocol/sdk to v1.32.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4688](https://github.com/midwayjs/midway/pull/4688) chore(deps): update dependency @modelcontextprotocol/sdk to v1.31.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `busboy`
+  * [#4699](https://github.com/midwayjs/midway/pull/4699) fix(deps): update dependency @types/busboy to v1.5.5 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#4697](https://github.com/midwayjs/midway/pull/4697) chore(deps): update dependency @anthropic-ai/sdk to ^0.135.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4692](https://github.com/midwayjs/midway/pull/4692) fix(deps): update dependency @grpc/grpc-js to v1.14.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `captcha`, `security`
+  * [#4693](https://github.com/midwayjs/midway/pull/4693) fix(deps): update dependency nanoid to v3.3.20 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `crud`, `typeorm`
+  * [#4690](https://github.com/midwayjs/midway/pull/4690) chore(deps): update dependency typeorm to v1.1.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `express-session`
+  * [#4689](https://github.com/midwayjs/midway/pull/4689) chore(deps): update dependency memorystore to v1.6.8 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web`
+  * [#4684](https://github.com/midwayjs/midway/pull/4684) chore(deps): update dependency dayjs to v1.11.23 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`, `validation-joi`
+  * [#4680](https://github.com/midwayjs/midway/pull/4680) fix(deps): update dependency joi to v17.13.8 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- Megumi ([@megumichai](https://github.com/megumichai))
+
+
+
 ## v4.2.5 (2026-10-06)
 
 #### :memo: Documentation
