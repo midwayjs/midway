@@ -80,6 +80,32 @@ type InferSchemaValue<TSchema> = [TSchema] extends [undefined]
           ? InferSafeParseData<TResult>
           : unknown;
 
+type InferSchemaInput<TSchema> = [TSchema] extends [undefined]
+  ? unknown
+  : TSchema extends {
+        parseAsync(value: infer TInput, ...args: any[]): any;
+      }
+    ? TInput
+    : TSchema extends { parse(value: infer TInput, ...args: any[]): any }
+      ? TInput
+      : TSchema extends {
+            safeParseAsync(value: infer TInput, ...args: any[]): any;
+          }
+        ? TInput
+        : TSchema extends {
+              safeParse(value: infer TInput, ...args: any[]): any;
+            }
+          ? TInput
+          : unknown;
+
+type InferRouteHandlerOutput<TOutput, TFn extends (...args: any[]) => any> = [
+  TOutput,
+] extends [undefined]
+  ? ReturnType<TFn>
+  : [unknown] extends [TOutput]
+    ? ReturnType<TFn>
+    : InferSchemaValue<TOutput>;
+
 type InferFunctionalRouteInput<TInput extends FunctionalRouteInput> = ([
   TInput['params'],
 ] extends [undefined]
@@ -112,7 +138,10 @@ export interface FunctionalRouteDefinition<
   options: FunctionalRouteOptions<TInput, TOutput>;
   handle: (
     args: FunctionalRouteHandlerArgs<TInput>
-  ) => Promise<unknown> | unknown;
+  ) =>
+    | Promise<InferSchemaValue<TOutput> | InferSchemaInput<TOutput>>
+    | InferSchemaValue<TOutput>
+    | InferSchemaInput<TOutput>;
 }
 
 export interface FunctionalRouteOptions<
@@ -168,9 +197,13 @@ export interface RouteBuilder<
   meta(
     options: Omit<FunctionalRouteOptions<TInput, TOutput>, 'input' | 'output'>
   ): RouteBuilder<TInput, TOutput>;
-  handle(
-    fn: FunctionalRouteDefinition<TInput, TOutput>['handle']
-  ): FunctionalRouteDefinition<TInput, TOutput>;
+  handle<TFn extends FunctionalRouteDefinition<TInput, TOutput>['handle']>(
+    fn: TFn
+  ): Omit<FunctionalRouteDefinition<TInput, TOutput>, 'handle'> & {
+    handle: (
+      args: FunctionalRouteHandlerArgs<TInput>
+    ) => InferRouteHandlerOutput<TOutput, TFn>;
+  };
 }
 
 interface RouteBuilderInternal<
@@ -232,7 +265,14 @@ function createRouteBuilder<
     },
     handle(fn) {
       route.handle = fn;
-      return builder.__build();
+      return builder.__build() as Omit<
+        FunctionalRouteDefinition<TInput, TOutput>,
+        'handle'
+      > & {
+        handle: (
+          args: FunctionalRouteHandlerArgs<TInput>
+        ) => InferRouteHandlerOutput<TOutput, typeof fn>;
+      };
     },
     __build() {
       if (!route.handle) {
@@ -363,8 +403,8 @@ function normalizeRouteDefinition<
 type NormalizeDefinedRoute<T> =
   T extends RouteBuilderInternal<infer TInput, infer TOutput>
     ? FunctionalRouteDefinition<TInput, TOutput>
-    : T extends FunctionalRouteDefinition<infer TInput, infer TOutput>
-      ? FunctionalRouteDefinition<TInput, TOutput>
+    : T extends FunctionalRouteDefinition<infer _TInput, infer _TOutput>
+      ? T
       : never;
 
 type NormalizeDefinedRoutes<

@@ -10,11 +10,7 @@ import {
   MidwayInformationService,
   MidwayWebRouterService,
 } from '../../src';
-import {
-  adaptRouteManifest,
-  defineApi,
-  useInject,
-} from '../../src/functional';
+import { adaptRouteManifest, defineApi, useInject } from '../../src/functional';
 import { join } from 'path';
 import { ComponentConfigurationLoader } from '../../src/context/componentLoader';
 import {
@@ -109,7 +105,9 @@ describe('test/functional/api.test.ts', function () {
 
     const collector = new MidwayWebRouterService();
     const routes = await collector.getFlattenRouterTable();
-    const functionalRoutes = routes.filter(route => route.source === 'functional');
+    const functionalRoutes = routes.filter(
+      route => route.source === 'functional'
+    );
     expect(functionalRoutes).toHaveLength(1);
     expect(functionalRoutes[0].fullUrl).toBe('/users/:id');
   });
@@ -140,9 +138,9 @@ describe('test/functional/api.test.ts', function () {
     const route = routes[0];
     const controller = new (route.controllerClz as any)();
 
-    await expect(controller[route.method as string]({ params: {} })).rejects.toThrow(
-      'Functional API input.params validation failed'
-    );
+    await expect(
+      controller[route.method as string]({ params: {} })
+    ).rejects.toThrow('Functional API input.params validation failed');
   });
 
   it('should infer input schema type in handler', async () => {
@@ -221,7 +219,10 @@ describe('test/functional/api.test.ts', function () {
   });
 
   it('should discover functional api by entry import', async () => {
-    const baseDir = join(__dirname, '../fixtures/app-with-functional-api-entry/src');
+    const baseDir = join(
+      __dirname,
+      '../fixtures/app-with-functional-api-entry/src'
+    );
     const container = new MidwayContainer();
     container.bind(MidwayConfigService);
     container.bind(MidwayEnvironmentService);
@@ -515,4 +516,76 @@ describe('test/functional/api.test.ts', function () {
     ]);
   });
 
+  it('should keep route input types when handler takes no arguments', () => {
+    const querySchema = {
+      parse(value: unknown) {
+        return value as { id: string };
+      },
+    };
+
+    const routes = defineApi('/users', api => ({
+      get: api
+        .get('/')
+        .input({ query: querySchema })
+        .handle(() => ({ ok: true })),
+    }));
+
+    type HandlerArgs = Parameters<typeof routes.get.handle>[0];
+    type HandlerResult = Awaited<ReturnType<typeof routes.get.handle>>;
+
+    function checkTypes() {
+      const args = null as unknown as HandlerArgs;
+      const result = null as unknown as HandlerResult;
+      const query: { id: string } = args.input.query;
+      const ok: boolean = result.ok;
+
+      // @ts-expect-error query input keeps the inferred schema type
+      const invalidQuery: { id: number } = args.input.query;
+
+      return { query, ok, invalidQuery };
+    }
+
+    expect(typeof checkTypes).toBe('function');
+  });
+
+  it('should use output schema input types for handler results', () => {
+    const permissiveOutput = {
+      parse(value: unknown): number {
+        return Number(value);
+      },
+    };
+    const typedOutput = {
+      parse(value: string): number {
+        return Number(value);
+      },
+    };
+
+    const routes = defineApi('/users', api => ({
+      coerce: api
+        .get('/coerce')
+        .output(permissiveOutput)
+        .handle(() => '42'),
+      typed: api
+        .get('/typed')
+        .output(typedOutput)
+        .handle(() => '42'),
+      invalid: api
+        .get('/invalid')
+        .output(typedOutput)
+        // @ts-expect-error handler result must be parseable by the output schema
+        .handle(() => true),
+    }));
+
+    type CoerceResult = Awaited<ReturnType<typeof routes.coerce.handle>>;
+    type TypedResult = Awaited<ReturnType<typeof routes.typed.handle>>;
+
+    function checkTypes() {
+      const coerce: number = null as unknown as CoerceResult;
+      const typed: number = null as unknown as TypedResult;
+
+      return { coerce, typed };
+    }
+
+    expect(typeof checkTypes).toBe('function');
+  });
 });
