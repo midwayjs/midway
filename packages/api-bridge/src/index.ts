@@ -131,9 +131,11 @@ type _ApiRouteClientCall<TRoute> = TRoute extends {
 
 export type ClientFromApiModules<TModules extends ApiModulesMap> = {
   [TNamespace in keyof TModules]: {
-    [TRoute in keyof TModules[TNamespace] as TRoute extends '__midwayApiMeta'
-      ? never
-      : TRoute]: _ApiRouteClientCall<TModules[TNamespace][TRoute]>;
+    [
+      TRoute in keyof TModules[TNamespace] as TRoute extends '__midwayApiMeta'
+        ? never
+        : TRoute
+    ]: _ApiRouteClientCall<TModules[TNamespace][TRoute]>;
   };
 };
 
