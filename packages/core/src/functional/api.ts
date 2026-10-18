@@ -80,6 +80,32 @@ type InferSchemaValue<TSchema> = [TSchema] extends [undefined]
           ? InferSafeParseData<TResult>
           : unknown;
 
+type InferSchemaInput<TSchema> = [TSchema] extends [undefined]
+  ? unknown
+  : TSchema extends {
+        parseAsync(value: infer TInput, ...args: any[]): any;
+      }
+    ? TInput
+    : TSchema extends { parse(value: infer TInput, ...args: any[]): any }
+      ? TInput
+      : TSchema extends {
+            safeParseAsync(value: infer TInput, ...args: any[]): any;
+          }
+        ? TInput
+        : TSchema extends {
+              safeParse(value: infer TInput, ...args: any[]): any;
+            }
+          ? TInput
+          : unknown;
+
+type InferRouteHandlerOutput<TOutput, TFn extends (...args: any[]) => any> = [
+  TOutput,
+] extends [undefined]
+  ? ReturnType<TFn>
+  : [unknown] extends [TOutput]
+    ? ReturnType<TFn>
+    : InferSchemaValue<TOutput>;
+
 type InferFunctionalRouteInput<TInput extends FunctionalRouteInput> = ([
   TInput['params'],
 ] extends [undefined]
@@ -112,7 +138,10 @@ export interface FunctionalRouteDefinition<
   options: FunctionalRouteOptions<TInput, TOutput>;
   handle: (
     args: FunctionalRouteHandlerArgs<TInput>
-  ) => Promise<InferSchemaValue<TOutput>> | InferSchemaValue<TOutput>;
+  ) =>
+    | Promise<InferSchemaValue<TOutput> | InferSchemaInput<TOutput>>
+    | InferSchemaValue<TOutput>
+    | InferSchemaInput<TOutput>;
 }
 
 export interface FunctionalRouteOptions<
@@ -171,7 +200,9 @@ export interface RouteBuilder<
   handle<TFn extends FunctionalRouteDefinition<TInput, TOutput>['handle']>(
     fn: TFn
   ): Omit<FunctionalRouteDefinition<TInput, TOutput>, 'handle'> & {
-    handle: (args: FunctionalRouteHandlerArgs<TInput>) => ReturnType<TFn>;
+    handle: (
+      args: FunctionalRouteHandlerArgs<TInput>
+    ) => InferRouteHandlerOutput<TOutput, TFn>;
   };
 }
 
@@ -240,7 +271,7 @@ function createRouteBuilder<
       > & {
         handle: (
           args: FunctionalRouteHandlerArgs<TInput>
-        ) => ReturnType<typeof fn>;
+        ) => InferRouteHandlerOutput<TOutput, typeof fn>;
       };
     },
     __build() {

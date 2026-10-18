@@ -547,4 +547,45 @@ describe('test/functional/api.test.ts', function () {
 
     expect(typeof checkTypes).toBe('function');
   });
+
+  it('should use output schema input types for handler results', () => {
+    const permissiveOutput = {
+      parse(value: unknown): number {
+        return Number(value);
+      },
+    };
+    const typedOutput = {
+      parse(value: string): number {
+        return Number(value);
+      },
+    };
+
+    const routes = defineApi('/users', api => ({
+      coerce: api
+        .get('/coerce')
+        .output(permissiveOutput)
+        .handle(() => '42'),
+      typed: api
+        .get('/typed')
+        .output(typedOutput)
+        .handle(() => '42'),
+      invalid: api
+        .get('/invalid')
+        .output(typedOutput)
+        // @ts-expect-error handler result must be parseable by the output schema
+        .handle(() => true),
+    }));
+
+    type CoerceResult = Awaited<ReturnType<typeof routes.coerce.handle>>;
+    type TypedResult = Awaited<ReturnType<typeof routes.typed.handle>>;
+
+    function checkTypes() {
+      const coerce: number = null as unknown as CoerceResult;
+      const typed: number = null as unknown as TypedResult;
+
+      return { coerce, typed };
+    }
+
+    expect(typeof checkTypes).toBe('function');
+  });
 });
