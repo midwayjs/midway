@@ -1561,8 +1561,8 @@ importers:
         specifier: workspace:*
         version: link:../mock
       class-validator:
-        specifier: ^0.14.1
-        version: 0.14.4
+        specifier: ^0.15.0
+        version: 0.15.1
       tsup:
         specifier: 8.5.1
         version: 8.5.1(postcss@8.5.30)(tsx@4.23.15)(typescript@5.6.3)(yaml@2.9.1)
@@ -6399,8 +6399,8 @@ packages:
   class-validator-multi-lang-lite@0.140.1:
     resolution: {integrity: sha512-gUuHWVN2g+DHxHRDajeRsnKMriXllE71FHhLXpE1yxHBfMrbTy3iohnFZ4rLJt3kZZFqoKnEFQWoeBefcxk0Vg==}
 
-  class-validator@0.14.4:
-    resolution: {integrity: sha512-AwNusCCam51q703dW82x95tOqQp6oC9HNUl724KxJJOfnKscI8dOloXFgyez7LbTTKWuRBA37FScqVbJEoq8Yw==}
+  class-validator@0.15.1:
+    resolution: {integrity: sha512-LqoS80HBBSCVhz/3KloUly0ovokxpdOLR++Al3J3+dHXWt9sTKlKd4eYtoxhxyUjoe5+UcIM+5k9MIxyBWnRTw==}
 
   clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
@@ -17978,7 +17978,7 @@ snapshots:
       libphonenumber-js: 1.13.14
       validator: 13.15.35
 
-  class-validator@0.14.4:
+  class-validator@0.15.1:
     dependencies:
       '@types/validator': 13.15.10
       libphonenumber-js: 1.13.14
