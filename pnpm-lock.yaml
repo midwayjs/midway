@@ -21,8 +21,8 @@ importers:
         specifier: 22.12.0
         version: 22.12.0
       '@vercel/ncc':
-        specifier: 0.38.4
-        version: 0.38.4
+        specifier: 0.45.0
+        version: 0.45.0
       autocannon:
         specifier: 7.15.0
         version: 7.15.0
@@ -5469,8 +5469,8 @@ packages:
   '@ungap/structured-clone@1.4.0':
     resolution: {integrity: sha512-1mEZtMKPM09vDmQt5y7YvmN2+DFTP7Tg0EWXdic8/C6VRnpb33e4ghisCIE3WZjsE2N8mf+QV1Zqh7ZFYLWInQ==}
 
-  '@vercel/ncc@0.38.4':
-    resolution: {integrity: sha512-8LwjnlP39s08C08J5NstzriPvW1SP8Zfpp1BvC2sI35kPeZnHfxVkCwu4/+Wodgnd60UtT1n8K8zw+Mp7J9JmQ==}
+  '@vercel/ncc@0.45.0':
+    resolution: {integrity: sha512-8zPi1yO2mHpoKTD+e+Bf0ZT3e+sWHSOyGapm9s7b5R0gxJi3CiFTqmeQiMEyu6ejrz2s09M8JkEoUaTWjBJPQQ==}
     hasBin: true
 
   '@vitejs/plugin-react@4.7.0':
@@ -16837,7 +16837,7 @@ snapshots:
 
   '@ungap/structured-clone@1.4.0': {}
 
-  '@vercel/ncc@0.38.4': {}
+  '@vercel/ncc@0.45.0': {}
 
   '@vitejs/plugin-react@4.7.0(vite@6.4.4(@types/node@22.12.0)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))':
     dependencies:
