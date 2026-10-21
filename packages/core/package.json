@@ -22,7 +22,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@anthropic-ai/sdk": "^0.135.0",
+    "@anthropic-ai/sdk": "^0.137.0",
     "@midwayjs/logger": "^4.0.0",
     "eventsource": "2.0.2",
     "koa": "3.1.2",
