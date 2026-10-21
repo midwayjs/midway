@@ -12,7 +12,7 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "dotenv": "16.4.7"
+    "dotenv": "16.6.1"
   },
   "dependencies": {
     "cos-nodejs-sdk-v5": "2.15.4"
