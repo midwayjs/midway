@@ -23,7 +23,7 @@
   "devDependencies": {
     "@midwayjs/core": "workspace:^",
     "tsup": "8.5.1",
-    "zod": "3.25.76"
+    "zod": "4.6.6"
   },
   "scripts": {
     "build": "tsup",
