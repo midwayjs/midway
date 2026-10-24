@@ -873,8 +873,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       '@modelcontextprotocol/sdk':
-        specifier: 1.32.1
-        version: 1.32.1(zod@3.25.76)
+        specifier: 1.32.2
+        version: 1.32.2(zod@3.25.76)
       zod:
         specifier: 3.25.76
         version: 3.25.76
@@ -3922,8 +3922,8 @@ packages:
     peerDependencies:
       '@mikro-orm/core': 7.0.13
 
-  '@modelcontextprotocol/sdk@1.32.1':
-    resolution: {integrity: sha512-2DdE+SJDtzLEEWzY1ZjY7Q+VcPhcV1KisD3zI4u0XZyktsjHum1mwbMI+JaulUBi2OZk+KJAi2uPXzxichPkdw==}
+  '@modelcontextprotocol/sdk@1.32.2':
+    resolution: {integrity: sha512-SWsVtH/0vULSQStoZ6xxH2K09Li8fXYTMC64ZeogCdpZ3XSi1eCPOByV1OpuJxuI3OcmHhosDWYyii07tpPsLw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -15349,7 +15349,7 @@ snapshots:
       better-sqlite3: 12.9.0
       kysely: 0.28.16
 
-  '@modelcontextprotocol/sdk@1.32.1(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.32.2(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 1.19.17(hono@4.13.12)
       ajv: 8.20.0
