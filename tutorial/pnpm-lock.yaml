@@ -32,7 +32,7 @@ importers:
         version: 6.1.2(vite@8.3.5(@types/node@26.6.5)(yaml@2.9.1))
       marked:
         specifier: ^18.0.14
-        version: 18.0.14
+        version: 18.1.1
       shiki:
         specifier: ^4.5.0
         version: 4.5.0
@@ -466,8 +466,8 @@ packages:
     resolution: {integrity: sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==}
     engines: {node: '>= 12.0.0'}
 
-  marked@18.0.14:
-    resolution: {integrity: sha512-mBHK6FBHuBAlhgRe88w9F0O1AbwwXJUcQibUbC/QcdTbVGAD7aWza+xt3N6oT/jCZx3/OMeS+8rnuiHZcQ9s7A==}
+  marked@18.1.1:
+    resolution: {integrity: sha512-zEGgrtUG8crk+TrMacJSVABU4DYDDkS8uqgU3ohrn/2fW9C2AEfUrO3m6IhpIpQpl7YcVpiXXC9cSMWDANT3dg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -917,7 +917,7 @@ snapshots:
       lightningcss-win32-arm64-msvc: 1.33.0
       lightningcss-win32-x64-msvc: 1.33.0
 
-  marked@18.0.14: {}
+  marked@18.1.1: {}
 
   mdast-util-to-hast@13.2.1:
     dependencies:
