@@ -321,8 +321,8 @@ importers:
         specifier: 11.4.1
         version: 11.4.1
       zod:
-        specifier: 3.25.76
-        version: 3.25.76
+        specifier: 4.6.6
+        version: 4.6.6
 
   packages/cache-manager:
     dependencies:
@@ -522,7 +522,7 @@ importers:
     devDependencies:
       '@anthropic-ai/sdk':
         specifier: ^0.137.0
-        version: 0.137.0(zod@4.2.1)
+        version: 0.137.0(zod@4.6.6)
       '@midwayjs/logger':
         specifier: ^4.0.0
         version: 4.1.0
@@ -537,7 +537,7 @@ importers:
         version: 3.4.0
       openai:
         specifier: ^6.35.0
-        version: 6.49.0(ws@8.21.0)(zod@4.2.1)
+        version: 6.49.0(ws@8.21.0)(zod@4.6.6)
       raw-body:
         specifier: 2.5.2
         version: 2.5.2
@@ -874,10 +874,10 @@ importers:
         version: link:../mock
       '@modelcontextprotocol/sdk':
         specifier: 1.32.2
-        version: 1.32.2(zod@3.25.76)
+        version: 1.32.2(zod@4.6.6)
       zod:
-        specifier: 3.25.76
-        version: 3.25.76
+        specifier: 4.6.6
+        version: 4.6.6
 
   packages/mikro:
     devDependencies:
@@ -1536,8 +1536,8 @@ importers:
         specifier: workspace:^
         version: link:../mock
       zod:
-        specifier: 3.24.1
-        version: 3.24.1
+        specifier: 4.6.6
+        version: 4.6.6
 
   packages/validation-class-validator:
     dependencies:
@@ -1605,10 +1605,10 @@ importers:
         version: 24.2.3(typescript@5.6.3)
       zod-i18n-map:
         specifier: 2.27.0
-        version: 2.27.0(i18next@24.2.3(typescript@5.6.3))(zod@3.25.76)
+        version: 2.27.0(i18next@24.2.3(typescript@5.6.3))(zod@4.6.6)
       zod-validation-error:
         specifier: 3.5.4
-        version: 3.5.4(zod@3.25.76)
+        version: 3.5.4(zod@4.6.6)
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -1617,8 +1617,8 @@ importers:
         specifier: 8.5.1
         version: 8.5.1(postcss@8.5.31)(tsx@4.23.15)(typescript@5.6.3)(yaml@2.9.1)
       zod:
-        specifier: 3.25.76
-        version: 3.25.76
+        specifier: 4.6.6
+        version: 4.6.6
 
   packages/validation-zod4:
     dependencies:
@@ -1630,13 +1630,13 @@ importers:
         version: link:../validation
       '@semihbou/zod-i18n-map':
         specifier: 0.0.4
-        version: 0.0.4(i18next@24.2.3(typescript@5.6.3))(zod@4.2.1)
+        version: 0.0.4(i18next@24.2.3(typescript@5.6.3))(zod@4.6.6)
       i18next:
         specifier: 24.2.3
         version: 24.2.3(typescript@5.6.3)
       zod-validation-error:
         specifier: 5.0.0
-        version: 5.0.0(zod@4.2.1)
+        version: 5.0.0(zod@4.6.6)
     devDependencies:
       '@midwayjs/core':
         specifier: workspace:^
@@ -1645,8 +1645,8 @@ importers:
         specifier: 8.5.1
         version: 8.5.1(postcss@8.5.31)(tsx@4.23.15)(typescript@5.6.3)(yaml@2.9.1)
       zod:
-        specifier: 4.2.1
-        version: 4.2.1
+        specifier: 4.6.6
+        version: 4.6.6
 
   packages/version: {}
 
@@ -13754,14 +13754,8 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
-  zod@3.24.1:
-    resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
-
-  zod@3.25.76:
-    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
-
-  zod@4.2.1:
-    resolution: {integrity: sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==}
+  zod@4.6.6:
+    resolution: {integrity: sha512-4UmzQUF5fxvfcYHlbjBmejU+w+hbDnWFx4aS8kBx7nPBHcO2SqPbpAG8snbdg+Xse4pRefR98hgjFgIMCI/UhA==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -13773,13 +13767,13 @@ packages:
 
 snapshots:
 
-  '@anthropic-ai/sdk@0.137.0(zod@4.2.1)':
+  '@anthropic-ai/sdk@0.137.0(zod@4.6.6)':
     dependencies:
       '@opentelemetry/api': 1.9.1
       json-schema-to-ts: 3.1.1
       standardwebhooks: 1.1.1
     optionalDependencies:
-      zod: 4.2.1
+      zod: 4.6.6
 
   '@apidevtools/json-schema-ref-parser@13.0.2':
     dependencies:
@@ -15361,7 +15355,7 @@ snapshots:
       better-sqlite3: 12.9.0
       kysely: 0.28.16
 
-  '@modelcontextprotocol/sdk@1.32.2(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.32.2(zod@4.6.6)':
     dependencies:
       '@hono/node-server': 1.19.17(hono@4.13.12)
       ajv: 8.20.0
@@ -15378,8 +15372,8 @@ snapshots:
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
       raw-body: 3.0.2
-      zod: 3.25.76
-      zod-to-json-schema: 3.25.2(zod@3.25.76)
+      zod: 4.6.6
+      zod-to-json-schema: 3.25.2(zod@4.6.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -16162,10 +16156,10 @@ snapshots:
 
   '@sec-ant/readable-stream@0.4.1': {}
 
-  '@semihbou/zod-i18n-map@0.0.4(i18next@24.2.3(typescript@5.6.3))(zod@4.2.1)':
+  '@semihbou/zod-i18n-map@0.0.4(i18next@24.2.3(typescript@5.6.3))(zod@4.6.6)':
     dependencies:
       i18next: 24.2.3(typescript@5.6.3)
-      zod: 4.2.1
+      zod: 4.6.6
 
   '@shikijs/core@1.29.2':
     dependencies:
@@ -23691,10 +23685,10 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@6.49.0(ws@8.21.0)(zod@4.2.1):
+  openai@6.49.0(ws@8.21.0)(zod@4.6.6):
     optionalDependencies:
       ws: 8.21.0
-      zod: 4.2.1
+      zod: 4.6.6
 
   openapi-types@12.1.3: {}
 
@@ -27100,28 +27094,24 @@ snapshots:
       split2: 2.2.0
       through2: 2.0.5
 
-  zod-i18n-map@2.27.0(i18next@24.2.3(typescript@5.6.3))(zod@3.25.76):
+  zod-i18n-map@2.27.0(i18next@24.2.3(typescript@5.6.3))(zod@4.6.6):
     dependencies:
       i18next: 24.2.3(typescript@5.6.3)
-      zod: 3.25.76
+      zod: 4.6.6
 
-  zod-to-json-schema@3.25.2(zod@3.25.76):
+  zod-to-json-schema@3.25.2(zod@4.6.6):
     dependencies:
-      zod: 3.25.76
+      zod: 4.6.6
 
-  zod-validation-error@3.5.4(zod@3.25.76):
+  zod-validation-error@3.5.4(zod@4.6.6):
     dependencies:
-      zod: 3.25.76
+      zod: 4.6.6
 
-  zod-validation-error@5.0.0(zod@4.2.1):
+  zod-validation-error@5.0.0(zod@4.6.6):
     dependencies:
-      zod: 4.2.1
+      zod: 4.6.6
 
-  zod@3.24.1: {}
-
-  zod@3.25.76: {}
-
-  zod@4.2.1: {}
+  zod@4.6.6: {}
 
   zwitch@2.0.4: {}
 
