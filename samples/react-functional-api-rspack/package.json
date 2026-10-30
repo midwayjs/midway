@@ -30,6 +30,6 @@
     "mocha": "^10.2.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.5",
-    "typescript": "5.6.3"
+    "typescript": "5.9.3"
   }
 }
