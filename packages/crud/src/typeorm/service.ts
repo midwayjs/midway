@@ -1,3 +1,4 @@
+import { IsNull } from 'typeorm';
 import { BaseCrudService } from '../service';
 import {
   assertSoftDeleteSupported,
@@ -27,28 +28,28 @@ export class TypeOrmCrudService<T> extends BaseCrudService<T> {
     }
   }
 
-  async list(query: CrudQuery, _ctx?: CrudContext): Promise<CrudPageResult<T>> {
-    void _ctx;
+  async list(query: CrudQuery, ctx?: CrudContext): Promise<CrudPageResult<T>> {
     const repo = this.getRepo();
-    if (this.resolveDeleteMode() === 'soft') {
+    const options = this.resolveCrudOptions(ctx);
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertSoftDeleteSupported(repo);
     }
-    const qb = buildTypeOrmQueryBuilder(repo, query, this.crudOptions);
+    const qb = buildTypeOrmQueryBuilder(repo, query, options);
     const [data, total] = await withTypeOrmErrorMapping(() =>
       qb.getManyAndCount()
     );
     return this.normalizePageResult(data, query.page, query.limit, total);
   }
 
-  async findOne(id: CrudIdValue, _ctx?: CrudContext): Promise<T | null> {
-    void _ctx;
+  async findOne(id: CrudIdValue, ctx?: CrudContext): Promise<T | null> {
     const repo = this.getRepo();
     const where: Record<string, unknown> = {};
-    if (this.resolveDeleteMode() === 'soft') {
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertSoftDeleteSupported(repo);
-      where[getSoftDeleteColumnName(repo)] = null;
+      // TypeORM rejects a raw null in find where-clauses. IsNull() is SQL NULL.
+      where[getSoftDeleteColumnName(repo)] = IsNull();
     }
-    const idField = this.getIdField();
+    const idField = this.getIdField(ctx);
     where[idField] = id;
     return withTypeOrmErrorMapping(() =>
       repo.findOne({
@@ -64,10 +65,9 @@ export class TypeOrmCrudService<T> extends BaseCrudService<T> {
     return withTypeOrmErrorMapping(() => repo.save(entity));
   }
 
-  async update(id: CrudIdValue, data: unknown, _ctx?: CrudContext): Promise<T> {
-    void _ctx;
+  async update(id: CrudIdValue, data: unknown, ctx?: CrudContext): Promise<T> {
     const repo = this.getRepo();
-    const idField = this.getIdField();
+    const idField = this.getIdField(ctx);
     const existing = this.assertEntityFound(
       await repo.findOne({
         where: {
@@ -83,11 +83,10 @@ export class TypeOrmCrudService<T> extends BaseCrudService<T> {
     return this.update(id, data, ctx);
   }
 
-  async delete(id: CrudIdValue, _ctx?: CrudContext): Promise<void> {
-    void _ctx;
+  async delete(id: CrudIdValue, ctx?: CrudContext): Promise<void> {
     const repo = this.getRepo();
-    const idField = this.getIdField();
-    if (this.resolveDeleteMode() === 'soft') {
+    const idField = this.getIdField(ctx);
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertSoftDeleteSupported(repo);
       await withTypeOrmErrorMapping(() =>
         repo.softDelete({
@@ -110,7 +109,7 @@ export class TypeOrmCrudService<T> extends BaseCrudService<T> {
     return this.repo;
   }
 
-  protected getIdField(): string {
-    return this.crudOptions?.id ?? 'id';
+  protected getIdField(ctx?: CrudContext): string {
+    return this.resolveCrudOptions(ctx)?.id ?? 'id';
   }
 }
