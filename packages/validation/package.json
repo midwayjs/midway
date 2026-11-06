@@ -33,6 +33,6 @@
     "@midwayjs/express": "workspace:^",
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
-    "zod": "3.24.1"
+    "zod": "4.6.6"
   }
 }
