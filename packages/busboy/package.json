@@ -41,6 +41,6 @@
     "@midwayjs/validation-zod": "workspace:^",
     "@midwayjs/web": "workspace:^",
     "fs-extra": "11.4.1",
-    "zod": "3.25.76"
+    "zod": "4.6.6"
   }
 }
