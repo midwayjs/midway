@@ -59,6 +59,35 @@ describe('route builder helpers', () => {
     await expect(handler({ query: {} })).rejects.toThrow(CrudConfigError);
   });
 
+  it('should pass controller CRUD options on the call without mutating the service', async () => {
+    const setCrudOptions = jest.fn();
+    const remove = jest.fn().mockResolvedValue(undefined);
+    const options = {
+      ...baseOptions,
+      delete: {
+        mode: 'soft' as const,
+      },
+    };
+    const handler = createCrudRouteHandler(
+      'delete',
+      {
+        crudService: {
+          setCrudOptions,
+          delete: remove,
+        },
+      },
+      options
+    );
+
+    await handler({ params: { id: '1' } });
+
+    expect(setCrudOptions).not.toHaveBeenCalled();
+    expect(remove).toHaveBeenCalledWith(1, {
+      ctx: undefined,
+      crudOptions: options,
+    });
+  });
+
   it('should route replace to replace() and fallback to update()', async () => {
     const replace = jest.fn().mockResolvedValue({ ok: 'replace' });
     const replaceHandler = createCrudRouteHandler(
@@ -81,7 +110,15 @@ describe('route builder helpers', () => {
         body: { name: 'neo' },
       })
     ).resolves.toEqual({ ok: 'replace' });
-    expect(replace).toHaveBeenCalledWith(1, { name: 'neo' }, { ctx: undefined });
+    expect(replace).toHaveBeenCalledWith(1, { name: 'neo' }, {
+      ctx: undefined,
+      crudOptions: {
+        ...baseOptions,
+        dto: {
+          replace: ReplaceDto as any,
+        },
+      },
+    });
 
     const update = jest.fn().mockResolvedValue({ ok: 'update' });
     const fallbackHandler = createCrudRouteHandler(
@@ -99,7 +136,10 @@ describe('route builder helpers', () => {
         body: { name: 'trinity' },
       })
     ).resolves.toEqual({ ok: 'update' });
-    expect(update).toHaveBeenCalledWith(2, { name: 'trinity' }, { ctx: undefined });
+    expect(update).toHaveBeenCalledWith(2, { name: 'trinity' }, {
+      ctx: undefined,
+      crudOptions: baseOptions,
+    });
   });
 
   it('should normalize controller request bags for koa and express style inputs', async () => {
@@ -166,6 +206,7 @@ describe('route builder helpers', () => {
         body: { ok: true },
         requestContext: { id: 'ctx' },
       },
+      crudOptions: baseOptions,
     });
   });
 
@@ -239,8 +280,162 @@ describe('route builder helpers', () => {
       })
     ).resolves.toBeUndefined();
 
-    expect(create).toHaveBeenCalledWith({ name: 'neo' }, { ctx: undefined });
-    expect(update).toHaveBeenCalledWith(3, { name: 'trinity' }, { ctx: undefined });
-    expect(remove).toHaveBeenCalledWith(4, { ctx: undefined });
+    expect(create).toHaveBeenCalledWith({ name: 'neo' }, {
+      ctx: undefined,
+      crudOptions: baseOptions,
+    });
+    expect(update).toHaveBeenCalledWith(3, { name: 'trinity' }, {
+      ctx: undefined,
+      crudOptions: baseOptions,
+    });
+    expect(remove).toHaveBeenCalledWith(4, {
+      ctx: undefined,
+      crudOptions: baseOptions,
+    });
+  });
+
+  it('should pass validation defaults to the CRUD service', async () => {
+    const create = jest.fn().mockResolvedValue({ created: true });
+    const validate = jest.fn().mockReturnValue({
+      value: {
+        name: 'neo',
+        status: 'active',
+      },
+    });
+    const handler = createCrudRouteHandler(
+      'create',
+      {
+        crudService: {
+          create,
+        },
+      },
+      {
+        ...baseOptions,
+        dto: {
+          create: class CreateDto {} as any,
+        },
+      }
+    );
+
+    await handler({
+      body: { name: 'neo' },
+      ctx: {
+        requestContext: {
+          getAsync: jest.fn().mockResolvedValue({ validate }),
+        },
+      },
+    });
+
+    expect(create).toHaveBeenCalledWith(
+      { name: 'neo', status: 'active' },
+      expect.any(Object)
+    );
+  });
+
+  it('should keep service options when the controller omits them', async () => {
+    const stored = {
+      ...baseOptions,
+      delete: {
+        mode: 'soft' as const,
+      },
+      query: {
+        searchable: ['name'],
+        sortable: ['id'],
+      },
+    };
+    const list = jest.fn().mockResolvedValue({ data: [] });
+    const handler = createCrudRouteHandler(
+      'list',
+      {
+        crudService: {
+          getCrudOptions: () => stored,
+          setCrudOptions: jest.fn(),
+          list,
+        },
+      },
+      {
+        ...baseOptions,
+        query: {
+          maxLimit: 5,
+        },
+      }
+    );
+
+    await handler({
+      query: {
+        search: 'neo',
+        sort: 'id:DESC',
+        limit: '100',
+      },
+    });
+
+    expect(list).toHaveBeenCalledWith(
+      expect.objectContaining({
+        search: 'neo',
+        limit: 5,
+        sort: [{ field: 'id', order: 'DESC' }],
+      }),
+      expect.objectContaining({
+        crudOptions: expect.objectContaining({
+          delete: { mode: 'soft' },
+          query: {
+            searchable: ['name'],
+            sortable: ['id'],
+            maxLimit: 5,
+          },
+        }),
+      })
+    );
+    expect(stored.delete).toEqual({ mode: 'soft' });
+  });
+
+  it('should keep each controller options when calls overlap on one service', async () => {
+    const serviceOptions = {
+      ...baseOptions,
+      delete: {
+        mode: 'soft' as const,
+      },
+    };
+    const service = {
+      getCrudOptions: () => serviceOptions,
+      setCrudOptions: jest.fn(),
+      async delete(_id: number, ctx: { crudOptions?: { delete?: { mode?: string } } }) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+        return ctx.crudOptions?.delete?.mode;
+      },
+    };
+    const soft = createCrudRouteHandler(
+      'delete',
+      { crudService: service },
+      {
+        ...baseOptions,
+        delete: { mode: 'soft' as const },
+      }
+    );
+    const hard = createCrudRouteHandler(
+      'delete',
+      { crudService: service },
+      {
+        ...baseOptions,
+        delete: { mode: 'hard' as const },
+      }
+    );
+    const inherited = createCrudRouteHandler(
+      'delete',
+      { crudService: service },
+      baseOptions
+    );
+
+    const [softMode, hardMode, inheritedMode] = await Promise.all([
+      soft({ params: { id: '1' } }),
+      hard({ params: { id: '2' } }),
+      inherited({ params: { id: '3' } }),
+    ]);
+
+    expect(softMode).toBe('soft');
+    expect(hardMode).toBe('hard');
+    expect(inheritedMode).toBe('soft');
+    expect(service.setCrudOptions).not.toHaveBeenCalled();
+    expect(service.getCrudOptions()).toBe(serviceOptions);
   });
 });

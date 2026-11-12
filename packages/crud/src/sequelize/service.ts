@@ -26,14 +26,15 @@ export class SequelizeCrudService<T> extends BaseCrudService<T> {
     }
   }
 
-  async list(query: CrudQuery, _ctx?: CrudContext): Promise<CrudPageResult<T>> {
-    void _ctx;
+  async list(query: CrudQuery, ctx?: CrudContext): Promise<CrudPageResult<T>> {
     const repo = this.getRepo();
-    if (this.resolveDeleteMode() === 'soft') {
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertSequelizeSoftDeleteSupported(repo);
     }
     const result = await withSequelizeErrorMapping(() =>
-      repo.findAndCountAll(buildSequelizeFindOptions(query, this.crudOptions))
+      repo.findAndCountAll(
+        buildSequelizeFindOptions(query, this.resolveCrudOptions(ctx))
+      )
     );
     return this.normalizePageResult(
       result.rows,
@@ -43,10 +44,9 @@ export class SequelizeCrudService<T> extends BaseCrudService<T> {
     );
   }
 
-  async findOne(id: CrudIdValue, _ctx?: CrudContext): Promise<T | null> {
-    void _ctx;
+  async findOne(id: CrudIdValue, ctx?: CrudContext): Promise<T | null> {
     const repo = this.getRepo();
-    if (this.resolveDeleteMode() === 'soft') {
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertSequelizeSoftDeleteSupported(repo);
     }
     return withSequelizeErrorMapping(() => repo.findByPk(id));
@@ -57,36 +57,34 @@ export class SequelizeCrudService<T> extends BaseCrudService<T> {
     return withSequelizeErrorMapping(() => this.getRepo().create(data as any));
   }
 
-  async update(id: CrudIdValue, data: unknown, _ctx?: CrudContext): Promise<T> {
-    void _ctx;
+  async update(id: CrudIdValue, data: unknown, ctx?: CrudContext): Promise<T> {
     const repo = this.getRepo();
     const [count] = await withSequelizeErrorMapping(() =>
       repo.update(data as any, {
         where: {
-          [this.getIdField()]: id,
+          [this.getIdField(ctx)]: id,
         },
       })
     );
     if (!count) {
       throw this.assertEntityFound(null);
     }
-    return this.assertEntityFound(await this.findOne(id));
+    return this.assertEntityFound(await this.findOne(id, ctx));
   }
 
   async replace(id: CrudIdValue, data: unknown, ctx?: CrudContext): Promise<T> {
     return this.update(id, data, ctx);
   }
 
-  async delete(id: CrudIdValue, _ctx?: CrudContext): Promise<void> {
-    void _ctx;
+  async delete(id: CrudIdValue, ctx?: CrudContext): Promise<void> {
     const repo = this.getRepo();
-    if (this.resolveDeleteMode() === 'soft') {
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertSequelizeSoftDeleteSupported(repo);
     }
     const affected = await withSequelizeErrorMapping(() =>
       repo.destroy({
         where: {
-          [this.getIdField()]: id,
+          [this.getIdField(ctx)]: id,
         },
       })
     );
@@ -102,7 +100,7 @@ export class SequelizeCrudService<T> extends BaseCrudService<T> {
     return this.repo;
   }
 
-  protected getIdField(): string {
-    return this.crudOptions?.id ?? 'id';
+  protected getIdField(ctx?: CrudContext): string {
+    return this.resolveCrudOptions(ctx)?.id ?? 'id';
   }
 }

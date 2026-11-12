@@ -97,6 +97,100 @@ describe('validation and swagger helpers', () => {
     expect(validate).toHaveBeenNthCalledWith(2, UpdateDto, { name: 'neo' });
   });
 
+  it('should replace payload values with transformed validation results', async () => {
+    const validate = jest
+      .fn()
+      .mockReturnValueOnce({ value: { page: 1, limit: 20 } })
+      .mockReturnValueOnce({ value: { name: 'neo', status: 'active' } });
+    const context = {
+      requestContext: {
+        getAsync: jest.fn().mockResolvedValue({ validate }),
+      },
+    };
+    const queryPayload = {
+      query: { page: 1 },
+      ctx: context,
+    };
+    const bodyPayload = {
+      body: { name: 'neo' },
+      ctx: context,
+    };
+
+    await applyCrudValidation('list', options, queryPayload);
+    await applyCrudValidation('create', options, bodyPayload);
+
+    expect(queryPayload.query).toEqual({ page: 1, limit: 20 });
+    expect(bodyPayload.body).toEqual({ name: 'neo', status: 'active' });
+  });
+
+  it('should keep coerced update fields and drop defaults for absent keys', async () => {
+    const validate = jest.fn().mockImplementation((_dto, value) => ({
+      value: {
+        name: value?.name,
+        visits: value?.visits === undefined ? 0 : Number(value.visits),
+        role: value?.role ?? 'guest',
+        profile: value?.profile
+          ? {
+              city: value.profile.city,
+              zip: value.profile.zip ?? '000000',
+            }
+          : undefined,
+      },
+    }));
+    const payload = {
+      body: {
+        name: 'neo',
+        visits: '8',
+        profile: {
+          city: 'hangzhou',
+        },
+      },
+      ctx: {
+        requestContext: {
+          getAsync: jest.fn().mockResolvedValue({ validate }),
+        },
+      },
+    };
+
+    await applyCrudValidation('update', options, payload);
+
+    expect(payload.body).toEqual({
+      name: 'neo',
+      visits: 8,
+      profile: {
+        city: 'hangzhou',
+      },
+    });
+  });
+
+  it('should keep defaults for create and replace bodies', async () => {
+    const validate = jest.fn().mockImplementation((_dto, value) => ({
+      value: {
+        name: value?.name,
+        role: value?.role ?? 'guest',
+      },
+    }));
+    const context = {
+      requestContext: {
+        getAsync: jest.fn().mockResolvedValue({ validate }),
+      },
+    };
+    const createPayload = {
+      body: { name: 'neo' },
+      ctx: context,
+    };
+    const replacePayload = {
+      body: { name: 'neo' },
+      ctx: context,
+    };
+
+    await applyCrudValidation('create', options, createPayload);
+    await applyCrudValidation('replace', options, replacePayload);
+
+    expect(createPayload.body).toEqual({ name: 'neo', role: 'guest' });
+    expect(replacePayload.body).toEqual({ name: 'neo', role: 'guest' });
+  });
+
   it('should fallback query validation payload to an empty object when query is missing', async () => {
     const validate = jest.fn();
     await applyCrudValidation('list', options, {

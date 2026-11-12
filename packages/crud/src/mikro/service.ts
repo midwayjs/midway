@@ -27,20 +27,18 @@ export class MikroCrudService<T> extends BaseCrudService<T> {
     }
   }
 
-  async list(query: CrudQuery, _ctx?: CrudContext): Promise<CrudPageResult<T>> {
-    void _ctx;
+  async list(query: CrudQuery, ctx?: CrudContext): Promise<CrudPageResult<T>> {
     const repo = this.getRepo();
-    const where = this.getScopedWhere(query);
+    const where = this.getScopedWhere(query, ctx);
     const [data, total] = await withMikroErrorMapping(() =>
       repo.findAndCount(where, buildMikroFindOptions(query))
     );
     return this.normalizePageResult(data, query.page, query.limit, total);
   }
 
-  async findOne(id: CrudIdValue, _ctx?: CrudContext): Promise<T | null> {
-    void _ctx;
+  async findOne(id: CrudIdValue, ctx?: CrudContext): Promise<T | null> {
     return withMikroErrorMapping(() =>
-      this.getRepo().findOne(this.getIdWhere(id))
+      this.getRepo().findOne(this.getIdWhere(id, ctx))
     );
   }
 
@@ -51,9 +49,8 @@ export class MikroCrudService<T> extends BaseCrudService<T> {
     return entity;
   }
 
-  async update(id: CrudIdValue, data: unknown, _ctx?: CrudContext): Promise<T> {
-    void _ctx;
-    const existing = this.assertEntityFound(await this.findOne(id));
+  async update(id: CrudIdValue, data: unknown, ctx?: CrudContext): Promise<T> {
+    const existing = this.assertEntityFound(await this.findOne(id, ctx));
     const entity = this.getRepo().assign(existing, data as any);
     await withMikroErrorMapping(() => this.getRepo().persistAndFlush(entity));
     return entity;
@@ -63,18 +60,17 @@ export class MikroCrudService<T> extends BaseCrudService<T> {
     return this.update(id, data, ctx);
   }
 
-  async delete(id: CrudIdValue, _ctx?: CrudContext): Promise<void> {
-    void _ctx;
+  async delete(id: CrudIdValue, ctx?: CrudContext): Promise<void> {
     const repo = this.getRepo();
-    if (this.resolveDeleteMode() === 'soft') {
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertMikroSoftDeleteSupported(repo);
-      const existing = this.assertEntityFound(await this.findOne(id));
+      const existing = this.assertEntityFound(await this.findOne(id, ctx));
       repo.assign(existing, { deletedAt: new Date() } as any);
       await withMikroErrorMapping(() => repo.persistAndFlush(existing));
       return;
     }
     const affected = await withMikroErrorMapping(() =>
-      repo.nativeDelete(this.getIdWhere(id))
+      repo.nativeDelete(this.getIdWhere(id, ctx))
     );
     if (!affected) {
       throw this.assertEntityFound(null);
@@ -88,27 +84,33 @@ export class MikroCrudService<T> extends BaseCrudService<T> {
     return this.repo;
   }
 
-  protected getScopedWhere(query: CrudQuery): Record<string, any> {
-    const where = buildMikroWhere(query, this.crudOptions);
-    if (this.resolveDeleteMode() === 'soft') {
+  protected getScopedWhere(
+    query: CrudQuery,
+    ctx?: CrudContext
+  ): Record<string, any> {
+    const where = buildMikroWhere(query, this.resolveCrudOptions(ctx));
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertMikroSoftDeleteSupported(this.getRepo());
       where.deletedAt = null;
     }
     return where;
   }
 
-  protected getIdWhere(id: CrudIdValue): Record<string, any> {
+  protected getIdWhere(
+    id: CrudIdValue,
+    ctx?: CrudContext
+  ): Record<string, any> {
     const where: Record<string, any> = {
-      [this.getIdField()]: id,
+      [this.getIdField(ctx)]: id,
     };
-    if (this.resolveDeleteMode() === 'soft') {
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertMikroSoftDeleteSupported(this.getRepo());
       where.deletedAt = null;
     }
     return where;
   }
 
-  protected getIdField(): string {
-    return this.crudOptions?.id ?? 'id';
+  protected getIdField(ctx?: CrudContext): string {
+    return this.resolveCrudOptions(ctx)?.id ?? 'id';
   }
 }
