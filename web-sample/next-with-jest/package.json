@@ -23,7 +23,7 @@
     "@types/react": "18.3.31",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "typescript": "5.3.3",
+    "typescript": "5.9.3",
     "@midwayjs/mock": "file:../../../packages/mock",
     "mwtsc": "^1.13.0"
   }
