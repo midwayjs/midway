@@ -4,7 +4,7 @@ import { CrudOptions, CrudRouteDefinition, CrudRouteName } from './interface';
 import { parseCrudId, parseCrudQuery } from './queryParser';
 import { applyCrudValidation } from './validation';
 
-const DEFAULT_ROUTE_DEFINITIONS: Record<CrudRouteName, CrudRouteDefinition> = {
+const REST_ROUTE_DEFINITIONS: Record<CrudRouteName, CrudRouteDefinition> = {
   list: { name: 'list', method: 'GET', path: '/' },
   detail: { name: 'detail', method: 'GET', path: '/:id' },
   create: { name: 'create', method: 'POST', path: '/' },
@@ -15,25 +15,97 @@ const DEFAULT_ROUTE_DEFINITIONS: Record<CrudRouteName, CrudRouteDefinition> = {
   deleteMany: { name: 'deleteMany', method: 'DELETE', path: '/bulk' },
 };
 
+const RPC_ROUTE_DEFINITIONS: Record<CrudRouteName, CrudRouteDefinition> = {
+  list: { name: 'list', method: 'GET', path: '/list' },
+  detail: { name: 'detail', method: 'GET', path: '/detail/:id' },
+  create: { name: 'create', method: 'POST', path: '/create' },
+  update: { name: 'update', method: 'POST', path: '/update/:id' },
+  replace: { name: 'replace', method: 'POST', path: '/replace/:id' },
+  delete: { name: 'delete', method: 'POST', path: '/delete/:id' },
+  createMany: { name: 'createMany', method: 'POST', path: '/bulk/create' },
+  deleteMany: { name: 'deleteMany', method: 'POST', path: '/bulk/delete' },
+};
+
 /**
- * Returns enabled CRUD routes after applying only/exclude rules.
+ * Default enabled routes
  */
-export function getEnabledCrudRoutes(options: CrudOptions): CrudRouteName[] {
-  const only = options.routes?.only;
-  const exclude = options.routes?.exclude ?? [];
-  const source = only?.length
-    ? only
-    : (['list', 'detail', 'create', 'update', 'delete'] as CrudRouteName[]);
-  return source.filter(route => !exclude.includes(route));
+export const defaultRoutes: CrudRouteName[] = [
+  'list',
+  'detail',
+  'create',
+  'update',
+  'delete',
+];
+
+/**
+ * Returns enabled CRUD routes after applying only/include/exclude rules.
+ */
+export function getEnabledCrudRoutes({ routes }: CrudOptions): CrudRouteName[] {
+  const include = routes?.include ?? [];
+  const exclude = routes?.exclude ?? [];
+  const source = new Set(
+    routes?.mode === 'CUSTOM'
+      ? []
+      : (routes?.only ??
+          [...defaultRoutes, ...include].filter(m => !exclude.includes(m)))
+  );
+
+  if (routes?.overrides) {
+    for (const key in routes.overrides) {
+      if (routes.overrides[key].enabled === false) {
+        source.delete(key as CrudRouteName);
+      } else {
+        source.add(key as CrudRouteName);
+      }
+    }
+  }
+
+  return [...source];
 }
 
 /**
  * Builds the default route table for a CRUD resource.
  */
 export function buildCrudRoutes(options: CrudOptions): CrudRouteDefinition[] {
-  return getEnabledCrudRoutes(options).map(
-    name => DEFAULT_ROUTE_DEFINITIONS[name]
+  const mode = options.routes?.mode || 'RESTful';
+  const overrides = options.routes?.overrides || {};
+  return getEnabledCrudRoutes(options).map(name =>
+    mode === 'CUSTOM'
+      ? ({ name, ...overrides[name] } as CrudRouteDefinition)
+      : mode === 'RPC'
+        ? { ...RPC_ROUTE_DEFINITIONS[name], ...overrides[name] }
+        : { ...REST_ROUTE_DEFINITIONS[name], ...overrides[name] }
   );
+}
+
+/**
+ * Return the bound CRUD service
+ */
+export async function getService(
+  controller: any,
+  ctx: any,
+  options: CrudOptions
+) {
+  const name =
+    typeof options.service === 'string' ? options.service : CRUD_SERVICE_KEY;
+  let service = controller[name];
+
+  if (!service && typeof options.service === 'function') {
+    const requestContext =
+      ctx?.requestContext ?? (ctx?.request ?? ctx?.req)?.requestContext;
+    if (requestContext) {
+      service = controller[name] = await requestContext.getAsync?.(
+        options.service,
+        [options]
+      );
+    }
+  }
+
+  if (!service) {
+    throw new CrudConfigError(`Controller is missing "${name}" binding`);
+  }
+
+  return service;
 }
 
 /**
@@ -45,13 +117,7 @@ export function createCrudRouteHandler(
   options: CrudOptions
 ): (payload?: any) => Promise<any> {
   return async function crudRouteHandler(payload: any = {}) {
-    const service = (controllerInstance as any)?.[CRUD_SERVICE_KEY];
-    if (!service) {
-      throw new CrudConfigError(
-        `Controller is missing "${CRUD_SERVICE_KEY}" binding`
-      );
-    }
-
+    const service = await getService(controllerInstance, payload.ctx, options);
     const ctxPayload = {
       ctx: payload.ctx,
     };
