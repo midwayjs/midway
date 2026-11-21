@@ -9,6 +9,7 @@ import {
   CrudQuery,
   CrudService,
 } from './interface';
+import { mergeCrudOptions } from './options';
 
 /**
  * Shared helpers for adapter implementations.
@@ -16,8 +17,27 @@ import {
 export abstract class BaseCrudService<T> implements CrudService<T> {
   protected crudOptions?: CrudOptions;
 
+  /**
+   * Stores options owned by this service instance.
+   * Per-request controller options are passed through `CrudContext` and are not written here.
+   */
   setCrudOptions(options: CrudOptions) {
     this.crudOptions = options;
+  }
+
+  /**
+   * Returns options configured on this service instance.
+   */
+  getCrudOptions(): CrudOptions | undefined {
+    return this.crudOptions;
+  }
+
+  /**
+   * Resolves the options for one call.
+   * Service options are the base; `ctx.crudOptions` overrides fields that are set.
+   */
+  protected resolveCrudOptions(ctx?: CrudContext): CrudOptions | undefined {
+    return mergeCrudOptions(this.crudOptions, ctx?.crudOptions);
   }
 
   abstract list(
@@ -80,8 +100,10 @@ export abstract class BaseCrudService<T> implements CrudService<T> {
     return entity;
   }
 
-  protected resolveDeleteMode(): 'hard' | 'soft' {
-    return this.crudOptions?.delete?.mode ?? CRUD_DEFAULT_DELETE_MODE;
+  protected resolveDeleteMode(ctx?: CrudContext): 'hard' | 'soft' {
+    return (
+      this.resolveCrudOptions(ctx)?.delete?.mode ?? CRUD_DEFAULT_DELETE_MODE
+    );
   }
 
   protected assertSoftDeleteSupported(supported: boolean) {

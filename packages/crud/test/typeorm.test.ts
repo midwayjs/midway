@@ -1,3 +1,4 @@
+import { IsNull } from 'typeorm';
 import {
   CrudFeatureNotSupportedError,
   CrudNotFoundError,
@@ -201,10 +202,45 @@ describe('TypeOrmCrudService', () => {
     expect(qb.andWhere).toHaveBeenCalledWith('user.deletedAt IS NULL');
     expect(service.repo.findOne).toHaveBeenCalledWith({
       where: {
-        deletedAt: null,
+        deletedAt: IsNull(),
         id: 1,
       },
     });
+  });
+
+  it('should apply per-call delete mode without replacing service options', async () => {
+    const service = createService(
+      {
+        metadata: {
+          name: 'User',
+          tableName: 'user',
+          columns: [{ isDeleteDate: true, propertyName: 'deletedAt' }],
+        },
+        softDelete: jest.fn(async () => undefined),
+      },
+      {
+        model: class UserModel {} as any,
+        service: class UserService {} as any,
+        delete: {
+          mode: 'hard',
+        },
+      }
+    );
+
+    await service.delete(1, {
+      crudOptions: {
+        model: class UserModel {} as any,
+        service: class UserService {} as any,
+        delete: {
+          mode: 'soft',
+        },
+      },
+    });
+    expect(service.repo.softDelete).toHaveBeenCalledWith({ id: 1 });
+    expect(service.getCrudOptions()?.delete?.mode).toBe('hard');
+
+    await service.delete(2);
+    expect(service.repo.delete).toHaveBeenCalledWith({ id: 2 });
   });
 
   it('should map common database errors and 404 cases', async () => {

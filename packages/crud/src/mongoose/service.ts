@@ -26,10 +26,9 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
     }
   }
 
-  async list(query: CrudQuery, _ctx?: CrudContext): Promise<CrudPageResult<T>> {
-    void _ctx;
+  async list(query: CrudQuery, ctx?: CrudContext): Promise<CrudPageResult<T>> {
     const repo = this.getRepo();
-    const filter = this.getScopedFilter(query);
+    const filter = this.getScopedFilter(query, ctx);
     const listQuery = repo.find(filter);
 
     if (query.sort.length) {
@@ -63,9 +62,8 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
     return this.normalizePageResult(data, query.page, query.limit, total);
   }
 
-  async findOne(id: CrudIdValue, _ctx?: CrudContext): Promise<T | null> {
-    void _ctx;
-    const filter = this.getIdFilter(id);
+  async findOne(id: CrudIdValue, ctx?: CrudContext): Promise<T | null> {
+    const filter = this.getIdFilter(id, ctx);
     return withMongooseErrorMapping(() => this.getRepo().findOne(filter));
   }
 
@@ -74,10 +72,9 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
     return withMongooseErrorMapping(() => this.getRepo().create(data as any));
   }
 
-  async update(id: CrudIdValue, data: unknown, _ctx?: CrudContext): Promise<T> {
-    void _ctx;
+  async update(id: CrudIdValue, data: unknown, ctx?: CrudContext): Promise<T> {
     const result = await withMongooseErrorMapping(() =>
-      this.getRepo().findOneAndUpdate(this.getIdFilter(id), data as any, {
+      this.getRepo().findOneAndUpdate(this.getIdFilter(id, ctx), data as any, {
         new: true,
       })
     );
@@ -88,14 +85,13 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
     return this.update(id, data, ctx);
   }
 
-  async delete(id: CrudIdValue, _ctx?: CrudContext): Promise<void> {
-    void _ctx;
+  async delete(id: CrudIdValue, ctx?: CrudContext): Promise<void> {
     const repo = this.getRepo();
-    if (this.resolveDeleteMode() === 'soft') {
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertMongooseSoftDeleteSupported(repo);
       const updated = await withMongooseErrorMapping(() =>
         repo.findOneAndUpdate(
-          this.getIdFilter(id),
+          this.getIdFilter(id, ctx),
           { deletedAt: new Date() },
           { new: false }
         )
@@ -104,7 +100,7 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
       return;
     }
     const result = await withMongooseErrorMapping(() =>
-      repo.deleteOne(this.getIdFilter(id))
+      repo.deleteOne(this.getIdFilter(id, ctx))
     );
     if (!result?.deletedCount) {
       throw this.assertEntityFound(null);
@@ -118,27 +114,33 @@ export class MongooseCrudService<T> extends BaseCrudService<T> {
     return this.repo;
   }
 
-  protected getScopedFilter(query: CrudQuery): Record<string, any> {
-    const filter = buildMongooseFilter(query, this.crudOptions);
-    if (this.resolveDeleteMode() === 'soft') {
+  protected getScopedFilter(
+    query: CrudQuery,
+    ctx?: CrudContext
+  ): Record<string, any> {
+    const filter = buildMongooseFilter(query, this.resolveCrudOptions(ctx));
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertMongooseSoftDeleteSupported(this.getRepo());
       filter.deletedAt = null;
     }
     return filter;
   }
 
-  protected getIdFilter(id: CrudIdValue): Record<string, any> {
+  protected getIdFilter(
+    id: CrudIdValue,
+    ctx?: CrudContext
+  ): Record<string, any> {
     const filter: Record<string, any> = {
-      [this.getIdField()]: id,
+      [this.getIdField(ctx)]: id,
     };
-    if (this.resolveDeleteMode() === 'soft') {
+    if (this.resolveDeleteMode(ctx) === 'soft') {
       assertMongooseSoftDeleteSupported(this.getRepo());
       filter.deletedAt = null;
     }
     return filter;
   }
 
-  protected getIdField(): string {
-    return this.crudOptions?.id ?? '_id';
+  protected getIdField(ctx?: CrudContext): string {
+    return this.resolveCrudOptions(ctx)?.id ?? '_id';
   }
 }
