@@ -48,6 +48,50 @@ export class BoardMiddleware
   private basePath: string;
   private serverAdapter: MidwayAdapter;
 
+  /**
+   * Normalize a route prefix with a leading slash and no trailing slashes, preserving root "/".
+   */
+  private normalizePrefix(prefix: string): string {
+    const withLeadingSlash = prefix.startsWith('/') ? prefix : `/${prefix}`;
+    const normalized = withLeadingSlash.replace(/\/+$/, '');
+    return normalized || '/';
+  }
+
+  /**
+   * Extract the relative bull-board route path only when pathname strictly matches basePath boundary.
+   */
+  private extractRoutePath(pathname: string): string | null {
+    if (!this.basePath || !this.serverAdapter || typeof pathname !== 'string') {
+      return null;
+    }
+    const base = this.normalizePrefix(this.basePath);
+    if (base === '/') {
+      return pathname || '/';
+    }
+    if (pathname === base) {
+      return '/';
+    }
+    if (pathname.startsWith(`${base}/`)) {
+      return pathname.slice(base.length);
+    }
+    return null;
+  }
+
+  /**
+   * Check whether a routePath points under the configured static route directory.
+   */
+  private isStaticRoute(routePath: string): boolean {
+    const staticRoute = this.serverAdapter?.getStaticRoutes();
+    if (!staticRoute) {
+      return false;
+    }
+    const staticPrefix = this.normalizePrefix(staticRoute);
+    if (staticPrefix === '/') {
+      return routePath.startsWith('/');
+    }
+    return routePath.startsWith(`${staticPrefix}/`);
+  }
+
   resolve(app: IMidwayApplication) {
     this.basePath = this.bullBoardManager.getBasePath();
     this.serverAdapter = this.bullBoardManager.getServerAdapter();
@@ -55,17 +99,20 @@ export class BoardMiddleware
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
       return async (req: any, res: any, next: NextFunction) => {
         const pathname = req.path;
-        if (pathname.indexOf(this.basePath) === -1) {
+        const routePath = this.extractRoutePath(pathname);
+        if (routePath === null) {
           return next();
         }
-        const routePath: string = pathname.replace(this.basePath, '') || '/';
 
         let content;
-        if (routePath.startsWith(this.serverAdapter.getStaticRoutes())) {
+        let matched = false;
+        if (this.isStaticRoute(routePath)) {
+          matched = true;
           content = await this.serverAdapter.renderStatic(routePath);
         } else if (
           this.serverAdapter.getViewRoutes().indexOf(routePath) !== -1
         ) {
+          matched = true;
           const entryRoute = this.serverAdapter.getEntryRoute();
           const { name, params } = entryRoute.handler({
             basePath: this.basePath,
@@ -78,12 +125,17 @@ export class BoardMiddleware
             routePath
           );
           if (matchRoute) {
+            matched = true;
             content = await this.serverAdapter.runAPI(
               matchRoute,
               req.query,
               req.body
             );
           }
+        }
+
+        if (!matched) {
+          return next();
         }
 
         const ext = extname(pathname);
@@ -102,18 +154,20 @@ export class BoardMiddleware
     } else {
       return async (ctx: IMidwayContext, next: NextFunction) => {
         const pathname = (ctx as any).path;
-        if (pathname.indexOf(this.basePath) === -1) {
+        const routePath = this.extractRoutePath(pathname);
+        if (routePath === null) {
           return next();
         }
 
-        const routePath: string = pathname.replace(this.basePath, '') || '/';
-
         let content;
-        if (routePath.startsWith(this.serverAdapter.getStaticRoutes())) {
+        let matched = false;
+        if (this.isStaticRoute(routePath)) {
+          matched = true;
           content = await this.serverAdapter.renderStatic(routePath);
         } else if (
           this.serverAdapter.getViewRoutes().indexOf(routePath) !== -1
         ) {
+          matched = true;
           const entryRoute = this.serverAdapter.getEntryRoute();
           const { name, params } = entryRoute.handler({
             basePath: this.basePath,
@@ -126,12 +180,17 @@ export class BoardMiddleware
             routePath
           );
           if (matchRoute) {
+            matched = true;
             content = await this.serverAdapter.runAPI(
               matchRoute,
               (ctx as any).query,
               (ctx as any).request && (ctx as any).request.body
             );
           }
+        }
+
+        if (!matched) {
+          return next();
         }
 
         const ext = extname(pathname);
