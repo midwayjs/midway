@@ -1,6 +1,18 @@
 # Change Log
 
 
+## v3.20.26 (2026-11-21)
+
+#### :bug: Bug Fix
+* `bull-board`
+  * [#4733](https://github.com/midwayjs/midway/pull/4733) fix(bull-board): prevent path traversal when serving static files ([@mariodu](https://github.com/mariodu))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- MarioDu ([@mariodu](https://github.com/mariodu))
+
+
+
 ## v3.20.25 (2026-09-27)
 
 #### :package: Dependencies
