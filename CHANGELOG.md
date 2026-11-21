@@ -1,6 +1,62 @@
 # Change Log
 
 
+## v4.2.7 (2026-11-21)
+
+#### :bug: Bug Fix
+* `bull-board`
+  * [#4732](https://github.com/midwayjs/midway/pull/4732) fix(bull-board): prevent path traversal when serving static files ([@mariodu](https://github.com/mariodu))
+
+#### :package: Dependencies
+* Other
+  * [#4731](https://github.com/midwayjs/midway/pull/4731) chore(deps): update dependency next to v16.4.5 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4723](https://github.com/midwayjs/midway/pull/4723) chore(deps): update redis docker tag to v7.4.12 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4721](https://github.com/midwayjs/midway/pull/4721) chore(deps): update dependency ts-jest to v29.4.15 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4719](https://github.com/midwayjs/midway/pull/4719) chore(deps): update dependency marked to v18.1.1 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4718](https://github.com/midwayjs/midway/pull/4718) chore(deps): update dependency next to v16.4.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4712](https://github.com/midwayjs/midway/pull/4712) chore(deps): update gcr.io/etcd-development/etcd docker tag to v3.7.3 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4710](https://github.com/midwayjs/midway/pull/4710) chore(deps): update dependency vite to v8.3.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4709](https://github.com/midwayjs/midway/pull/4709) chore(deps): update dependency vite to v6.4.5 ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#4704](https://github.com/midwayjs/midway/pull/4704) chore(deps): update dependency @vercel/ncc to v0.45.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `security`
+  * [#4728](https://github.com/midwayjs/midway/pull/4728) fix(deps): update dependency xss to v1.0.17 ([@renovate[bot]](https://github.com/apps/renovate))
+* `crud`, `mongoose`, `typegoose`
+  * [#4730](https://github.com/midwayjs/midway/pull/4730) chore(deps): update dependency mongoose to v8.24.7 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `oss`
+  * [#4726](https://github.com/midwayjs/midway/pull/4726) fix(deps): update dependency @types/ali-oss to v6.23.4 ([@renovate[bot]](https://github.com/apps/renovate))
+* `tablestore`
+  * [#4727](https://github.com/midwayjs/midway/pull/4727) fix(deps): update dependency tablestore to v5.6.6 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validate`, `validation-joi`
+  * [#4725](https://github.com/midwayjs/midway/pull/4725) fix(deps): update dependency joi to v17.13.9 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `grpc`
+  * [#4724](https://github.com/midwayjs/midway/pull/4724) fix(deps): update dependency @grpc/grpc-js to v1.14.7 ([@renovate[bot]](https://github.com/apps/renovate))
+* `swagger`
+  * [#4720](https://github.com/midwayjs/midway/pull/4720) chore(deps): update dependency swagger-ui-dist to v5.34.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `mcp`
+  * [#4715](https://github.com/midwayjs/midway/pull/4715) chore(deps): update dependency @modelcontextprotocol/sdk to v1.32.2 ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-express`
+  * [#4716](https://github.com/midwayjs/midway/pull/4716) fix(deps): update dependency body-parser to v2.4.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `web-koa`, `web`
+  * [#4713](https://github.com/midwayjs/midway/pull/4713) fix(deps): update dependency qs to v6.16.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `nextjs`
+  * [#4714](https://github.com/midwayjs/midway/pull/4714) fix(deps): update dependency next to ~16.4.0 [security] ([@renovate[bot]](https://github.com/apps/renovate))
+* `busboy`, `grpc`, `rabbitmq`, `socketio`, `web-express`, `web-koa`, `web`, `ws`
+  * [#4711](https://github.com/midwayjs/midway/pull/4711) chore(deps): update dependency fs-extra to v11.4.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `core`
+  * [#4708](https://github.com/midwayjs/midway/pull/4708) chore(deps): update dependency @anthropic-ai/sdk to ^0.137.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `cos`, `oss`
+  * [#4707](https://github.com/midwayjs/midway/pull/4707) chore(deps): update dependency dotenv to v16.6.1 ([@renovate[bot]](https://github.com/apps/renovate))
+* `validation-class-validator`
+  * [#4706](https://github.com/midwayjs/midway/pull/4706) chore(deps): update dependency class-validator to ^0.15.0 ([@renovate[bot]](https://github.com/apps/renovate))
+* `casbin-typeorm-adapter`, `typeorm`
+  * [#4705](https://github.com/midwayjs/midway/pull/4705) chore(deps): update dependency better-sqlite3 to v12.11.1 ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 2
+- Harry Chen ([@czy88840616](https://github.com/czy88840616))
+- MarioDu ([@mariodu](https://github.com/mariodu))
+
+
+
 ## v4.2.6 (2026-10-18)
 
 #### :nail_care: Polish

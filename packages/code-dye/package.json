@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/code-dye",
-  "version": "4.2.6",
+  "version": "4.2.7",
   "description": "Midway Code Dye Component",
   "main": "dist/index.js",
   "typings": "index.d.ts",
