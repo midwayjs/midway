@@ -76,6 +76,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Plain GitHub Actions bash steps do not put node_modules/.bin on PATH.
+      # PNPM_HOME only exposes the pnpm CLI; publish.sh sources build.sh, which
+      # invokes `lerna` directly.
+      - name: Add local npm binaries to PATH
+        run: echo "${GITHUB_WORKSPACE}/node_modules/.bin" >> "$GITHUB_PATH"
+
+      - name: Verify Lerna CLI
+        run: |
+          command -v lerna
+          lerna --version
+
       - name: Configure git author
         run: |
           git config user.name "github-actions[bot]"
@@ -86,6 +97,7 @@ jobs:
           GITHUB_AUTH: ${{ github.token }}
           NPM_CONFIG_PROVENANCE: true
         run: |
+          export PATH="${GITHUB_WORKSPACE}/node_modules/.bin:${PATH}"
           case "${{ inputs.release_type }}" in
             beta)
               bash scripts/publish.sh beta "${{ inputs.version_bump }}"
