@@ -734,5 +734,6 @@ export const Utils = {
   toAsyncFunction,
   safeStringify,
   safeParse,
+  joinURLPath,
   isTypeScriptEnvironment,
 };
