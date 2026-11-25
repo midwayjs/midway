@@ -1601,11 +1601,11 @@ importers:
         specifier: workspace:^
         version: link:../validation
       i18next:
-        specifier: 24.2.3
-        version: 24.2.3(typescript@5.6.3)
+        specifier: 26.3.4
+        version: 26.3.4(typescript@5.6.3)
       zod-i18n-map:
         specifier: 2.27.0
-        version: 2.27.0(i18next@24.2.3(typescript@5.6.3))(zod@3.25.76)
+        version: 2.27.0(i18next@26.3.4(typescript@5.6.3))(zod@3.25.76)
       zod-validation-error:
         specifier: 3.5.4
         version: 3.5.4(zod@3.25.76)
@@ -1630,10 +1630,10 @@ importers:
         version: link:../validation
       '@semihbou/zod-i18n-map':
         specifier: 0.0.4
-        version: 0.0.4(i18next@24.2.3(typescript@5.6.3))(zod@4.2.1)
+        version: 0.0.4(i18next@26.3.4(typescript@5.6.3))(zod@4.2.1)
       i18next:
-        specifier: 24.2.3
-        version: 24.2.3(typescript@5.6.3)
+        specifier: 26.3.4
+        version: 26.3.4(typescript@5.6.3)
       zod-validation-error:
         specifier: 5.0.0
         version: 5.0.0(zod@4.2.1)
@@ -5228,9 +5228,6 @@ packages:
   '@types/node@22.12.0':
     resolution: {integrity: sha512-Fll2FZ1riMjNmlmJOdAyY5pUbkftXslB5DgEzlIuNaiWhXd00FhWxVC/r4yV/4wBb9JfImTu+jiSvXTkJ7F/gA==}
 
-  '@types/node@26.6.6':
-    resolution: {integrity: sha512-MzQj+8Kx3XI40OmUAE6Qoh58ZMNstNNMwn2nfd3qWsfe7nDNSqJNzes4njhz6AHwrSHOffSLwXU6yb474Q4aog==}
-
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
 
@@ -8691,10 +8688,10 @@ packages:
   hyperid@3.3.0:
     resolution: {integrity: sha512-7qhCVT4MJIoEsNcbhglhdmBKb09QtcmJNiIQGq7js/Khf5FtQQ9bzcAuloeqBeee7XD7JqDeve9KNlQya5tSGQ==}
 
-  i18next@24.2.3:
-    resolution: {integrity: sha512-lfbf80OzkocvX7nmZtu7nSTNbrTYR52sLWxPtlXX1zAhVw8WEnFk4puUkCR4B1dNQwbSpEHHHemcZu//7EcB7A==}
+  i18next@26.3.4:
+    resolution: {integrity: sha512-pa7m0d7pBDqGHZxljT+WPFeyFgQ7P7SciPPo1tTqYuO0z4sqADYhwnBESmmGp/wEof1inwdls/k8ZgTg8rxFHA==}
     peerDependencies:
-      typescript: ^5
+      typescript: ^5 || ^6
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -13153,9 +13150,6 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  undici-types@8.9.0:
-    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
-
   undici@6.29.0:
     resolution: {integrity: sha512-R+RODBqp6i2pPflGdq+xIOUkl+RNfGgHwoinecKu/JCuf2uO06cOKoDbI2P7Dn6KcswdKwrczbU6IYJ6K8X+wg==}
     engines: {node: '>=18.17'}
@@ -16203,9 +16197,9 @@ snapshots:
 
   '@sec-ant/readable-stream@0.4.1': {}
 
-  '@semihbou/zod-i18n-map@0.0.4(i18next@24.2.3(typescript@5.6.3))(zod@4.2.1)':
+  '@semihbou/zod-i18n-map@0.0.4(i18next@26.3.4(typescript@5.6.3))(zod@4.2.1)':
     dependencies:
-      i18next: 24.2.3(typescript@5.6.3)
+      i18next: 26.3.4(typescript@5.6.3)
       zod: 4.2.1
 
   '@shikijs/core@1.29.2':
@@ -16599,10 +16593,6 @@ snapshots:
   '@types/node@22.12.0':
     dependencies:
       undici-types: 6.20.0
-
-  '@types/node@26.6.6':
-    dependencies:
-      undici-types: 8.9.0
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -21048,9 +21038,7 @@ snapshots:
       uuid: 8.3.2
       uuid-parse: 1.1.0
 
-  i18next@24.2.3(typescript@5.6.3):
-    dependencies:
-      '@babel/runtime': 7.29.7
+  i18next@26.3.4(typescript@5.6.3):
     optionalDependencies:
       typescript: 5.6.3
 
@@ -21886,7 +21874,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 26.6.6
+      '@types/node': 20.19.43
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -26469,8 +26457,6 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@8.9.0: {}
-
   undici@6.29.0: {}
 
   unescape@1.0.1:
@@ -27184,9 +27170,9 @@ snapshots:
       split2: 2.2.0
       through2: 2.0.5
 
-  zod-i18n-map@2.27.0(i18next@24.2.3(typescript@5.6.3))(zod@3.25.76):
+  zod-i18n-map@2.27.0(i18next@26.3.4(typescript@5.6.3))(zod@3.25.76):
     dependencies:
-      i18next: 24.2.3(typescript@5.6.3)
+      i18next: 26.3.4(typescript@5.6.3)
       zod: 3.25.76
 
   zod-to-json-schema@3.25.2(zod@3.25.76):
