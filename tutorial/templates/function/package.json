@@ -12,7 +12,7 @@
     "@midwayjs/koa": "^4.2.0",
     "@midwayjs/logger": "^4.0.0",
     "@midwayjs/web-bridge": "^4.2.0",
-    "zod": "^3.23.8"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@midwayjs/mock": "^4.2.0",
