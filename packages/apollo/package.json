@@ -23,7 +23,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@apollo/server": "5.5.1",
+    "@apollo/server": "5.5.2",
     "@graphql-tools/schema": "10.0.38",
     "@midwayjs/glob": "1.1.1",
     "@midwayjs/graphql": "workspace:^",
