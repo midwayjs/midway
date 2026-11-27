@@ -1,5 +1,36 @@
 import { CrudOptions, CrudRouteName, CrudValidationMeta } from './interface';
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
+
+/**
+ * Drops validator defaults for keys the caller did not send.
+ * Values for provided keys are kept, including coerced types.
+ */
+export function omitUnprovidedDefaults(
+  original: unknown,
+  validated: unknown
+): unknown {
+  if (!isPlainObject(validated)) {
+    return validated;
+  }
+  if (!isPlainObject(original)) {
+    return {};
+  }
+  const result: Record<string, unknown> = {};
+  for (const key of Object.keys(original)) {
+    if (Object.prototype.hasOwnProperty.call(validated, key)) {
+      result[key] = omitUnprovidedDefaults(original[key], validated[key]);
+    }
+  }
+  return result;
+}
+
 /**
  * Resolves DTO bindings for generated CRUD routes.
  */
@@ -52,11 +83,26 @@ export async function applyCrudValidation(
   }
 
   if (meta.queryDto) {
-    await validationService.validate(meta.queryDto, payload?.query ?? {});
+    const result = await validationService.validate(
+      meta.queryDto,
+      payload?.query ?? {}
+    );
+    if (payload && result && 'value' in result) {
+      payload.query = result.value;
+    }
   }
 
   if (meta.bodyDto) {
-    await validationService.validate(meta.bodyDto, payload?.body);
+    const originalBody = payload?.body;
+    const result = await validationService.validate(meta.bodyDto, originalBody);
+    if (payload && result && 'value' in result) {
+      // PATCH bodies are partial. Defaults for keys absent from the request
+      // would be written through repository merge and reset stored columns.
+      payload.body =
+        route === 'update'
+          ? omitUnprovidedDefaults(originalBody, result.value)
+          : result.value;
+    }
   }
 
   return meta;
