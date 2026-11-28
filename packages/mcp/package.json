@@ -30,7 +30,7 @@
     "@midwayjs/koa": "workspace:^",
     "@midwayjs/mock": "workspace:^",
     "@modelcontextprotocol/sdk": "1.32.2",
-    "zod": "3.25.76"
+    "zod": "4.6.6"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
